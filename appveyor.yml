@@ -67,11 +67,11 @@ for:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
   artifacts:
-    - path: 2017\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2017.dll
+    - path: 2017\bin\ReleaseCI2017\Antlr4ParseTreeVisualizer.2017.dll
       type: File
       name: visualizer
 
-    - path: 2017\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2017.pdb
+    - path: 2017\bin\ReleaseCI2017\Antlr4ParseTreeVisualizer.2017.pdb
       type: File
       name: visualizer
 
