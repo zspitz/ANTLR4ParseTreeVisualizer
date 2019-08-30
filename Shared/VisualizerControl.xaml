@@ -3,7 +3,12 @@
         <my:RootConverter x:Key="RootConverter" />
     </FrameworkElement.Resources>
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
-    <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}"/>
+    <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding Key}" />
+            <DataGridTextColumn Header="Value" Binding="{Binding Value}" />
+        </DataGrid.Columns>
+    </DataGrid>
     <TreeView Name="treeview" ItemsSource="{Binding Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
