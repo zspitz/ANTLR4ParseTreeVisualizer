@@ -18,13 +18,13 @@ namespace ParseTreeVisualizer {
             var t = tree.GetType();
             Name = t.Name;
             Properties = t.GetProperties().OrderBy(x => x.Name).ToDictionary(x => {
-                string value;
+                object value = null;
                 try {
-                    value = x.GetValue(tree).ToString();
+                    value = x.GetValue(tree);
                 } catch (Exception e) {
                     value = $"<{e.GetType()}: {e.Message}";
                 }
-                return (x.Name, value);
+                return (x.Name, value?.ToString());
             });
             Children = tree.Children().Select(x => new VisualizerDataNode(x)).ToList();
         }

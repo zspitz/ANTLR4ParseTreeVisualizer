@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using static System.Windows.Media.Brushes;
 using static System.Windows.DependencyProperty;
 
 namespace ParseTreeVisualizer
@@ -16,5 +17,9 @@ namespace ParseTreeVisualizer
 
     public class RootConverter : ReadOnlyConverterBase {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => new[] { value };
+    }
+
+    public class NullBackgroundConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value == null ? LightGray : UnsetValue;
     }
 }

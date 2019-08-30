@@ -1,12 +1,19 @@
 ﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:ag="clr-namespace:WpfAutoGrid">
     <FrameworkElement.Resources>
         <my:RootConverter x:Key="RootConverter" />
+        <my:NullBackgroundConverter x:Key="NullBackgroundConverter" />
     </FrameworkElement.Resources>
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
     <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Name" Binding="{Binding Key}" />
-            <DataGridTextColumn Header="Value" Binding="{Binding Value}" />
+            <DataGridTextColumn Header="Value" Binding="{Binding Value}" >
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="{Binding Value, Converter={StaticResource NullBackgroundConverter}}" />
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
         </DataGrid.Columns>
     </DataGrid>
     <TreeView Name="treeview" ItemsSource="{Binding Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
