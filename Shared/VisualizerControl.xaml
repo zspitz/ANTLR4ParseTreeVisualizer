@@ -1,0 +1,14 @@
+﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:ag="clr-namespace:WpfAutoGrid">
+    <FrameworkElement.Resources>
+        <my:RootConverter x:Key="RootConverter" />
+    </FrameworkElement.Resources>
+    <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
+    <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}"/>
+    <TreeView Name="treeview" ItemsSource="{Binding Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
+        <TreeView.ItemTemplate>
+            <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
+                <TextBlock Text="{Binding Name}" />
+            </HierarchicalDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+</DockPanel>

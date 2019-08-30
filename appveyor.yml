@@ -1,0 +1,83 @@
+version: 0.0.0.{build}
+image:
+  - Visual Studio 2019
+  - Visual Studio 2017
+configuration:
+  - ReleaseCI
+  - ReleaseCI2017
+init:
+  - git config --global core.autocrlf false
+branches:
+  only:
+    - master
+skip_tags:  true
+only_commits:
+  files:
+    - Shared/
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "1.0.0.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+before_build:
+- cmd: nuget restore
+
+matrix:
+  fast_finish: true
+  exclude:
+    - image: Visual Studio 2019
+      configuration: ReleaseCI2017
+    - image: Visual Studio 2017
+      configuration: ReleaseCI
+
+for:
+- 
+  matrix:
+    only:
+      - image: Visual Studio 2019
+  configuration: ReleaseCI
+  artifacts:
+    - path: 2019\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2019.dll
+      type: File
+      name: visualizer
+
+    - path: 2019\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2019.pdb
+      type: File
+      name: visualizer
+
+  deploy:
+    - provider: GitHub
+      desciprion: ''
+      auth_token:
+        secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
+      artifact: visualizer
+
+- 
+  matrix:
+    only:
+      - image: Visual Studio 2017
+  configuration: ReleaseCI2017
+  artifacts:
+    - path: 2017\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2017.dll
+      type: File
+      name: visualizer
+
+    - path: 2017\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2017.pdb
+      type: File
+      name: visualizer
+
+  deploy:
+    - provider: GitHub
+      desciprion: ''
+      auth_token:
+        secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
+      artifact: visualizer
