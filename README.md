@@ -23,3 +23,14 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 * Begin a debugging session.
 * Navigate to an instance of one of the visualizer target types (can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposd by any variable, or any expression; the type of the expression doesn't matter.
 * Click on the magnifying glass to the right of the expression.
+
+## Feedback
+
+* Star this project
+* File an issue
+
+## Roadmap
+
+* The current visualization targets `RulerContext`. Some sort of visualization for token streams, usable from the `RulerContext` visualization, and independently.
+* Parsing errors
+* Live window, perhaps as a VS extension. It should be possible to select a lexer class from a lexer assembly, a parser class from a parser assembly, and display the resultant token stream and parse tree.
