@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ParseTreeVisualizer.Util;
 using System.Runtime.Serialization;
 using Antlr4.Runtime;
+using static ParseTreeVisualizer.Util.Functions;
 
 namespace ParseTreeVisualizer {
     public enum TreeNodeType {
@@ -17,31 +18,25 @@ namespace ParseTreeVisualizer {
 
     [Serializable]
     public class TreeNodeData {
-        public string Name { get; }
-        public IDictionary<string, string> Properties { get; }
+        public string Caption { get; }
+        public IList<PropertyValueVM> Properties { get; }
         public IList<TreeNodeData> Children { get; }
         public (int start, int Length) Span { get; }
         public TreeNodeType? NodeType { get; }
         public TreeNodeData(IParseTree tree, VisualizerData visualizerData) {
+            var t = tree.GetType();
+
             if (tree is RuleContext) {
                 NodeType= TreeNodeType.RuleContext;
+                Caption = t.Name;
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var vm = new TerminalNodeImplVM(terminalNode);
                 visualizerData.TerminalNodes.Add(vm);
                 NodeType = TreeNodeType.Token;
+                Caption = terminalNode.Payload.Text.ToCSharpLiteral();
             } 
 
-            var t = tree.GetType();
-            Name = t.Name;
-            Properties = t.GetProperties().OrderBy(x => x.Name).ToDictionary(x => {
-                object value = null;
-                try {
-                    value = x.GetValue(tree);
-                } catch (Exception e) {
-                    value = $"<{e.GetType()}: {e.Message}";
-                }
-                return (x.Name, value?.ToString());
-            });
+            Properties = t.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValueVM(tree, prp)).ToList();
             Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData)).ToList();
         }
     }

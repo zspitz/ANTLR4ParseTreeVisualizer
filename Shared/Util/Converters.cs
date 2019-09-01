@@ -38,4 +38,17 @@ namespace ParseTreeVisualizer.Util {
             throw new InvalidOperationException("Converter only valid for Brush and FontStyle.");
         }
     }
+
+    public class NodeTypeConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            var nodeType = (TreeNodeType)value;
+
+            if (targetType==typeof(Brush)) {
+                return nodeType == TreeNodeType.Token ? DimGray : UnsetValue;
+            } else if (targetType == typeof(FontWeight)) {
+                return nodeType == TreeNodeType.RuleContext ? FontWeights.Bold : UnsetValue;
+            }
+            throw new InvalidOperationException("Converter only valid for Brush and FontWeight.");
+        }
+    }
 }

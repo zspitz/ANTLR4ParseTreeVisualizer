@@ -2,6 +2,7 @@
     <FrameworkElement.Resources>
         <my1:RootConverter x:Key="RootConverter" />
         <my1:NullConverter x:Key="NullConverter" />
+        <my1:NodeTypeConverter x:Key="NodeTypeConverter"/>
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="HeadersVisibility" Value="Column"/>
@@ -11,8 +12,9 @@
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
     <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Name" Binding="{Binding Key}" />
-            <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null}" >
+            <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
+            <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
+            <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" >
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
@@ -25,7 +27,7 @@
     <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
-                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text="{Binding Caption}" Foreground="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" FontWeight="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" />
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>
