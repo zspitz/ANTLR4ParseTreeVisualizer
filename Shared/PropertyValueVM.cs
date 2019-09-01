@@ -14,7 +14,7 @@ namespace ParseTreeVisualizer {
         public PropertyValueVM(object instance, PropertyInfo prp) {
             Key = prp.Name;
 
-            object value = null;
+            object value;
             try {
                 value = prp.GetValue(instance);
             } catch (Exception e) {

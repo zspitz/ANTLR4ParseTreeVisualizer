@@ -9,6 +9,10 @@ namespace ParseTreeVisualizer {
     public partial class VisualizerControl {
         public VisualizerControl() {
             InitializeComponent();
+
+            tokens.AutoGeneratingColumn += (s, e) => {
+                if (e.PropertyName == "IsError") { e.Cancel = true; }
+            };
         }
     }
 }
