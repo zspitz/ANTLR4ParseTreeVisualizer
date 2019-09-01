@@ -3,6 +3,7 @@
         <my:RootConverter x:Key="RootConverter" />
         <my:NullBackgroundConverter x:Key="NullBackgroundConverter" />
     </FrameworkElement.Resources>
+    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" />
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
     <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
         <DataGrid.Columns>
@@ -16,7 +17,7 @@
             </DataGridTextColumn>
         </DataGrid.Columns>
     </DataGrid>
-    <TreeView Name="treeview" ItemsSource="{Binding Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
+    <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
                 <TextBlock Text="{Binding Name}" />

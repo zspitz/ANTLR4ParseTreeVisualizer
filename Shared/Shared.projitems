@@ -13,11 +13,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ICollectionT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IParseTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\String.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Functions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TerminalNodeImplVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visualizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VisualizerDataNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TreeNodeData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerDataObjectSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerWindow.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WpfAutoGrid\AutoGrid.cs" />

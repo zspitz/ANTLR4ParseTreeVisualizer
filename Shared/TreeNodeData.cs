@@ -6,15 +6,32 @@ using System.Text;
 using System.Threading.Tasks;
 using ParseTreeVisualizer.Util;
 using System.Runtime.Serialization;
+using Antlr4.Runtime;
 
 namespace ParseTreeVisualizer {
+    public enum TreeNodeType {
+        RuleContext,
+        Token,
+        Trivia
+    }
+
     [Serializable]
-    public class VisualizerDataNode {
+    public class TreeNodeData {
         public string Name { get; }
         public IDictionary<string, string> Properties { get; }
-        public IList<VisualizerDataNode> Children { get; }
+        public IList<TreeNodeData> Children { get; }
         public (int start, int Length) Span { get; }
-        public VisualizerDataNode(IParseTree tree) {
+        public TreeNodeType? NodeType { get; }
+        public TreeNodeData(IParseTree tree, VisualizerData visualizerData) {
+            if (tree is RuleContext) {
+                NodeType= TreeNodeType.RuleContext;
+            } else if (tree is TerminalNodeImpl terminalNode) {
+                visualizerData.TerminalNodes.Add(new TerminalNodeImplVM(terminalNode));
+                NodeType =
+                    terminalNode.Payload.Text.IsNullOrWhitespace() ? TreeNodeType.Trivia :
+                    TreeNodeType.Token;
+            } 
+
             var t = tree.GetType();
             Name = t.Name;
             Properties = t.GetProperties().OrderBy(x => x.Name).ToDictionary(x => {
@@ -26,7 +43,7 @@ namespace ParseTreeVisualizer {
                 }
                 return (x.Name, value?.ToString());
             });
-            Children = tree.Children().Select(x => new VisualizerDataNode(x)).ToList();
+            Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData)).ToList();
         }
     }
 }

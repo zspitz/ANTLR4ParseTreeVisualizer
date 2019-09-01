@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer {
     [Serializable]
-    public class VisualizerData : VisualizerDataNode {
+    public class VisualizerData {
         public string Source { get; }
-        public VisualizerData(IParseTree tree) : base(tree) {
+        public TreeNodeData Root { get; }
+        public IList<TerminalNodeImplVM> TerminalNodes { get; } = new List<TerminalNodeImplVM>();
+        public VisualizerData(IParseTree tree) {
             Source = tree.GetText();
+            Root = new TreeNodeData(tree, this);
         }
     }
 }
