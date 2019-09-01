@@ -21,7 +21,7 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 ## Usage
 
 * Begin a debugging session.
-* Navigate to an instance of one of the visualizer target types (can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposd by any variable, or any expression; the type of the expression doesn't matter.
+* Navigate to an instance of one of the visualizer target types (ATM only `RulerContext`, but can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposd by any variable, or any expression; the type of the expression doesn't matter.
 * Click on the magnifying glass to the right of the expression.
 
 ## Contributing
