@@ -1,17 +1,22 @@
-﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:ag="clr-namespace:WpfAutoGrid">
+﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:my1="clr-namespace:ParseTreeVisualizer.Util" xmlns:ag="clr-namespace:WpfAutoGrid">
     <FrameworkElement.Resources>
-        <my:RootConverter x:Key="RootConverter" />
-        <my:NullBackgroundConverter x:Key="NullBackgroundConverter" />
+        <my1:RootConverter x:Key="RootConverter" />
+        <my1:NullConverter x:Key="NullConverter" />
+        <Style TargetType="DataGrid">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
     </FrameworkElement.Resources>
-    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" />
+    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" />
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
     <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Name" Binding="{Binding Key}" />
-            <DataGridTextColumn Header="Value" Binding="{Binding Value}" >
+            <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null}" >
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
-                        <Setter Property="Background" Value="{Binding Value, Converter={StaticResource NullBackgroundConverter}}" />
+                        <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                        <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>

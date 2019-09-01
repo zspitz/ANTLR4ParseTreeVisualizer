@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ParseTreeVisualizer.Util;
 
 namespace ParseTreeVisualizer {
     public partial class VisualizerWindow : Window {
         public VisualizerWindow() {
             InitializeComponent();
+
+            // if we could find out which is the current monitor, that would be better
+            var workingAreas = Monitor.AllMonitors.Select(x => x.WorkingArea).ToList();
+            MaxWidth = workingAreas.Min(x => x.Width) * .90;
+            MaxHeight = workingAreas.Min(x => x.Height) * .90;
 
             PreviewKeyDown += (s, e) => {
                 if (e.Key == Key.Escape) { Close(); }

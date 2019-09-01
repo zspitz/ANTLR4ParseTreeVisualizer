@@ -12,7 +12,7 @@ namespace ParseTreeVisualizer {
     public enum TreeNodeType {
         RuleContext,
         Token,
-        Trivia
+        Error
     }
 
     [Serializable]
@@ -26,10 +26,9 @@ namespace ParseTreeVisualizer {
             if (tree is RuleContext) {
                 NodeType= TreeNodeType.RuleContext;
             } else if (tree is TerminalNodeImpl terminalNode) {
-                visualizerData.TerminalNodes.Add(new TerminalNodeImplVM(terminalNode));
-                NodeType =
-                    terminalNode.Payload.Text.IsNullOrWhitespace() ? TreeNodeType.Trivia :
-                    TreeNodeType.Token;
+                var vm = new TerminalNodeImplVM(terminalNode);
+                visualizerData.TerminalNodes.Add(vm);
+                NodeType = TreeNodeType.Token;
             } 
 
             var t = tree.GetType();

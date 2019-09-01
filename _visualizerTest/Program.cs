@@ -16,6 +16,7 @@ namespace _visualizerTest {
         static void Main(string[] args) {
             var code = @"
 Private Sub Detail_Format(Cancel As Integer, FormatCount As Integer)
+    ' This is a test comment
     ShoppingListSRC.Visible = ShoppingListSRC.Report.HasData
     PreparedMealsSRC.Visible = PreparedMealsSRC.Report.HasData
     MeatsSRC.Visible = MeatsSRC.Report.HasData
