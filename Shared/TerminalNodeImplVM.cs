@@ -10,17 +10,21 @@ using ParseTreeVisualizer.Util;
 namespace ParseTreeVisualizer {
     [Serializable]
     public class TerminalNodeImplVM {
-        public int Index { get; set; }
-        public string TokenType { get; set; }
-        public int Line { get; set; }
-        public int Col { get; set; }
-        public string Text { get; set; }
+        public int Index { get; }
+        public string TokenType { get; }
+        public int Line { get; }
+        public int Col { get; }
+        public string Text { get; }
+        public bool IsError { get; }
         public TerminalNodeImplVM(TerminalNodeImpl terminalNode) {
             Index = terminalNode.Payload.TokenIndex;
             TokenType = terminalNode.Payload.Type.ToString();
             Line = terminalNode.Payload.Line;
             Col = terminalNode.Payload.Column;
             Text = terminalNode.Payload.Text;
+            if (terminalNode is ErrorNodeImpl) {
+                IsError = true;
+            }
         }
     }
 }

@@ -2,8 +2,14 @@
 
 [![GitHub Release](https://img.shields.io/github/release/zspitz/antlr4parsetreevisualizer?style=flat&max-age=86400)](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) [![AppVeyor build status](https://img.shields.io/appveyor/ci/zspitz/antlr4parsetreevisualizer?style=flat&max-age=86400)](https://ci.appveyor.com/project/zspitz/antlr4parsetreevisualizer) 
 
-
 ![Screenshot](screenshot.png)
+
+## Features
+
+* List of tokens (error tokens are highlighted in red)
+* Treeview of rule contexts and terminal nodes (error nodes in red)
+* Properties of selected treeview node (properties not declared in the Antlr namespace are checked)
+* Source view
 
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
@@ -21,7 +27,7 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 ## Usage
 
 1. Begin a debugging session, and break at some point.
-2. Navigate to an instance of one of the visualizer target types (ATM only `RulerContext`, but can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposd by any variable, or any expression; the type of the expression doesn't matter.
+2. Navigate to an instance of one of the visualizer target types (ATM only `RulerContext`, but can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
 3. Click on the magnifying glass to the right of the expression.
 
 ## Contributing

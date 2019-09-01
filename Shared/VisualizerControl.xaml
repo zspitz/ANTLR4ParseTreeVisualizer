@@ -3,12 +3,19 @@
         <my1:RootConverter x:Key="RootConverter" />
         <my1:NullConverter x:Key="NullConverter" />
         <my1:NodeTypeConverter x:Key="NodeTypeConverter"/>
+        <my1:ErrorColorConverter x:Key="ErrorColorConverter" />
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="HeadersVisibility" Value="Column"/>
         </Style>
     </FrameworkElement.Resources>
-    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" />
+    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}">
+        <DataGrid.RowStyle>
+            <Style TargetType="DataGridRow">
+                <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+            </Style>
+        </DataGrid.RowStyle>
+    </DataGrid>
     <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
     <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
         <DataGrid.Columns>

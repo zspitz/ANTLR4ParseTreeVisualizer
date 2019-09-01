@@ -32,9 +32,14 @@ namespace ParseTreeVisualizer {
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var vm = new TerminalNodeImplVM(terminalNode);
                 visualizerData.TerminalNodes.Add(vm);
-                NodeType = TreeNodeType.Token;
-                Caption = terminalNode.Payload.Text.ToCSharpLiteral();
-            } 
+                if (vm.IsError) {
+                    Caption = vm.Text;
+                    NodeType = TreeNodeType.Error;
+                } else {
+                    Caption = vm.Text.ToCSharpLiteral();
+                    NodeType = TreeNodeType.Token;
+                }
+            }
 
             Properties = t.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValueVM(tree, prp)).ToList();
             Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData)).ToList();

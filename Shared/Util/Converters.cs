@@ -44,11 +44,20 @@ namespace ParseTreeVisualizer.Util {
             var nodeType = (TreeNodeType)value;
 
             if (targetType==typeof(Brush)) {
-                return nodeType == TreeNodeType.Token ? DimGray : UnsetValue;
+                switch (nodeType) {
+                    case TreeNodeType.RuleContext: return UnsetValue;
+                    case TreeNodeType.Token: return DimGray;
+                    case TreeNodeType.Error: return Red;
+                    default: throw new InvalidOperationException("Invalid NodeType value");
+                }
             } else if (targetType == typeof(FontWeight)) {
                 return nodeType == TreeNodeType.RuleContext ? FontWeights.Bold : UnsetValue;
             }
             throw new InvalidOperationException("Converter only valid for Brush and FontWeight.");
         }
+    }
+
+    public class ErrorColorConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((bool)value) ? Red : UnsetValue;
     }
 }

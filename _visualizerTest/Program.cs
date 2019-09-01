@@ -17,7 +17,7 @@ namespace _visualizerTest {
             var code = @"
 Private Sub Detail_Format(Cancel As Integer, FormatCount As Integer)
     ' This is a test comment
-    ShoppingListSRC.Visible = ShoppingListSRC.Report.HasData
+    ShoppingListSRC.Visible = 'ShoppingListSRC.Report.HasData
     PreparedMealsSRC.Visible = PreparedMealsSRC.Report.HasData
     MeatsSRC.Visible = MeatsSRC.Report.HasData
 End Sub".Trim();
