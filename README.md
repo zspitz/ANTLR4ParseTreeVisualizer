@@ -29,6 +29,7 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 * Test the visualizer
 * Suggest ideas and enhancements ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Notify about bugs ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
+* Feel free to star the project
 
 ## Roadmap
 
