@@ -17,5 +17,14 @@ namespace ParseTreeVisualizer {
             Source = tree.GetText();
             Root = new TreeNodeData(tree, this);
         }
+
+        [NonSerialized]
+        private Dictionary<int, TerminalNodeImplVM> nodesByIndex;
+        public Dictionary<int, TerminalNodeImplVM> NodesByIndex {
+            get {
+                if (nodesByIndex == null) { nodesByIndex = TerminalNodes.ToDictionary(x => x.Index); }
+                return nodesByIndex;
+            }
+        }
     }
 }

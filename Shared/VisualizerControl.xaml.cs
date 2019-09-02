@@ -55,9 +55,13 @@ namespace ParseTreeVisualizer {
             }
 
             if (sender != source) {
-                var selectionStart = data.TerminalNodes[startTokenIndex].Span.start;
-                var selectionStop = data.TerminalNodes[endTokenIndex].Span.stop;
-                source.Select(selectionStart, selectionStop - selectionStart);
+                var selectionStart = data.NodesByIndex[startTokenIndex].Span.start;
+                var selectionStop = data.NodesByIndex[endTokenIndex].Span.stop;
+                if (selectionStart<0) {
+                    source.Select(0, 0);
+                } else {
+                    source.Select(selectionStart, selectionStop - selectionStart);
+                }
             }
 
             if (sender != tokens) {
