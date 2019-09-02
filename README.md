@@ -10,6 +10,9 @@
 * Treeview of rule contexts and terminal nodes (error nodes in red)
 * Properties of selected treeview node (properties not declared in the Antlr namespace are checked)
 * Source view
+* Selection sync
+
+  ![Selection sync](selection-sync.gif)
 
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 

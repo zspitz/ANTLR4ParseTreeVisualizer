@@ -16,6 +16,7 @@ namespace ParseTreeVisualizer {
         public int Col { get; }
         public string Text { get; }
         public bool IsError { get; }
+        public (int start, int stop) Span { get; }
         public TerminalNodeImplVM(TerminalNodeImpl terminalNode) {
             Index = terminalNode.Payload.TokenIndex;
             TokenType = terminalNode.Payload.Type.ToString();
@@ -25,6 +26,8 @@ namespace ParseTreeVisualizer {
             if (terminalNode is ErrorNodeImpl) {
                 IsError = true;
             }
+
+            Span = (terminalNode.Payload.StartIndex, terminalNode.Payload.StopIndex);
         }
     }
 }

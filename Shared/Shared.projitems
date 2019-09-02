@@ -13,8 +13,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Util\Converters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ICollectionT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\INotifyPropertyChanged.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IParseTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\MultiSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\Selector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\String.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\TreeView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Functions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TerminalNodeImplVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Monitor.cs" />

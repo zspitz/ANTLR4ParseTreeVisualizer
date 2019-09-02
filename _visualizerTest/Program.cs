@@ -26,7 +26,7 @@ End Sub".Trim();
             var tokens = new CommonTokenStream(lexer);
             var parser = new VBAParser(tokens);
             parser.Interpreter.PredictionMode = PredictionMode.Sll;
-            var tree = parser.subStmt();            
+            var tree = parser.subStmt();
 
             var visualizerHost = new VisualizerDevelopmentHost(tree, typeof(Visualizer), typeof(ObjectSource));
             visualizerHost.ShowVisualizer();

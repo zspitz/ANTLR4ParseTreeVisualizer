@@ -37,5 +37,11 @@
                 <TextBlock Text="{Binding Caption}" Foreground="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" FontWeight="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" />
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="TreeViewItem">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+            </Style>
+        </TreeView.ItemContainerStyle>
     </TreeView>
 </DockPanel>
