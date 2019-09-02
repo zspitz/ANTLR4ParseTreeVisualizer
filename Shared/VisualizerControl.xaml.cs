@@ -22,7 +22,13 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
-            Loaded += (s, e) => data.Root.IsExpanded = true;
+            Loaded += (s, e) => {
+                data.Root.IsExpanded = true;
+
+                source.LostFocus += (s1, e1) => e1.Handled = true;
+                source.Focus();
+                source.SelectAll();
+            };
 
             source.SelectionChanged += (s, e) => changeSelection(source);
             tokens.SelectionChanged += (s, e) => changeSelection(tokens);
@@ -60,7 +66,7 @@ namespace ParseTreeVisualizer {
                 if (selectionStart<0) {
                     source.Select(0, 0);
                 } else {
-                    source.Select(selectionStart, selectionStop - selectionStart);
+                    source.Select(selectionStart, selectionStop - selectionStart + 1);
                 }
             }
 
