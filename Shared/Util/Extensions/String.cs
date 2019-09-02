@@ -39,5 +39,6 @@ namespace ParseTreeVisualizer.Util {
             return literal.ToString();
         }
 
+        public static bool ContainsAny(this string s, params string[] testStrings) => testStrings.Any(x => s.Contains(x));
     }
 }
