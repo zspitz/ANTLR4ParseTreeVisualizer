@@ -22,6 +22,7 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
+
             Loaded += (s, e) => {
                 data.Root.IsExpanded = true;
 
@@ -74,6 +75,7 @@ namespace ParseTreeVisualizer {
                 tokens.SelectedItems.Clear();
                 foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
                     tokens.SelectedItems.Add(selectedToken);
+                    tokens.ScrollIntoView(selectedToken);
                 }
             }
 
