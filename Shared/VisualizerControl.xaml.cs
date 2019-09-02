@@ -42,8 +42,10 @@ namespace ParseTreeVisualizer {
             } else if (sender == source) {
                 var startChar = source.SelectionStart;
                 var endChar = source.SelectionStart + source.SelectionLength;
-                startTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start<=startChar && x.Span.stop >=startChar)?.Index ?? -1;
-                endTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start <= endChar && x.Span.stop >= endChar)?.Index ?? -1;
+                startTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start <= startChar && x.Span.stop >= startChar)?.Index ??
+                    data.TerminalNodes.Min(x => x.Index);
+                endTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start <= endChar && x.Span.stop >= endChar)?.Index ??
+                    data.TerminalNodes.Max(x => x.Index);
             } else if (sender == tokens) {
                 var selectedItems = tokens.SelectedItems<TerminalNodeImplVM>();
                 startTokenIndex = selectedItems.Min(x => x.Index);
