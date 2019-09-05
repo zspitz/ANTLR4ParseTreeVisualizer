@@ -9,7 +9,7 @@
     <Import_RootNamespace>ParseTreeVisualizer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)PropertyValueVM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PropertyValueVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Converters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ICollectionT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableT.cs" />
@@ -24,12 +24,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\TreeView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\Type.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Functions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TerminalNodeImplVM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TerminalNodeImplVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Monitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visualizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VisualizerData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TreeNodeData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TreeNodeData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerDataObjectSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerWindow.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WpfAutoGrid\AutoGrid.cs" />

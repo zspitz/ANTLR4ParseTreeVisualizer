@@ -28,6 +28,8 @@ End Sub".Trim();
             parser.Interpreter.PredictionMode = PredictionMode.Sll;
             var tree = parser.subStmt();
 
+
+            
             var visualizerHost = new VisualizerDevelopmentHost(tree, typeof(Visualizer), typeof(ObjectSource));
             visualizerHost.ShowVisualizer();
         }

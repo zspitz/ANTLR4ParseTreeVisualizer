@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer.Util;
 
 namespace ParseTreeVisualizer {
@@ -64,7 +66,7 @@ namespace ParseTreeVisualizer {
             if (sender != source) {
                 var selectionStart = data.NodesByIndex[startTokenIndex].Span.start;
                 var selectionStop = data.NodesByIndex[endTokenIndex].Span.stop;
-                if (selectionStart<0) {
+                if (selectionStart < 0) {
                     source.Select(0, 0);
                 } else {
                     source.Select(selectionStart, selectionStop - selectionStart + 1);
@@ -92,6 +94,31 @@ namespace ParseTreeVisualizer {
             }
 
             inChangeSelection = false;
+        }
+
+        private void LoadDataContext() {
+            if (_objectProvider == null || _config == null) { return; }
+            DataContext = _objectProvider.TransferObject(_config);
+        }
+
+        private IVisualizerObjectProvider _objectProvider;
+        public IVisualizerObjectProvider objectProvider {
+            get => _objectProvider;
+            set {
+                if (value == _objectProvider) { return; }
+                _objectProvider = value;
+                LoadDataContext();
+            }
+        }
+
+        private VisualizerConfig _config;
+        public VisualizerConfig Config {
+            get => _config;
+            set {
+                if (value == _config) { return; }
+                _config = value;
+                LoadDataContext();
+            }
         }
     }
 }

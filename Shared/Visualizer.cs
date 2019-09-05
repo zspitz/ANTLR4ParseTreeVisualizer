@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.Windows;
+using static System.Windows.SystemColors;
 
 [assembly: DebuggerVisualizer(
     visualizer: typeof(ParseTreeVisualizer.Visualizer),
@@ -18,18 +19,15 @@ namespace ParseTreeVisualizer {
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider) {
             if (windowService == null) { throw new ArgumentNullException(nameof(windowService)); }
 
-            var window = new VisualizerWindow {
-                DataContext = objectProvider.GetObject()
-            };
+            var window = new VisualizerWindow();
+            // When a control loses focus, it should look no different from when it had the focus (e.g. selection color)
+            window.Resources[InactiveSelectionHighlightBrushKey] = HighlightBrush;
+            window.Resources[InactiveSelectionHighlightTextBrushKey] = HighlightTextBrush;
 
-            var t = typeof(SystemColors);
-            var inactive = t.GetProperties().Where(x => x.Name.StartsWith("Inactive") && !x.Name.EndsWith("Key")).Select(x => new {
-                key = t.GetProperty(x.Name + "Key").GetValue(null),
-                activePropertyValue = (t.GetProperty(x.Name.Replace("Inactive", "Active")) ?? t.GetProperty(x.Name.Replace("InactiveSelection", ""))).GetValue(null)
-            }).ToList();
-            foreach (var x in inactive) {
-                window.Resources[x.key] = x.activePropertyValue;
-            }
+            var content = window.Content as VisualizerControl;
+            // TODO load config from disk
+            content.Config = new VisualizerConfig();
+            content.objectProvider = objectProvider;
 
             window.ShowDialog();
         }

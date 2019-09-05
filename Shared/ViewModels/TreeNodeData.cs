@@ -24,14 +24,20 @@ namespace ParseTreeVisualizer {
         public IList<TreeNodeData> Children { get; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
         public TreeNodeType? NodeType { get; }
-        public TreeNodeData(IParseTree tree, VisualizerData visualizerData) {
+        public TreeNodeData(IParseTree tree, VisualizerData visualizerData, IVocabulary vocabulary, string[] ruleNames) {
             var t = tree.GetType();
 
             if (tree is RuleContext) {
                 NodeType= TreeNodeType.RuleContext;
                 Caption = t.Name;
+                if (ruleNames != null) {
+                    var ruleIndex = tree.GetType().GetProperty("RuleIndex")?.GetValue(tree) as int?;
+                    if (ruleIndex.HasValue && ruleIndex>=0) {
+                        Caption = ruleNames[ruleIndex.Value];
+                    }
+                }
             } else if (tree is TerminalNodeImpl terminalNode) {
-                var vm = new TerminalNodeImplVM(terminalNode);
+                var vm = new TerminalNodeImplVM(terminalNode, vocabulary);
                 visualizerData.TerminalNodes.Add(vm);
                 if (vm.IsError) {
                     Caption = vm.Text;
@@ -43,7 +49,7 @@ namespace ParseTreeVisualizer {
             }
 
             Properties = t.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValueVM(tree, prp)).ToList();
-            Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData)).ToList();
+            Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData, vocabulary, ruleNames)).ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
         }
 

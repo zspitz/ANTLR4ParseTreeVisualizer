@@ -17,9 +17,13 @@ namespace ParseTreeVisualizer {
         public string Text { get; }
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
-        public TerminalNodeImplVM(TerminalNodeImpl terminalNode) {
+        public TerminalNodeImplVM(TerminalNodeImpl terminalNode, IVocabulary vocabulary) {
             Index = terminalNode.Payload.TokenIndex;
-            TokenType = terminalNode.Payload.Type.ToString();
+            if (vocabulary != null) {
+                TokenType = vocabulary.GetSymbolicName(terminalNode.Payload.Type);
+            } else {
+                TokenType = terminalNode.Payload.Type.ToString();
+            }
             Line = terminalNode.Payload.Line;
             Col = terminalNode.Payload.Column;
             Text = terminalNode.Payload.Text;

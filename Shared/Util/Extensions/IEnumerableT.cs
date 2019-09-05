@@ -20,5 +20,29 @@ namespace ParseTreeVisualizer.Util {
             if (selector == null) { return string.Join(delimiter, source); }
             return string.Join(delimiter, source.Select(selector));
         }
+
+        public static bool None<T>(this IEnumerable<T> src, Func<T, bool> predicate = null) {
+            if (predicate != null) { return !src.Any(predicate); }
+            return !src.Any();
+        }
+
+        /// <summary>
+        /// Returns an element If the sequence has exactly one element; otherwise returns the default of T
+        /// (unlike the standard SingleOrDefault, which will throw an exception on multiple elements).
+        /// </summary>
+        public static T OneOrDefault<T>(this IEnumerable<T> src, Func<T,bool> predicate = null) {
+            if (src == null) { return default; }
+            if (predicate != null) { src = src.Where(predicate); }
+            T ret = default;
+            var counter = 0;
+            foreach (var item in src.Take(2)) {
+                if (counter == 1) { return default; }
+                ret = item;
+                counter += 1;
+            }
+            return ret;
+        }
+
+        public static IEnumerable<T> Select<T>(this IEnumerable<T> src) => src.Select(x => x);
     }
 }

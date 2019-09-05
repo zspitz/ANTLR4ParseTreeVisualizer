@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using ParseTreeVisualizer.Util;
 
 namespace ParseTreeVisualizer {
     [Serializable]
@@ -13,9 +15,20 @@ namespace ParseTreeVisualizer {
         public string Source { get; }
         public TreeNodeData Root { get; }
         public IList<TerminalNodeImplVM> TerminalNodes { get; } = new List<TerminalNodeImplVM>();
-        public VisualizerData(IParseTree tree) {
+        public VisualizerConfig Config { get; }
+        public VisualizerData(IParseTree tree, VisualizerConfig config) {
             Source = tree.GetText();
-            Root = new TreeNodeData(tree, this);
+            Config = config;
+
+            IVocabulary vocabulary = null ;
+            string[] ruleNames = null;
+
+            if (!config.SelectedParserName.IsNullOrWhitespace()) {
+                var parserType = AppDomain.CurrentDomain.GetAssemblies().Select(x =>x.GetType(config.SelectedParserName)).FirstOrDefault(x => x!=null);
+                vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
+                ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
+            }
+            Root = new TreeNodeData(tree, this, vocabulary, ruleNames);
         }
 
         [NonSerialized]
