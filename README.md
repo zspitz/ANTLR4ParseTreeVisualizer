@@ -33,6 +33,12 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 2. Navigate to an instance of one of the visualizer target types (ATM only `RulerContext`, but can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
 3. Click on the magnifying glass to the right of the expression.
 
+Note that rule and token names aren't part of the `RuleContext` targeted by the visualizer; by default, tokens will be identified by their token ID, and rule contexts will be identified by the typename of the instance (e.g. `SubStmtContext`). To display the rule and token names, click on the **Settings** gear at the top right of the window, and choose a parser from the available parser classes.
+
+![Choosing a parser](choose-parser.gif)
+
+(ATM this selection isn't persisted between sessions; this is being tracked at [#18](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/18).)
+
 ## Contributing
 
 * Test the visualizer
