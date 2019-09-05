@@ -12,6 +12,29 @@
             <Setter Property="DockPanel.Dock" Value="Top"/>
             <Setter Property="Margin" Value="0,0,0,3" />
         </Style>
+        <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
+            <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
+                        <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
+                    </StackPanel>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+            <my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold">
+                        <TextBlock.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
+                                <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
+                            </StackPanel>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+        </my1:ComboBoxTemplateSelector>
     </FrameworkElement.Resources>
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
@@ -56,22 +79,13 @@
                     <Border Background="White" BorderBrush="Black" BorderThickness="1">
                         <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
                             <TextBlock Background="White" Text="Parser class:" />
-                            <ComboBox Name="selectedParser" ItemsSource="{Binding AvailableParsers}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                            <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
-                                            <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            <ComboBox Name="selectedParser" ItemsSource="{Binding AvailableParsers}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
                         </ag:AutoGrid>
                     </Border>
                 </Popup>
             </StackPanel>
         </Button>
+
     </Grid>
 
     <TextBlock Text="Parse tree view:" Style="{StaticResource LabelStyle}" />

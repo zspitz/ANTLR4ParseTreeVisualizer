@@ -32,7 +32,7 @@ namespace ParseTreeVisualizer {
                 Caption = t.Name;
                 if (ruleNames != null) {
                     var ruleIndex = tree.GetType().GetProperty("RuleIndex")?.GetValue(tree) as int?;
-                    if (ruleIndex.HasValue && ruleIndex>=0) {
+                    if (ruleIndex.HasValue && ruleIndex>=0 && ruleIndex<ruleNames.Length) {
                         Caption = ruleNames[ruleIndex.Value];
                     }
                 }
