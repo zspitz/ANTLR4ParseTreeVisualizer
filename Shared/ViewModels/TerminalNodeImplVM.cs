@@ -28,7 +28,7 @@ namespace ParseTreeVisualizer {
             }
             Line = terminalNode.Payload.Line;
             Col = terminalNode.Payload.Column;
-            Text = terminalNode.Payload.Text;
+            Text = terminalNode.Payload.Text.ToCSharpLiteral(false);
             if (terminalNode is ErrorNodeImpl) {
                 IsError = true;
             }

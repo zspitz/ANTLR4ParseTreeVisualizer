@@ -10,8 +10,10 @@ namespace ParseTreeVisualizer.Util {
         public static bool IsNullOrWhitespace(this string s) => string.IsNullOrWhiteSpace(s);
 
         // https://stackoverflow.com/a/14502246/111794
-        public static string ToCSharpLiteral(this string input) {
-            var literal = new StringBuilder("\"", input.Length + 2);
+        public static string ToCSharpLiteral(this string input, bool withQuotationMarks = true) {
+            var literal =
+                withQuotationMarks ? new StringBuilder("\"", input.Length + 2) :
+                new StringBuilder(input.Length);
             foreach (var c in input) {
                 switch (c) {
                     case '\'': literal.Append(@"\'"); break;
@@ -35,7 +37,7 @@ namespace ParseTreeVisualizer.Util {
                         break;
                 }
             }
-            literal.Append("\"");
+            if (withQuotationMarks) { literal.Append("\""); }
             return literal.ToString();
         }
 
