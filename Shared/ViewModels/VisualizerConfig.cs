@@ -53,9 +53,11 @@ namespace ParseTreeVisualizer {
             ret._originalValues = this;
             return ret;
         }
-        public bool? ShouldTriggerReload() {
-            if (_originalValues == null) { return null; }
-            return _originalValues.SelectedParserName == SelectedParserName;
+        public bool? ShouldTriggerReload {
+            get {
+                if (_originalValues == null) { return null; }
+                return _originalValues.SelectedParserName != SelectedParserName;
+            }
         }
     }
 
@@ -76,5 +78,6 @@ namespace ParseTreeVisualizer {
                 t.IfAttribute<GeneratedCodeAttribute>(attr => Antlr = attr.Version);
             }
         }
+        public override string ToString() => FullName;
     }
 }

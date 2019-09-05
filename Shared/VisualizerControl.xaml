@@ -8,29 +8,73 @@
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="HeadersVisibility" Value="Column"/>
         </Style>
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="DockPanel.Dock" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
     </FrameworkElement.Resources>
-    <DataGrid Name="tokens" DockPanel.Dock="Left" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}">
-        <DataGrid.RowStyle>
-            <Style TargetType="DataGridRow">
-                <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
-            </Style>
-        </DataGrid.RowStyle>
-    </DataGrid>
-    <TextBox Name="source" DockPanel.Dock="Bottom" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
-    <DataGrid Name="properties" DockPanel.Dock="Right" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
-        <DataGrid.Columns>
-            <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
-            <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
-            <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" >
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
-                        <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+
+    <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
+        <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
+        <DataGrid Name="tokens" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" >
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+    </DockPanel>
+
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+        <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
+        <TextBox Name="source" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
+    </DockPanel>
+
+    <Grid DockPanel.Dock="Right" Margin="12,0,0,0">
+        <DockPanel >
+            <TextBlock Text="Properties:" Style="{StaticResource LabelStyle}"/>
+            <DataGrid Name="properties" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                                <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <Button Name="configButton" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0">
+            <StackPanel>
+                <TextBlock Text="&#9881;" />
+                <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False">
+                    <Border Background="White" BorderBrush="Black" BorderThickness="1">
+                        <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
+                            <TextBlock Background="White" Text="Parser class:" />
+                            <ComboBox Name="selectedParser" ItemsSource="{Binding AvailableParsers}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                            <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
+                                            <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </ag:AutoGrid>
+                    </Border>
+                </Popup>
+            </StackPanel>
+        </Button>
+    </Grid>
+
+    <TextBlock Text="Parse tree view:" Style="{StaticResource LabelStyle}" />
     <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
@@ -44,4 +88,5 @@
             </Style>
         </TreeView.ItemContainerStyle>
     </TreeView>
+
 </DockPanel>

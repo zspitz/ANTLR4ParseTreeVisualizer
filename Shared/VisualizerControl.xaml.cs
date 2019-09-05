@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer.Util;
 
@@ -24,8 +25,23 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
-
             Loaded += (s, e) => {
+                // https://stackoverflow.com/a/21436273/111794
+                configPopup.CustomPopupPlacementCallback += (popupSize, targetSize, offset) =>
+                    new[] {
+                        new CustomPopupPlacement() {
+                            Point = new Point(targetSize.Width - popupSize.Width, targetSize.Height)
+                        }
+                    };
+                configButton.Click += (s1, e1) => configPopup.IsOpen = true;
+                configPopup.Opened += (s1, e1) => configPopup.DataContext = data.Config.Clone();
+                configPopup.Closed += (s1, e1) => {
+                    var popupConfig = configPopup.DataContext<VisualizerConfig>();
+                    if (popupConfig.ShouldTriggerReload ?? false) {
+                        Config = configPopup.DataContext<VisualizerConfig>();
+                    }
+                };
+
                 data.Root.IsExpanded = true;
 
                 source.LostFocus += (s1, e1) => e1.Handled = true;
@@ -45,7 +61,7 @@ namespace ParseTreeVisualizer {
             if (inChangeSelection) { return; }
             inChangeSelection = true;
 
-            (int startTokenIndex, int endTokenIndex) = (0, 0);
+            (int? startTokenIndex, int? endTokenIndex) = (null, null);
             if (sender == treeview) {
                 (startTokenIndex, endTokenIndex) = treeview.SelectedItem<TreeNodeData>().TokenSpan;
             } else if (sender == source) {
@@ -57,40 +73,50 @@ namespace ParseTreeVisualizer {
                     data.TerminalNodes.Max(x => x.Index);
             } else if (sender == tokens) {
                 var selectedItems = tokens.SelectedItems<TerminalNodeImplVM>();
-                startTokenIndex = selectedItems.Min(x => x.Index);
-                endTokenIndex = selectedItems.Max(x => x.Index);
+                if (selectedItems.Any()) {
+                    startTokenIndex = selectedItems.Min(x => x.Index);
+                    endTokenIndex = selectedItems.Max(x => x.Index);
+                }
             } else {
                 throw new InvalidOperationException("Unrecognized selection change source.");
             }
 
             if (sender != source) {
-                var selectionStart = data.NodesByIndex[startTokenIndex].Span.start;
-                var selectionStop = data.NodesByIndex[endTokenIndex].Span.stop;
-                if (selectionStart < 0) {
+                if (startTokenIndex == null || endTokenIndex == null) {
                     source.Select(0, 0);
                 } else {
-                    source.Select(selectionStart, selectionStop - selectionStart + 1);
+                    var selectionStart = data.NodesByIndex[startTokenIndex.Value].Span.start;
+                    var selectionStop = data.NodesByIndex[endTokenIndex.Value].Span.stop;
+                    if (selectionStart < 0) {
+                        source.Select(0, 0);
+                    } else {
+                        source.Select(selectionStart, selectionStop - selectionStart + 1);
+                    }
                 }
             }
 
             if (sender != tokens) {
                 tokens.SelectedItems.Clear();
-                foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
-                    tokens.SelectedItems.Add(selectedToken);
-                    tokens.ScrollIntoView(selectedToken);
+                if (startTokenIndex != null && endTokenIndex != null) {
+                    foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
+                        tokens.SelectedItems.Add(selectedToken);
+                        tokens.ScrollIntoView(selectedToken);
+                    }
                 }
             }
 
             if (sender != treeview) {
                 data.Root.ClearSelection();
-                var selectedNode = data.Root;
-                while (true) {
-                    var nextChild = selectedNode.Children.SingleOrDefault(x => startTokenIndex >= x.TokenSpan.startTokenIndex && endTokenIndex <= x.TokenSpan.endTokenIndex);
-                    if (nextChild == null) { break; }
-                    selectedNode = nextChild;
-                    selectedNode.IsExpanded = true;
+                if (startTokenIndex != null && endTokenIndex != null) {
+                    var selectedNode = data.Root;
+                    while (true) {
+                        var nextChild = selectedNode.Children.SingleOrDefault(x => startTokenIndex >= x.TokenSpan.startTokenIndex && endTokenIndex <= x.TokenSpan.endTokenIndex);
+                        if (nextChild == null) { break; }
+                        selectedNode = nextChild;
+                        selectedNode.IsExpanded = true;
+                    }
+                    selectedNode.IsSelected = true;
                 }
-                selectedNode.IsSelected = true;
             }
 
             inChangeSelection = false;
@@ -99,6 +125,7 @@ namespace ParseTreeVisualizer {
         private void LoadDataContext() {
             if (_objectProvider == null || _config == null) { return; }
             DataContext = _objectProvider.TransferObject(_config);
+            data.Root.IsExpanded = true;
         }
 
         private IVisualizerObjectProvider _objectProvider;
