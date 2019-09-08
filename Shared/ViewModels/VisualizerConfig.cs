@@ -7,10 +7,81 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using ParseTreeVisualizer.Util;
+using static System.IO.Path;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace ParseTreeVisualizer {
     [Serializable]
     public class VisualizerConfig {
+        public static string AssemblyName { get; set; }
+        private static readonly string ConfigFolder = Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "ANTLR4VisualizerParser"
+        );
+        private static string ConfigPath(bool globals = true) =>
+            Combine(
+                ConfigFolder,
+                globals ? "config.json" : $"{AssemblyName}.json"
+            );
+
+        public static VisualizerConfig Get() {
+            var ret = new VisualizerConfig();
+
+            string fileText = null;
+            if (Directory.Exists(ConfigFolder)) {
+                var testPath = ConfigPath(true);
+                if (File.Exists(testPath)) {
+                    //var globals = JObject.Parse(File.ReadAllText(testPath));
+
+                    // TODO load globals here
+
+                }
+
+                testPath = ConfigPath(false);
+                if (File.Exists(testPath)) {
+                    try {
+                        fileText = File.ReadAllText(testPath);
+                    } catch { }
+                    if (!fileText.IsNullOrWhitespace()) {
+                        var assemblyConfig = JObject.Parse(fileText);
+                        ret.SelectedParserName = assemblyConfig[nameof(SelectedParserName)].ToString();
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        private VisualizerConfig() { }
+
+        public void Write() {
+            if (!Directory.Exists(ConfigFolder)) {
+                try {
+                    Directory.CreateDirectory(ConfigFolder);
+                } catch {
+                    return;
+                }
+            }
+
+            var data = new JObject();
+
+            // filll globals here
+            // write globals to file
+
+            // fill assembly-specific here
+            data = new JObject();
+            if (!SelectedParserName.IsNullOrWhitespace()) {
+                data[nameof(SelectedParserName)] = SelectedParserName;
+            }
+            var toWrite = data.ToString();
+            try {
+                File.WriteAllText(ConfigPath(false), toWrite);
+            } catch {}
+        }
+
+
         public string SelectedParserName { get; set; }
 
         // TODO make this an immutable list, once we can combine everything into a single DLL https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/17
@@ -27,7 +98,7 @@ namespace ParseTreeVisualizer {
             foreach (var t in types) {
                 AvailableParsers.Add(new ClassInfo(t));
             }
-            
+
             if (AvailableParsers.None(x => x.FullName == SelectedParserName)) {
                 SelectedParserName = null;
             }

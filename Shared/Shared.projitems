@@ -32,7 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Visualizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TreeNodeData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TreeNodeVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerDataObjectSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerWindow.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WpfAutoGrid\AutoGrid.cs" />

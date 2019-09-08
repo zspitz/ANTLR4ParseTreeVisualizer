@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.Windows;
 using static System.Windows.SystemColors;
+using ParseTreeVisualizer.Util;
 
 [assembly: DebuggerVisualizer(
     visualizer: typeof(ParseTreeVisualizer.Visualizer),
@@ -24,9 +25,10 @@ namespace ParseTreeVisualizer {
             window.Resources[InactiveSelectionHighlightBrushKey] = HighlightBrush;
             window.Resources[InactiveSelectionHighlightTextBrushKey] = HighlightTextBrush;
 
+            VisualizerConfig.AssemblyName = objectProvider.GetObject() as string;
+
             var content = window.Content as VisualizerControl;
-            // TODO load config from disk
-            content.Config = new VisualizerConfig();
+            content.Config = VisualizerConfig.Get();
             content.objectProvider = objectProvider;
 
             window.ShowDialog();

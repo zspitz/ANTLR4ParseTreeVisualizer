@@ -18,13 +18,13 @@ namespace ParseTreeVisualizer {
     }
 
     [Serializable]
-    public class TreeNodeData : INotifyPropertyChanged {
+    public class TreeNodeVM : INotifyPropertyChanged {
         public string Caption { get; }
         public IList<PropertyValueVM> Properties { get; }
-        public IList<TreeNodeData> Children { get; }
+        public IList<TreeNodeVM> Children { get; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
         public TreeNodeType? NodeType { get; }
-        public TreeNodeData(IParseTree tree, VisualizerData visualizerData, IVocabulary vocabulary, string[] ruleNames) {
+        public TreeNodeVM(IParseTree tree, VisualizerData visualizerData, IVocabulary vocabulary, string[] ruleNames) {
             var t = tree.GetType();
 
             if (tree is RuleContext) {
@@ -49,7 +49,7 @@ namespace ParseTreeVisualizer {
             }
 
             Properties = t.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValueVM(tree, prp)).ToList();
-            Children = tree.Children().Select(x => new TreeNodeData(x, visualizerData, vocabulary, ruleNames)).ToList();
+            Children = tree.Children().Select(x => new TreeNodeVM(x, visualizerData, vocabulary, ruleNames)).ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
         }
 

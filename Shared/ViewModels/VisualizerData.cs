@@ -13,7 +13,7 @@ namespace ParseTreeVisualizer {
     [Serializable]
     public class VisualizerData {
         public string Source { get; }
-        public TreeNodeData Root { get; }
+        public TreeNodeVM Root { get; }
         public IList<TerminalNodeImplVM> TerminalNodes { get; } = new List<TerminalNodeImplVM>();
         public VisualizerConfig Config { get; }
         public VisualizerData(IParseTree tree, VisualizerConfig config) {
@@ -28,7 +28,7 @@ namespace ParseTreeVisualizer {
                 vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
                 ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             }
-            Root = new TreeNodeData(tree, this, vocabulary, ruleNames);
+            Root = new TreeNodeVM(tree, this, vocabulary, ruleNames);
         }
 
         [NonSerialized]

@@ -63,7 +63,7 @@ namespace ParseTreeVisualizer {
 
             (int? startTokenIndex, int? endTokenIndex) = (null, null);
             if (sender == treeview) {
-                (startTokenIndex, endTokenIndex) = treeview.SelectedItem<TreeNodeData>().TokenSpan;
+                (startTokenIndex, endTokenIndex) = treeview.SelectedItem<TreeNodeVM>().TokenSpan;
             } else if (sender == source) {
                 var startChar = source.SelectionStart;
                 var endChar = source.SelectionStart + source.SelectionLength;
@@ -126,6 +126,7 @@ namespace ParseTreeVisualizer {
             if (_objectProvider == null || _config == null) { return; }
             DataContext = _objectProvider.TransferObject(_config);
             data.Root.IsExpanded = true;
+            Config.Write();
         }
 
         private IVisualizerObjectProvider _objectProvider;
