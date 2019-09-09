@@ -77,10 +77,22 @@
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1">
-                        <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
-                            <TextBlock Background="White" Text="Parser class:" />
-                            <ComboBox Name="selectedParser" ItemsSource="{Binding AvailableParsers}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
-                        </ag:AutoGrid>
+                        <StackPanel Orientation="Vertical">
+                            <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
+                                <TextBlock Background="White" Text="Parser class:" />
+                                <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
+                            </ag:AutoGrid>
+
+                            <!--<GroupBox Header="Token list">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox>Show text tokens</CheckBox>
+                                    <CheckBox>Show .NET whitespace tokens</CheckBox>
+                                    <CheckBox>Show errors</CheckBox>
+                                    <TextBlock Text="Show token types" />
+                                    <ListBox MaxHeight="200" SelectedValuePath="ID"/>
+                                </StackPanel>
+                            </GroupBox>-->
+                        </StackPanel>
                     </Border>
                 </Popup>
             </StackPanel>

@@ -17,15 +17,13 @@ namespace ParseTreeVisualizer {
         public string Text { get; }
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
-        public TerminalNodeImplVM(TerminalNodeImpl terminalNode, IVocabulary vocabulary) {
+        public TerminalNodeImplVM(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) {
             Index = terminalNode.Payload.TokenIndex;
 
-            if (vocabulary != null) {
-                TokenType = vocabulary.GetSymbolicName(terminalNode.Payload.Type);
-            } 
-            if (TokenType == null) {
-                TokenType = terminalNode.Payload.Type.ToString();
-            }
+            TokenType = 
+                tokenTypeMapping?[terminalNode.Payload.Type] ??
+                terminalNode.Payload.Type.ToString();
+
             Line = terminalNode.Payload.Line;
             Col = terminalNode.Payload.Column;
             Text = terminalNode.Payload.Text.ToCSharpLiteral(false);

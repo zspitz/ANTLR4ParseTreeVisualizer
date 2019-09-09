@@ -10,12 +10,11 @@ namespace ParseTreeVisualizer {
     public class ObjectSource : VisualizerObjectSource {
         public override void TransferData(object target, Stream incomingData, Stream outgoingData) {
             var config = (VisualizerConfig)Deserialize(incomingData);
-            config.LoadAvailableParser();
             var visualizerData = new VisualizerData((IParseTree)target, config);
             Serialize(outgoingData, visualizerData);
         }
 
-        public override void GetData(object target, Stream outgoingData) => 
+        public override void GetData(object target, Stream outgoingData) =>
             Serialize(outgoingData, Assembly.GetAssembly(target.GetType()).GetName().Name);
     }
 }

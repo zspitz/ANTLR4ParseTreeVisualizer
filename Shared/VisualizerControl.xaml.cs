@@ -126,6 +126,7 @@ namespace ParseTreeVisualizer {
             if (_objectProvider == null || _config == null) { return; }
             DataContext = _objectProvider.TransferObject(_config);
             data.Root.IsExpanded = true;
+            _config = data.Config;
             Config.Write();
         }
 
