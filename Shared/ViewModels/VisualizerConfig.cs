@@ -8,6 +8,9 @@ using ParseTreeVisualizer.Util;
 using static System.IO.Path;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace ParseTreeVisualizer {
     [Serializable]
@@ -24,9 +27,9 @@ namespace ParseTreeVisualizer {
             );
 
         public static VisualizerConfig Get() {
-            var ret = new VisualizerConfig();
-
+            var ret = new JObject();
             string fileText = null;
+
             if (Directory.Exists(ConfigFolder)) {
                 var testPath = ConfigPath(true);
                 if (File.Exists(testPath)) {
@@ -41,15 +44,13 @@ namespace ParseTreeVisualizer {
                     try {
                         fileText = File.ReadAllText(testPath);
                     } catch { }
-                    if (!fileText.IsNullOrWhitespace()) {
-                        var assemblyConfig = JObject.Parse(fileText);
-                        ret.SelectedParserName = (string)assemblyConfig[nameof(SelectedParserName)];
-                        ret.SelectedLexerName = (string)assemblyConfig[nameof(SelectedLexerName)];
-                    }
+                }
+                if (!fileText.IsNullOrWhitespace()) {
+                    ret.Merge(JObject.Parse(fileText));
                 }
             }
 
-            return ret;
+            return ret.ToObject<VisualizerConfig>();
         }
 
         private VisualizerConfig() { }
@@ -59,39 +60,48 @@ namespace ParseTreeVisualizer {
                 try {
                     Directory.CreateDirectory(ConfigFolder);
                 } catch {
+                    // we can't create the directory, so we can't write the configuration
                     return;
                 }
             }
 
-            var data = new JObject();
+            // write global
+            var resolver = new ConfigContractResolver { ForGlobal = true };
+            var settings = new JsonSerializerSettings {
+                ContractResolver = resolver,
+                Formatting = Formatting.Indented
+            };
+            var toWrite = JsonConvert.SerializeObject(this, settings);
+            try {
+                File.WriteAllText(ConfigPath(true), toWrite);
+            } catch { }
 
-            // filll globals here
-            // write globals to file
-
-            // fill assembly-specific here
-            data = new JObject();
-            if (!SelectedParserName.IsNullOrWhitespace()) {
-                data[nameof(SelectedParserName)] = SelectedParserName;
-                data[nameof(SelectedLexerName)] = SelectedLexerName;
-            }
-            var toWrite = data.ToString();
+            // write assembly-specific
+            resolver = new ConfigContractResolver { ForGlobal = false };
+            settings = new JsonSerializerSettings {
+                ContractResolver = resolver,
+                Formatting = Formatting.Indented
+            };
+            toWrite = JsonConvert.SerializeObject(this, settings);
             try {
                 File.WriteAllText(ConfigPath(false), toWrite);
             } catch { }
         }
 
-        private string selectedParserName;
-        public string SelectedParserName {
-            get => selectedParserName;
-            set => selectedParserName = value;
-        }
+
+        public string SelectedParserName { get; set; }
         public string SelectedLexerName { get; set; }
+        public bool ShowTextTokens { get; set; } = true;
+        public bool ShowWhitespaceTokens { get; set; } = true;
+        public bool ShowErrorTokens { get; set; } = true;
+        public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
 
         private VisualizerConfig _originalValues;
 
         public VisualizerConfig Clone() => new VisualizerConfig {
             SelectedParserName = SelectedParserName,
             SelectedLexerName = SelectedLexerName,
+            SelectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
             _originalValues = this
         };
 
@@ -99,8 +109,23 @@ namespace ParseTreeVisualizer {
             get {
                 if (_originalValues == null) { return null; }
                 return _originalValues.SelectedParserName != SelectedParserName ||
-                    _originalValues.SelectedLexerName != SelectedLexerName;
+                    _originalValues.SelectedLexerName != SelectedLexerName ||
+                    !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes);
             }
+        }
+    }
+
+    public class ConfigContractResolver : DefaultContractResolver {
+        private static readonly string[] globalNames = new[] { nameof(VisualizerConfig.TestGlobal) };
+        public bool ForGlobal { get; set; } = true;
+
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {
+            var ret = base.CreateProperties(type, memberSerialization);
+            var predicate = ForGlobal ? 
+                x => x.PropertyName.In(globalNames) :
+                (Func<JsonProperty, bool>)(x => x.PropertyName.NotIn(globalNames));
+            ret = ret.Where(predicate).ToList();
+            return ret;
         }
     }
 }

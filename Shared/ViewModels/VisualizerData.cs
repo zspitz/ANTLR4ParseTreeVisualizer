@@ -26,7 +26,7 @@ namespace ParseTreeVisualizer {
             if (!config.SelectedParserName.IsNullOrWhitespace()) {
                 var parserType = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetType(config.SelectedParserName)).FirstOrDefault(x => x != null);
                 vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
-                TokenTypeMapping = Enumerable.Range(0, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
+                TokenTypeMapping = Enumerable.Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
                 ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             }
@@ -59,7 +59,6 @@ namespace ParseTreeVisualizer {
         public List<ClassInfo> AvailableParsers { get; private set; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; private set; } = new List<ClassInfo>();
         public List<ClassInfo> ParserRuleContexts { get; private set; } = new List<ClassInfo>();
-        public HashSet<TokenTypeVM> AvailableTokens { get; } = new HashSet<TokenTypeVM>();
 
         // We need to load information from three different kinds of types: parsers, lexers, and parser context rules
 

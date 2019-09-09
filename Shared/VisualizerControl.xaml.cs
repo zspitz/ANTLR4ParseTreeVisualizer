@@ -37,6 +37,7 @@ namespace ParseTreeVisualizer {
                 configPopup.Opened += (s1, e1) => configPopup.DataContext = data.Config.Clone();
                 configPopup.Closed += (s1, e1) => {
                     var popupConfig = configPopup.DataContext<VisualizerConfig>();
+                    popupConfig.SelectedTokenTypes = lbSelectedTokenTypes.SelectedItems.Cast<KeyValuePair<int,string>>().Select(x => x.Key).ToHashSet();
                     if (popupConfig.ShouldTriggerReload ?? false) {
                         Config = configPopup.DataContext<VisualizerConfig>();
                     }
