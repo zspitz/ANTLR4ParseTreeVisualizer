@@ -14,7 +14,7 @@
 
   ![Choosing a parser](choose-parser.gif)
 
-* Selection sync
+* Selection sync, when selecting in the token list, the tree view, or the source text.
 
   ![Selection sync](selection-sync.gif)
 
@@ -39,8 +39,6 @@ Save the compiled DLL in one of Visual Studio's recognized visualizer folders. Y
 
 Note that rule and token names aren't part of the `RuleContext` targeted by the visualizer; by default, tokens will be identified by their token ID, and rule contexts will be identified by the typename of the instance (e.g. `SubStmtContext`). To display the rule and token names, click on the settings gear at the top right of the window, and choose the appropriate parser class from the available classes.
 
-(ATM this selection isn't persisted between sessions; this is being tracked at [#18](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/18).)
-
 ## Contributing
 
 * Test the visualizer
@@ -52,5 +50,5 @@ Note that rule and token names aren't part of the `RuleContext` targeted by the 
 ## Roadmap
 
 * The current visualization targets `RulerContext`. Some sort of visualization for token streams, usable from the `RulerContext` visualization, and independently.
-* Parsing errors
+* [Parsing errors in a separate pane](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/24)
 * Live window, perhaps as a VS extension. It should be possible to select a lexer class from a lexer assembly, a parser class from a parser assembly, and display the resultant token stream and parse tree.
