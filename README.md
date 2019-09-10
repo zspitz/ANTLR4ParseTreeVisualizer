@@ -14,7 +14,7 @@
 
   ![Choosing a parser](choose-parser.gif)
 
-* Selection sync
+* Selection sync, when selecting in the token list, the tree view, or the source text.
 
   ![Selection sync](selection-sync.gif)
 
