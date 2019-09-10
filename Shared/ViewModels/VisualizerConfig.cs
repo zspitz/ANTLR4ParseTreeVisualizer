@@ -105,6 +105,7 @@ namespace ParseTreeVisualizer {
             _originalValues = this
         };
 
+        [JsonIgnore]
         public bool? ShouldTriggerReload {
             get {
                 if (_originalValues == null) { return null; }
@@ -116,7 +117,7 @@ namespace ParseTreeVisualizer {
     }
 
     public class ConfigContractResolver : DefaultContractResolver {
-        private static readonly string[] globalNames = new[] { nameof(VisualizerConfig.TestGlobal) };
+        private static readonly string[] globalNames = new[] { "" };
         public bool ForGlobal { get; set; } = true;
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {

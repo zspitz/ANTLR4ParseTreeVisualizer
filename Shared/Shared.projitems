@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Util\ComboBoxTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\FrameworkElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ListBoxExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ClassInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PropertyValueVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Converters.cs" />
