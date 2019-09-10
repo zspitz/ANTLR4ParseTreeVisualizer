@@ -50,5 +50,5 @@ Note that rule and token names aren't part of the `RuleContext` targeted by the 
 ## Roadmap
 
 * The current visualization targets `RulerContext`. Some sort of visualization for token streams, usable from the `RulerContext` visualization, and independently.
-* Parsing errors
+* [Parsing errors in a separate pane](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/24)
 * Live window, perhaps as a VS extension. It should be possible to select a lexer class from a lexer assembly, a parser class from a parser assembly, and display the resultant token stream and parse tree.
