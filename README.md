@@ -18,6 +18,10 @@
 
   ![Selection sync](selection-sync.gif)
 
+* Filtering the token list, by text, whitespace, or error; or by specific token types:
+
+  ![Token filtering](token-filtering.gif)
+
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
 ## Installation
