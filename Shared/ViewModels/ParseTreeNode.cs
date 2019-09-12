@@ -21,9 +21,10 @@ namespace ParseTreeVisualizer.ViewModels {
         public List<PropertyValue> Properties { get; }
         public List<ParseTreeNode> Children { get; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
+        public (int startChar, int endChar) CharSpan { get; }
         public TreeNodeType? NodeType { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping, Config config) {
             var type = tree.GetType();
 
             if (tree is RuleContext) {
@@ -37,7 +38,9 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var token = new Token(terminalNode, tokenTypeMapping);
-                tokens.Add(token);
+                if (config.SelectedTokenTypes.None() || token.TokenTypeID.In(config.SelectedTokenTypes)) {
+                    tokens.Add(token);
+                }
                 if (token.IsError) {
                     Caption = token.Text;
                     NodeType = TreeNodeType.Error;
@@ -45,13 +48,22 @@ namespace ParseTreeVisualizer.ViewModels {
                     Caption = $"\"{token.Text}\"";
                     NodeType = TreeNodeType.Token;
                 }
+
+                CharSpan = token.Span;
             }
 
             Properties = type.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValue(tree, prp)).ToList();
             Children = tree.Children()
-                .Select(x => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping))
+                .Select(x => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config))
                 .ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
+
+            if (Children.Any()) {
+                CharSpan = (
+                    Children.First().CharSpan.startChar,
+                    Children.Last().CharSpan.endChar
+                );
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

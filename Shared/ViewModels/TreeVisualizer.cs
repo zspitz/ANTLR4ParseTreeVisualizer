@@ -20,24 +20,27 @@ namespace ParseTreeVisualizer.ViewModels {
             Source = tree.GetText();
             Config = config;
 
-            IVocabulary vocabulary = null;
             string[] ruleNames = null;
+            Dictionary<int, string> tokenTypeMapping = null;
 
             if (!config.SelectedParserName.IsNullOrWhitespace()) {
                 var parserType = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetType(config.SelectedParserName)).FirstOrDefault(x => x != null);
-                vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
-                TokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
+                var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
+                tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
                 ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             }
 
-            Root = new ParseTreeNode(tree, Tokens, ruleNames, TokenTypeMapping);
+            Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config);
 
             #region Load debuggee state
 
-            if (TokenTypeMapping == null) {
-                TokenTypeMapping = Range(1, Tokens.MaxTokenTypeID ?? 0).ToDictionary(x => (x, x.ToString()));
-            }
+            config.TokenTypes = (
+                tokenTypeMapping ??
+                Range(1, Tokens.MaxTokenTypeID ?? 0).ToDictionary(x => (x, x.ToString()))
+            ).SelectKVP((id, text) => new TokenType(id, text) {
+                IsSelected = id.In(config.SelectedTokenTypes)
+            }).OrderBy(x => x.Text).ToList();
 
             {
                 var baseTypes = new[] { typeof(Parser), typeof(Lexer), typeof(ParserRuleContext) };
@@ -74,7 +77,7 @@ namespace ParseTreeVisualizer.ViewModels {
         }
 
         #region Debuggee state
-        public Dictionary<int, string> TokenTypeMapping { get; }
+        //public List<TokenType> TokenTypes { get; }
 
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();

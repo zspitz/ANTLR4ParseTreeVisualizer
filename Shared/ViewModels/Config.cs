@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.IO.Path;
 
 namespace ParseTreeVisualizer.ViewModels {
@@ -52,6 +50,7 @@ namespace ParseTreeVisualizer.ViewModels {
 
             return ret.ToObject<Config>();
         }
+
         private Config() { }
 
         public string SelectedParserName { get; set; }
@@ -61,6 +60,8 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool ShowErrorTokens { get; set; } = true;
         public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
 
+        [NonSerialized]
+        [JsonIgnore]
         private Config _originalValues;
 
         public void Write() {
@@ -100,7 +101,8 @@ namespace ParseTreeVisualizer.ViewModels {
             SelectedParserName = SelectedParserName,
             SelectedLexerName = SelectedLexerName,
             SelectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
-            _originalValues = this
+            _originalValues = this,
+            TokenTypes = TokenTypes?.Select().ToList()
         };
 
         public bool? ShouldTriggerReload() {
@@ -108,6 +110,15 @@ namespace ParseTreeVisualizer.ViewModels {
             return _originalValues.SelectedParserName != SelectedParserName ||
                 _originalValues.SelectedLexerName != SelectedLexerName ||
                 !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes);
+        }
+
+        // used for the view
+        [JsonIgnore]
+        public List<TokenType> TokenTypes { get; set; }
+        public void UpdateSelectedTokenTypes() {
+            if (TokenTypes==null) { return; }
+            SelectedTokenTypes = TokenTypes.Where(x => x.IsSelected).Select(x => x.Index).ToHashSet();
+            TokenTypes = null;
         }
     }
 

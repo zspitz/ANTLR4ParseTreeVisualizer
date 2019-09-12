@@ -43,11 +43,11 @@ namespace ParseTreeVisualizer.ViewModels {
         }
 
         private bool inUpdateSelection;
-        private void updateTokenIsSelected(int? startTokenIndex, int? endTokenIndex) {
+        private void updateSelection(int? startChar, int? endChar) {
             inUpdateSelection = true;
             foreach (var token in this) {
-                if (startTokenIndex != null && endTokenIndex != null) {
-                    token.IsSelected = token.Index >= startTokenIndex && token.Index <= endTokenIndex;
+                if (startChar != null && endChar != null) {
+                    token.IsSelected = token.Span.start <= endChar && token.Span.stop >= startChar;
                 } else {
                     token.IsSelected = false;
                 }
@@ -56,39 +56,44 @@ namespace ParseTreeVisualizer.ViewModels {
         }
 
         private void recalculateProperties() {
-            int? newSelectionStartTokenIndex = null;
-            int? newSelectionEndTokenIndex = null;
+            int? newStartChar = null;
+            int? newEndChar = null;
             int? newMaxTokenTypeID = null;
 
             foreach (var token in this) {
                 if (token.IsSelected) {
-                    newSelectionStartTokenIndex = Math.Min(newSelectionStartTokenIndex ?? 0, token.Index);
-                    newSelectionEndTokenIndex = Math.Min(newSelectionEndTokenIndex ?? 0, token.Index);
+                    newStartChar = 
+                        newStartChar == null ? 
+                            token.Span.start : 
+                            Math.Min(newStartChar.Value, token.Span.start);
+                    newEndChar =
+                        newEndChar == null ?
+                            token.Span.stop:
+                            Math.Min(newEndChar.Value, token.Span.stop);
                 }
                 newMaxTokenTypeID = Math.Max(newMaxTokenTypeID ?? 0, token.TokenTypeID);
             }
 
-            this.NotifyChanged(ref selectionStartTokenIndex, newSelectionStartTokenIndex, OnPropertyChanged);
-            this.NotifyChanged(ref selectionEndTokenIndex, newSelectionEndTokenIndex, OnPropertyChanged);
-            this.NotifyChanged(ref maxTokenTypeID, newMaxTokenTypeID, OnPropertyChanged);
+            this.NotifyChanged(ref selectionStartChar, newStartChar, OnPropertyChanged, nameof(SelectionStartChar));
+            this.NotifyChanged(ref selectionEndChar, newEndChar, OnPropertyChanged, nameof(SelectionEndChar));
+            this.NotifyChanged(ref maxTokenTypeID, newMaxTokenTypeID, OnPropertyChanged, nameof(MaxTokenTypeID));
         }
 
-        private int? selectionStartTokenIndex;
-        public int? SelectionStartTokenIndex {
-            get => selectionStartTokenIndex;
+        private int? selectionStartChar;
+        public int? SelectionStartChar {
+            get => selectionStartChar;
             set {
-                updateTokenIsSelected(value, selectionEndTokenIndex);
-                this.NotifyChanged(ref selectionStartTokenIndex, value, OnPropertyChanged, "SelectionStartTokenIndex");
-
+                updateSelection(value, selectionEndChar);
+                this.NotifyChanged(ref selectionStartChar, value, OnPropertyChanged);
             }
         }
 
-        private int? selectionEndTokenIndex;
-        public int? SelectionEndTokenIndex {
-            get => selectionEndTokenIndex;
+        private int? selectionEndChar;
+        public int? SelectionEndChar {
+            get => selectionEndChar;
             set {
-                updateTokenIsSelected(selectionStartTokenIndex, value);
-                this.NotifyChanged(ref selectionEndTokenIndex, value, OnPropertyChanged);
+                updateSelection(selectionStartChar, value);
+                this.NotifyChanged(ref selectionEndChar, value, OnPropertyChanged);
             }
         }
 
@@ -100,7 +105,16 @@ namespace ParseTreeVisualizer.ViewModels {
         private Dictionary<int, Token> tokenByIndex;
         public Token GetByIndex(int index) {
             if (tokenByIndex == null) { tokenByIndex = this.ToDictionary(x => x.Index); }
-            return tokenByIndex[index];
+            if (tokenByIndex.TryGetValue(index, out var token)) { return token; }
+            return null;
         }
+
+        public void Select(int? startChar, int? endChar) {
+            updateSelection(startChar, endChar);
+            this.NotifyChanged(ref selectionStartChar, startChar, OnPropertyChanged, nameof(SelectionStartChar));
+            this.NotifyChanged(ref selectionEndChar, endChar, OnPropertyChanged, nameof(SelectionEndChar));
+        }
+
+        public void ClearSelection() => Select(null, null);
     }
 }

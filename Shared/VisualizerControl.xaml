@@ -78,7 +78,7 @@
         <Button Name="configButton" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0">
             <StackPanel>
                 <TextBlock Text="&#9881;" />
-                <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False">
+                <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1">
                         <ag:AutoGrid ColumnCount="2">
                             <StackPanel>
@@ -87,8 +87,13 @@
                                 <CheckBox IsChecked="{Binding ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
                                 <CheckBox IsChecked="{Binding ShowErrorTokens}">Show errors</CheckBox>
                                 <TextBlock Text="Show token types" />
-                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Key" DisplayMemberPath="Value" SelectionMode="Multiple"
-                                             ItemsSource="{Binding DataContext.TokenTypeMapping, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" />
+                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" DisplayMemberPath="Text" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="Parse tree" />

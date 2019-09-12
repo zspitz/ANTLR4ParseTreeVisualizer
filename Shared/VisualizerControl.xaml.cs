@@ -42,16 +42,11 @@ namespace ParseTreeVisualizer {
                 configPopup.Opened += (s1, e1) => {
                     var cloned = data.Config.Clone();
                     configPopup.DataContext = cloned;
-                    // TODO replace this foreach with databinding -- https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/22
-                    foreach (var kvp in data.TokenTypeMapping.Where(x =>  x.Key.In(cloned.SelectedTokenTypes))) {
-                        lbSelectedTokenTypes.SelectedItems.Add(kvp);
-                    }
                 };
 
                 configPopup.Closed += (s1, e1) => {
                     var popupConfig = configPopup.DataContext<Config>();
-                    // TODO replace the next line with databinding -- https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/22
-                    popupConfig.SelectedTokenTypes = lbSelectedTokenTypes.SelectedItems.Cast<KeyValuePair<int,string>>().Select(x => x.Key).ToHashSet();
+                    popupConfig.UpdateSelectedTokenTypes(); // in case changes were made to the selection
                     if (popupConfig.ShouldTriggerReload() ?? false) {
                         Config = popupConfig;
                     }
@@ -76,60 +71,43 @@ namespace ParseTreeVisualizer {
             if (inChangeSelection) { return; }
             inChangeSelection = true;
 
-            (int? startTokenIndex, int? endTokenIndex) = (null, null);
+            (int start, int end)? charSpan = null;
             if (sender == treeview) {
-                (startTokenIndex, endTokenIndex) = treeview.SelectedItem<ParseTreeNode>().TokenSpan;
+                charSpan = treeview.SelectedItem<ParseTreeNode>()?.CharSpan;
             } else if (sender == source) {
-                var startChar = source.SelectionStart;
-                var endChar = source.SelectionStart + source.SelectionLength;
-                startTokenIndex = data.Tokens.FirstOrDefault(x => x.Span.start <= startChar && x.Span.stop >= startChar)?.Index ??
-                    data.Tokens.DefaultIfEmpty().Min(x => x.Index);
-                endTokenIndex = data.Tokens.FirstOrDefault(x => x.Span.start <= endChar && x.Span.stop >= endChar)?.Index ??
-                    data.Tokens.DefaultIfEmpty().Max(x => x.Index);
+                charSpan = (source.SelectionStart, source.SelectionStart + source.SelectionLength);
             } else if (sender == tokens) {
-                var selectedItems = tokens.SelectedItems<Token>();
-                if (selectedItems.Any()) {
-                    startTokenIndex = selectedItems.Min(x => x.Index);
-                    endTokenIndex = selectedItems.Max(x => x.Index);
+                var tokensStartChar = data.Tokens.SelectionStartChar;
+                var tokensEndChar = data.Tokens.SelectionEndChar;
+                if (tokensStartChar != null && tokensEndChar != null) {
+                    charSpan = (tokensStartChar.Value, tokensEndChar.Value);
                 }
-            } else {
-                throw new InvalidOperationException("Unrecognized source of selection change.");
             }
 
             if (sender != source) {
-                if (startTokenIndex == null || endTokenIndex == null) {
-                    source.Select(0, 0);
+                if (charSpan != null) {
+                    source.Select(charSpan.Value.start, charSpan.Value.end - charSpan.Value.start + 1);
                 } else {
-                    var selectionStart = data.Tokens.GetByIndex(startTokenIndex.Value).Span.start;
-                    var selectionStop = data.Tokens.GetByIndex(endTokenIndex.Value).Span.stop;
-                    if (selectionStart < 0) {
-                        source.Select(0, 0);
-                    } else {
-                        source.Select(selectionStart, selectionStop - selectionStart + 1);
-                    }
+                    source.Select(0, 0);
                 }
             }
 
             if (sender != tokens) {
-                tokens.SelectedItems.Clear();
-                if (startTokenIndex != null && endTokenIndex != null) {
-                    data.Tokens.SelectionStartTokenIndex = startTokenIndex;
-                    data.Tokens.SelectionEndTokenIndex = endTokenIndex;
-                    tokens.ScrollIntoView(data.Tokens[startTokenIndex.Value]);
-
-                    //foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
-                    //    tokens.SelectedItems.Add(selectedToken);
-                    //    tokens.ScrollIntoView(selectedToken);
-                    //}
+                if (charSpan == null) {
+                    data.Tokens.Select(null, null);
+                } else {
+                    data.Tokens.Select(charSpan.Value.start, charSpan.Value.end);
                 }
             }
 
             if (sender != treeview) {
                 data.Root.ClearSelection();
-                if (startTokenIndex != null && endTokenIndex != null) {
+                if (charSpan != null) {
+                    var startChar = charSpan.Value.start;
+                    var endChar = charSpan.Value.end;
                     var selectedNode = data.Root;
                     while (true) {
-                        var nextChild = selectedNode.Children.SingleOrDefault(x => startTokenIndex >= x.TokenSpan.startTokenIndex && endTokenIndex <= x.TokenSpan.endTokenIndex);
+                        var nextChild = selectedNode.Children.SingleOrDefault(x => startChar >= x.CharSpan.startChar && endChar<=x.CharSpan.endChar);
                         if (nextChild == null) { break; }
                         selectedNode = nextChild;
                         selectedNode.IsExpanded = true;

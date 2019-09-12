@@ -3,6 +3,7 @@ using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Tree;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer;
+using ParseTreeVisualizer.ViewModels;
 using Rubberduck.Parsing.Grammar;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,11 @@ End Sub".Trim();
             var parser = new VBAParser(tokens);
             parser.Interpreter.PredictionMode = PredictionMode.Sll;
             var tree = parser.subStmt();
+
+            Config.AssemblyName = "Rubberduck.Parsing";
+            var config = Config.Get();
+            var objectsource = new VisualizerObjectSource();
+            
 
 
             
