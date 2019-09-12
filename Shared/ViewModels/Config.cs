@@ -102,14 +102,20 @@ namespace ParseTreeVisualizer.ViewModels {
             SelectedLexerName = SelectedLexerName,
             SelectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
             _originalValues = this,
-            TokenTypes = TokenTypes?.Select().ToList()
+            TokenTypes = TokenTypes?.Select().ToList(),
+            ShowTextTokens = ShowTextTokens,
+            ShowErrorTokens = ShowErrorTokens,
+            ShowWhitespaceTokens = ShowWhitespaceTokens
         };
 
         public bool? ShouldTriggerReload() {
             if (_originalValues == null) { return null; }
             return _originalValues.SelectedParserName != SelectedParserName ||
                 _originalValues.SelectedLexerName != SelectedLexerName ||
-                !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes);
+                !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes) ||
+                _originalValues.ShowTextTokens != ShowTextTokens ||
+                _originalValues.ShowErrorTokens != ShowErrorTokens ||
+                _originalValues.ShowWhitespaceTokens != ShowWhitespaceTokens;
         }
 
         // used for the view

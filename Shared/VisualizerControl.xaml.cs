@@ -60,7 +60,9 @@ namespace ParseTreeVisualizer {
             };
 
             source.SelectionChanged += (s, e) => changeSelection(source);
-            tokens.SelectionChanged += (s, e) => changeSelection(tokens);
+            tokens.SelectionChanged += (s, e) => {
+                changeSelection(tokens);
+            };
             treeview.SelectedItemChanged += (s, e) => changeSelection(treeview);
         }
 

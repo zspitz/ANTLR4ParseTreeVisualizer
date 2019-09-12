@@ -38,9 +38,7 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var token = new Token(terminalNode, tokenTypeMapping);
-                if (config.SelectedTokenTypes.None() || token.TokenTypeID.In(config.SelectedTokenTypes)) {
-                    tokens.Add(token);
-                }
+
                 if (token.IsError) {
                     Caption = token.Text;
                     NodeType = TreeNodeType.Error;
@@ -48,8 +46,24 @@ namespace ParseTreeVisualizer.ViewModels {
                     Caption = $"\"{token.Text}\"";
                     NodeType = TreeNodeType.Token;
                 }
-
                 CharSpan = token.Span;
+
+                // should the token be added to the token list?
+                var addToken = false;
+
+                if (token.IsError) {
+                    addToken = config.ShowErrorTokens;
+                } else if (token.Text.IsNullOrWhitespace()) {
+                    addToken = config.ShowWhitespaceTokens;
+                } else { //token is not whitespace
+                    addToken = config.ShowTextTokens;
+                }
+
+                addToken &= config.SelectedTokenTypes.None() || token.TokenTypeID.In(config.SelectedTokenTypes);
+
+                if (addToken) {
+                    tokens.Add(token);
+                }
             }
 
             Properties = type.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValue(tree, prp)).ToList();

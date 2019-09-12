@@ -69,7 +69,7 @@ namespace ParseTreeVisualizer.ViewModels {
                     newEndChar =
                         newEndChar == null ?
                             token.Span.stop:
-                            Math.Min(newEndChar.Value, token.Span.stop);
+                            Math.Max(newEndChar.Value, token.Span.stop);
                 }
                 newMaxTokenTypeID = Math.Max(newMaxTokenTypeID ?? 0, token.TokenTypeID);
             }

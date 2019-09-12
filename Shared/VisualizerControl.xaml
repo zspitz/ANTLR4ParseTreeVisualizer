@@ -101,7 +101,6 @@
                                     <TextBlock Background="White" Text="Parser class:" />
                                     <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
                                 </ag:AutoGrid>
-
                             </StackPanel>
                         </ag:AutoGrid>
                     </Border>
