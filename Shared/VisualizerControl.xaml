@@ -39,12 +39,13 @@
         </my1:ComboBoxTemplateSelector>
     </FrameworkElement.Resources>
 
-    <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
+    <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
         <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
-        <DataGrid Name="tokens" ItemsSource="{Binding TerminalNodes,Mode=OneTime}" >
+        <DataGrid Name="tokens" ItemsSource="{Binding Tokens,Mode=OneTime}" >
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
@@ -79,25 +80,25 @@
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1">
-                        <StackPanel Orientation="Vertical">
-                            
-                            <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
-                                <TextBlock Background="White" Text="Parser class:" />
-                                <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
-                            </ag:AutoGrid>
-                            
-                            <GroupBox Header="Token list">
-                                <StackPanel Orientation="Vertical">
-                                    <CheckBox IsChecked="{Binding ShowTextTokens}">Show text tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowErrorTokens}">Show errors</CheckBox>
-                                    <TextBlock Text="Show token types" />
-                                    <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Key" DisplayMemberPath="Value" SelectionMode="Multiple"
+                        <ag:AutoGrid ColumnCount="2">
+                            <StackPanel>
+                                <TextBlock Text="Token list" />
+                                <CheckBox IsChecked="{Binding ShowTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowErrorTokens}">Show errors</CheckBox>
+                                <TextBlock Text="Show token types" />
+                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Key" DisplayMemberPath="Value" SelectionMode="Multiple"
                                              ItemsSource="{Binding DataContext.TokenTypeMapping, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" />
-                                </StackPanel>
-                            </GroupBox>
-                            
-                        </StackPanel>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Parse tree" />
+                                <ag:AutoGrid Margin="6" ChildMargin="3" ChildVerticalAlignment="Center" ColumnCount="2">
+                                    <TextBlock Background="White" Text="Parser class:" />
+                                    <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
+                                </ag:AutoGrid>
+
+                            </StackPanel>
+                        </ag:AutoGrid>
                     </Border>
                 </Popup>
             </StackPanel>

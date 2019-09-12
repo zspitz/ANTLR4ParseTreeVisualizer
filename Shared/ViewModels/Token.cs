@@ -1,28 +1,35 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime.Tree;
+using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ParseTreeVisualizer.Util;
+using System.ComponentModel;
 
-namespace ParseTreeVisualizer {
+namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
-    public class TerminalNodeImplVM {
+    public class Token : INotifyPropertyChanged {
         public int Index { get; }
         public string TokenType { get; }
+        public int TokenTypeID { get; }
         public int Line { get; }
         public int Col { get; }
         public string Text { get; }
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
-        public TerminalNodeImplVM(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) {
+
+        private bool isSelected;
+        public bool IsSelected {
+            get => isSelected;
+            set => this.NotifyChanged(ref isSelected, value, args => PropertyChanged?.Invoke(this, args));
+        }
+
+        public Token(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) {
             Index = terminalNode.Payload.TokenIndex;
 
+            TokenTypeID = terminalNode.Payload.Type;
+
             TokenType = 
-                tokenTypeMapping?[terminalNode.Payload.Type] ??
-                terminalNode.Payload.Type.ToString();
+                tokenTypeMapping?[TokenTypeID] ??
+                TokenTypeID.ToString();
 
             Line = terminalNode.Payload.Line;
             Col = terminalNode.Payload.Column;
@@ -33,5 +40,7 @@ namespace ParseTreeVisualizer {
 
             Span = (terminalNode.Payload.StartIndex, terminalNode.Payload.StopIndex);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

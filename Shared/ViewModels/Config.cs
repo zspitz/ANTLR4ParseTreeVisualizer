@@ -1,32 +1,32 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using ParseTreeVisualizer.Util;
-using static System.IO.Path;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Reflection;
+using ParseTreeVisualizer.Util;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.IO.Path;
 
-namespace ParseTreeVisualizer {
+namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
-    public class VisualizerConfig {
+    public class Config {
         public static string AssemblyName { get; set; }
+
         private static readonly string ConfigFolder = Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "ANTLR4VisualizerParser"
         );
+
         private static string ConfigPath(bool globals = true) =>
             Combine(
                 ConfigFolder,
                 globals ? "config.json" : $"{AssemblyName}.json"
             );
 
-        public static VisualizerConfig Get() {
+        public static Config Get() {
             var ret = new JObject();
             string fileText = null;
 
@@ -50,10 +50,18 @@ namespace ParseTreeVisualizer {
                 }
             }
 
-            return ret.ToObject<VisualizerConfig>();
+            return ret.ToObject<Config>();
         }
+        private Config() { }
 
-        private VisualizerConfig() { }
+        public string SelectedParserName { get; set; }
+        public string SelectedLexerName { get; set; }
+        public bool ShowTextTokens { get; set; } = true;
+        public bool ShowWhitespaceTokens { get; set; } = true;
+        public bool ShowErrorTokens { get; set; } = true;
+        public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
+
+        private Config _originalValues;
 
         public void Write() {
             if (!Directory.Exists(ConfigFolder)) {
@@ -88,41 +96,28 @@ namespace ParseTreeVisualizer {
             } catch { }
         }
 
-
-        public string SelectedParserName { get; set; }
-        public string SelectedLexerName { get; set; }
-        public bool ShowTextTokens { get; set; } = true;
-        public bool ShowWhitespaceTokens { get; set; } = true;
-        public bool ShowErrorTokens { get; set; } = true;
-        public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
-
-        private VisualizerConfig _originalValues;
-
-        public VisualizerConfig Clone() => new VisualizerConfig {
+        public Config Clone() => new Config {
             SelectedParserName = SelectedParserName,
             SelectedLexerName = SelectedLexerName,
             SelectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
             _originalValues = this
         };
 
-        [JsonIgnore]
-        public bool? ShouldTriggerReload {
-            get {
-                if (_originalValues == null) { return null; }
-                return _originalValues.SelectedParserName != SelectedParserName ||
-                    _originalValues.SelectedLexerName != SelectedLexerName ||
-                    !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes);
-            }
+        public bool? ShouldTriggerReload() {
+            if (_originalValues == null) { return null; }
+            return _originalValues.SelectedParserName != SelectedParserName ||
+                _originalValues.SelectedLexerName != SelectedLexerName ||
+                !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes);
         }
     }
 
-    public class ConfigContractResolver : DefaultContractResolver {
+    internal class ConfigContractResolver : DefaultContractResolver {
         private static readonly string[] globalNames = new[] { "" };
         public bool ForGlobal { get; set; } = true;
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {
             var ret = base.CreateProperties(type, memberSerialization);
-            var predicate = ForGlobal ? 
+            var predicate = ForGlobal ?
                 x => x.PropertyName.In(globalNames) :
                 (Func<JsonProperty, bool>)(x => x.PropertyName.NotIn(globalNames));
             ret = ret.Where(predicate).ToList();

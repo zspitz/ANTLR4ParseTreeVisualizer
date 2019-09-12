@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer.Util;
+using ParseTreeVisualizer.ViewModels;
 
 namespace ParseTreeVisualizer {
     public partial class VisualizerControl {
@@ -25,6 +23,12 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
+            tokens.AutoGeneratingColumn += (s, e) => {
+                if (e.PropertyName.In(nameof(Token.IsSelected), nameof(Token.TokenTypeID))) {
+                    e.Cancel = true;
+                }
+            };
+
             Loaded += (s, e) => {
                 // https://stackoverflow.com/a/21436273/111794
                 configPopup.CustomPopupPlacementCallback += (popupSize, targetSize, offset) =>
@@ -34,12 +38,22 @@ namespace ParseTreeVisualizer {
                         }
                     };
                 configButton.Click += (s1, e1) => configPopup.IsOpen = true;
-                configPopup.Opened += (s1, e1) => configPopup.DataContext = data.Config.Clone();
+
+                configPopup.Opened += (s1, e1) => {
+                    var cloned = data.Config.Clone();
+                    configPopup.DataContext = cloned;
+                    // TODO replace this foreach with databinding -- https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/22
+                    foreach (var kvp in data.TokenTypeMapping.Where(x =>  x.Key.In(cloned.SelectedTokenTypes))) {
+                        lbSelectedTokenTypes.SelectedItems.Add(kvp);
+                    }
+                };
+
                 configPopup.Closed += (s1, e1) => {
-                    var popupConfig = configPopup.DataContext<VisualizerConfig>();
+                    var popupConfig = configPopup.DataContext<Config>();
+                    // TODO replace the next line with databinding -- https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/22
                     popupConfig.SelectedTokenTypes = lbSelectedTokenTypes.SelectedItems.Cast<KeyValuePair<int,string>>().Select(x => x.Key).ToHashSet();
-                    if (popupConfig.ShouldTriggerReload ?? false) {
-                        Config = configPopup.DataContext<VisualizerConfig>();
+                    if (popupConfig.ShouldTriggerReload() ?? false) {
+                        Config = popupConfig;
                     }
                 };
 
@@ -55,7 +69,7 @@ namespace ParseTreeVisualizer {
             treeview.SelectedItemChanged += (s, e) => changeSelection(treeview);
         }
 
-        private VisualizerData data => (VisualizerData)DataContext;
+        private TreeVisualizer data => (TreeVisualizer)DataContext;
 
         private bool inChangeSelection;
         private void changeSelection(object sender) {
@@ -64,30 +78,30 @@ namespace ParseTreeVisualizer {
 
             (int? startTokenIndex, int? endTokenIndex) = (null, null);
             if (sender == treeview) {
-                (startTokenIndex, endTokenIndex) = treeview.SelectedItem<TreeNodeVM>().TokenSpan;
+                (startTokenIndex, endTokenIndex) = treeview.SelectedItem<ParseTreeNode>().TokenSpan;
             } else if (sender == source) {
                 var startChar = source.SelectionStart;
                 var endChar = source.SelectionStart + source.SelectionLength;
-                startTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start <= startChar && x.Span.stop >= startChar)?.Index ??
-                    data.TerminalNodes.Min(x => x.Index);
-                endTokenIndex = data.TerminalNodes.FirstOrDefault(x => x.Span.start <= endChar && x.Span.stop >= endChar)?.Index ??
-                    data.TerminalNodes.Max(x => x.Index);
+                startTokenIndex = data.Tokens.FirstOrDefault(x => x.Span.start <= startChar && x.Span.stop >= startChar)?.Index ??
+                    data.Tokens.DefaultIfEmpty().Min(x => x.Index);
+                endTokenIndex = data.Tokens.FirstOrDefault(x => x.Span.start <= endChar && x.Span.stop >= endChar)?.Index ??
+                    data.Tokens.DefaultIfEmpty().Max(x => x.Index);
             } else if (sender == tokens) {
-                var selectedItems = tokens.SelectedItems<TerminalNodeImplVM>();
+                var selectedItems = tokens.SelectedItems<Token>();
                 if (selectedItems.Any()) {
                     startTokenIndex = selectedItems.Min(x => x.Index);
                     endTokenIndex = selectedItems.Max(x => x.Index);
                 }
             } else {
-                throw new InvalidOperationException("Unrecognized selection change source.");
+                throw new InvalidOperationException("Unrecognized source of selection change.");
             }
 
             if (sender != source) {
                 if (startTokenIndex == null || endTokenIndex == null) {
                     source.Select(0, 0);
                 } else {
-                    var selectionStart = data.NodesByIndex[startTokenIndex.Value].Span.start;
-                    var selectionStop = data.NodesByIndex[endTokenIndex.Value].Span.stop;
+                    var selectionStart = data.Tokens.GetByIndex(startTokenIndex.Value).Span.start;
+                    var selectionStop = data.Tokens.GetByIndex(endTokenIndex.Value).Span.stop;
                     if (selectionStart < 0) {
                         source.Select(0, 0);
                     } else {
@@ -99,10 +113,14 @@ namespace ParseTreeVisualizer {
             if (sender != tokens) {
                 tokens.SelectedItems.Clear();
                 if (startTokenIndex != null && endTokenIndex != null) {
-                    foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
-                        tokens.SelectedItems.Add(selectedToken);
-                        tokens.ScrollIntoView(selectedToken);
-                    }
+                    data.Tokens.SelectionStartTokenIndex = startTokenIndex;
+                    data.Tokens.SelectionEndTokenIndex = endTokenIndex;
+                    tokens.ScrollIntoView(data.Tokens[startTokenIndex.Value]);
+
+                    //foreach (var selectedToken in data.TerminalNodes.Where(x => x.Index >= startTokenIndex && x.Index <= endTokenIndex)) {
+                    //    tokens.SelectedItems.Add(selectedToken);
+                    //    tokens.ScrollIntoView(selectedToken);
+                    //}
                 }
             }
 
@@ -129,6 +147,10 @@ namespace ParseTreeVisualizer {
             data.Root.IsExpanded = true;
             _config = data.Config;
             Config.Write();
+
+            if (data.AssemblyLoadErrors.Any()) {
+                MessageBox.Show($"Error loading the following assemblies:\n\n{data.AssemblyLoadErrors.Joined("\n")}");
+            }
         }
 
         private IVisualizerObjectProvider _objectProvider;
@@ -141,8 +163,8 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private VisualizerConfig _config;
-        public VisualizerConfig Config {
+        private Config _config;
+        public Config Config {
             get => _config;
             set {
                 if (value == _config) { return; }

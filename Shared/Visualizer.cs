@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.VisualStudio.DebuggerVisualizers;
-using System.Windows;
 using static System.Windows.SystemColors;
-using ParseTreeVisualizer.Util;
+using ParseTreeVisualizer.ViewModels;
 
 [assembly: DebuggerVisualizer(
     visualizer: typeof(ParseTreeVisualizer.Visualizer),
@@ -25,10 +20,10 @@ namespace ParseTreeVisualizer {
             window.Resources[InactiveSelectionHighlightBrushKey] = HighlightBrush;
             window.Resources[InactiveSelectionHighlightTextBrushKey] = HighlightTextBrush;
 
-            VisualizerConfig.AssemblyName = objectProvider.GetObject() as string;
+            Config.AssemblyName = objectProvider.GetObject() as string;
 
             var content = window.Content as VisualizerControl;
-            content.Config = VisualizerConfig.Get();
+            content.Config = Config.Get();
             content.objectProvider = objectProvider;
 
             window.ShowDialog();

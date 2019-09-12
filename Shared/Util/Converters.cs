@@ -10,6 +10,7 @@ using static System.Windows.DependencyProperty;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows;
+using ParseTreeVisualizer.ViewModels;
 
 namespace ParseTreeVisualizer.Util {
     public abstract class ReadOnlyConverterBase : IValueConverter {

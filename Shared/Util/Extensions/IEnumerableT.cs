@@ -44,5 +44,14 @@ namespace ParseTreeVisualizer.Util {
         }
 
         public static IEnumerable<T> Select<T>(this IEnumerable<T> src) => src.Select(x => x);
+
+        public static int? MinOrDefault<T>(this IEnumerable<T> src, Func<T, int> selector) {
+            if (src.None()) { return null; }
+            return src.Min(selector);
+        }
+        public static int? MaxOrDefault<T>(this IEnumerable<T> src, Func<T, int> selector) {
+            if (src.None()) { return null; }
+            return src.Max(selector);
+        }
     }
 }

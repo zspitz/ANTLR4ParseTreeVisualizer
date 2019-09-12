@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reflection;
 using static ParseTreeVisualizer.Util.Functions;
 
-namespace ParseTreeVisualizer {
+namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
-    public class PropertyValueVM {
+    public class PropertyValue {
         public bool Custom { get; }
         public string Key { get; }
         public string Value { get; }
-        public PropertyValueVM(object instance, PropertyInfo prp) {
+        public PropertyValue(object instance, PropertyInfo prp) {
             Key = prp.Name;
 
             // null values map to null strings

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParseTreeVisualizer {
+namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
     public class ClassInfo {
         public string Name { get; }
