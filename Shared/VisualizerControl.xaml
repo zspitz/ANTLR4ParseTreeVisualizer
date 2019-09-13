@@ -41,7 +41,7 @@
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
         <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
-        <DataGrid Name="tokens" ItemsSource="{Binding Tokens,Mode=OneTime}" >
+        <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
