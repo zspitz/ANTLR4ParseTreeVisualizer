@@ -21,13 +21,13 @@ namespace ParseTreeVisualizer.ViewModels {
         public List<PropertyValue> Properties { get; }
         public List<ParseTreeNode> Children { get; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
-        public (int startChar, int endChar) CharSpan { get; }
+        public (int startChar, int endChar) CharSpan { get; private set; }
         public TreeNodeType? NodeType { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping, Config config) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config) {
             var type = tree.GetType();
 
-            if (tree is RuleContext) {
+            if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
                 Caption = type.Name;
                 if (ruleNames != null) {
@@ -36,6 +36,7 @@ namespace ParseTreeVisualizer.ViewModels {
                         Caption = ruleNames[ruleIndex.Value];
                     }
                 }
+                CharSpan = (ruleContext.Start.StartIndex, ruleContext.Stop.StopIndex);
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var token = new Token(terminalNode, tokenTypeMapping);
 
@@ -68,16 +69,24 @@ namespace ParseTreeVisualizer.ViewModels {
 
             Properties = type.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValue(tree, prp)).ToList();
             Children = tree.Children()
-                .Select(x => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config))
+                .Select(x => {
+                    var ret = new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config);
+                    if (!config.ShowTokenTreeNodes && ret.NodeType != TreeNodeType.RuleContext) { return null; }
+                    return ret;
+                })
+                .Where(x => x!=null)
                 .ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
 
-            if (Children.Any()) {
-                CharSpan = (
-                    Children.First().CharSpan.startChar,
-                    Children.Last().CharSpan.endChar
-                );
-            }
+            // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
+            //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));
+            //foreach (var error in errorChildren) {
+            //    var index = Children.IndexOf(error);
+            //    if (index>0) {
+            //        var previousChildren = Children.Take(index - 1).ToList();
+            //        error.CharSpan = (previousChildren.Min(x => x.CharSpan.endChar) + 1, (tree as ParserRuleContext).Start.InputStream.Size);
+            //    }
+            //}
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

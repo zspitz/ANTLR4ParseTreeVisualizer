@@ -77,8 +77,6 @@ namespace ParseTreeVisualizer.ViewModels {
         }
 
         #region Debuggee state
-        //public List<TokenType> TokenTypes { get; }
-
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();
         public List<ClassInfo> ParserRuleContexts { get; } = new List<ClassInfo>();
@@ -87,8 +85,7 @@ namespace ParseTreeVisualizer.ViewModels {
 
         private string fixList(List<ClassInfo> lst, string selected) {
             lst.Insert(0, ClassInfo.None);
-            var selected1 = selected; // because selected is a ref
-            if (lst.None(x => x.FullName == selected1)) {
+            if (lst.None(x => x.FullName == selected)) {
                 selected = null;
             }
             if (selected.IsNullOrWhitespace()) {

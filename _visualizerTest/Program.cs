@@ -18,7 +18,7 @@ namespace _visualizerTest {
             var code = @"
 Private Sub Detail_Format(Cancel As Integer, FormatCount As Integer)
     ' This is a test comment
-    ShoppingListSRC.Visible = ShoppingListSRC.Report.HasData
+    ShoppingListSRC.Visible = 'ShoppingListSRC.Report.HasData
     PreparedMealsSRC.Visible = PreparedMealsSRC.Report.HasData
     MeatsSRC.Visible = MeatsSRC.Report.HasData
 End Sub".Trim();
@@ -28,13 +28,6 @@ End Sub".Trim();
             var parser = new VBAParser(tokens);
             parser.Interpreter.PredictionMode = PredictionMode.Sll;
             var tree = parser.subStmt();
-
-            Config.AssemblyName = "Rubberduck.Parsing";
-            var config = Config.Get();
-            var objectsource = new VisualizerObjectSource();
-            
-
-
             
             var visualizerHost = new VisualizerDevelopmentHost(tree, typeof(Visualizer), typeof(ObjectSource));
             visualizerHost.ShowVisualizer();

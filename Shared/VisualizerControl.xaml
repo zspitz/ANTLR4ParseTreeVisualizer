@@ -116,6 +116,7 @@
                             <Border BorderThickness="1,0,0,0"  BorderBrush="Black">
                                 <StackPanel Margin="12">
                                     <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
+                                    <CheckBox IsChecked="{Binding ShowTokenTreeNodes}" />
                                 </StackPanel>
                             </Border>
 

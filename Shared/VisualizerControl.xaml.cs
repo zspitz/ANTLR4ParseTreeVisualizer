@@ -85,7 +85,7 @@ namespace ParseTreeVisualizer {
             }
 
             if (sender != source) {
-                if (charSpan != null) {
+                if (charSpan != null && charSpan != (-1,-1)) {
                     source.Select(charSpan.Value.start, charSpan.Value.end - charSpan.Value.start + 1);
                 } else {
                     source.Select(0, 0);
@@ -97,6 +97,10 @@ namespace ParseTreeVisualizer {
                     data.Tokens.Select(null, null);
                 } else {
                     data.Tokens.Select(charSpan.Value.start, charSpan.Value.end);
+                    var selected = data.Tokens.GetSelectedTokens().FirstOrDefault();
+                    if (selected != null) {
+                        tokens.ScrollIntoView(selected);
+                    }
                 }
             }
 
@@ -105,14 +109,18 @@ namespace ParseTreeVisualizer {
                 if (charSpan != null) {
                     var startChar = charSpan.Value.start;
                     var endChar = charSpan.Value.end;
+
+                    Func<ParseTreeNode, bool> matcher = x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar;
                     var selectedNode = data.Root;
-                    while (true) {
-                        var nextChild = selectedNode.Children.SingleOrDefault(x => startChar >= x.CharSpan.startChar && endChar<=x.CharSpan.endChar);
-                        if (nextChild == null) { break; }
-                        selectedNode = nextChild;
-                        selectedNode.IsExpanded = true;
+                    if (matcher(selectedNode)) {
+                        while (true) {
+                            var nextChild = selectedNode.Children.OneOrDefault(x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar);
+                            if (nextChild == null) { break; }
+                            selectedNode = nextChild;
+                            selectedNode.IsExpanded = true;
+                        }
+                        selectedNode.IsSelected = true;
                     }
-                    selectedNode.IsSelected = true;
                 }
             }
 

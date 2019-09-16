@@ -59,6 +59,8 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool ShowWhitespaceTokens { get; set; } = true;
         public bool ShowErrorTokens { get; set; } = true;
         public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
+        public bool ShowTokenTreeNodes { get; set; } = true;
+        public HashSet<int> SelectedRuleIDs { get; set; } = new HashSet<int>();
 
         [NonSerialized]
         [JsonIgnore]
@@ -105,7 +107,9 @@ namespace ParseTreeVisualizer.ViewModels {
             TokenTypes = TokenTypes?.Select().ToList(),
             ShowTextTokens = ShowTextTokens,
             ShowErrorTokens = ShowErrorTokens,
-            ShowWhitespaceTokens = ShowWhitespaceTokens
+            ShowWhitespaceTokens = ShowWhitespaceTokens,
+            ShowTokenTreeNodes = ShowTokenTreeNodes,
+            SelectedRuleIDs = SelectedRuleIDs.Select().ToHashSet()
         };
 
         public bool? ShouldTriggerReload() {
@@ -115,7 +119,9 @@ namespace ParseTreeVisualizer.ViewModels {
                 !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes) ||
                 _originalValues.ShowTextTokens != ShowTextTokens ||
                 _originalValues.ShowErrorTokens != ShowErrorTokens ||
-                _originalValues.ShowWhitespaceTokens != ShowWhitespaceTokens;
+                _originalValues.ShowWhitespaceTokens != ShowWhitespaceTokens ||
+                _originalValues.ShowTokenTreeNodes != ShowTokenTreeNodes ||
+                !_originalValues.SelectedRuleIDs.SetEquals(SelectedRuleIDs);
         }
 
         // used for the view

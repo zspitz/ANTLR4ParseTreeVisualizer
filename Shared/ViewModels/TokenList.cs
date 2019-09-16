@@ -101,6 +101,7 @@ namespace ParseTreeVisualizer.ViewModels {
         public int? MaxTokenTypeID => maxTokenTypeID;
 
         public int[] GetSelectedIndexes() => this.Where(x => x.IsSelected).Select(x => x.Index).ToArray();
+        public Token[] GetSelectedTokens() => this.Where(x => x.IsSelected).ToArray();
 
         private Dictionary<int, Token> tokenByIndex;
         public Token GetByIndex(int index) {
