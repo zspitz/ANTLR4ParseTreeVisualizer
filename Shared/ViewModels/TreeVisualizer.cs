@@ -35,12 +35,9 @@ namespace ParseTreeVisualizer.ViewModels {
 
             #region Load debuggee state
 
-            config.TokenTypes = (
+            config.TokenTypeMapping =
                 tokenTypeMapping ??
-                Range(1, Tokens.MaxTokenTypeID ?? 0).ToDictionary(x => (x, x.ToString()))
-            ).SelectKVP((id, text) => new TokenType(id, text) {
-                IsSelected = id.In(config.SelectedTokenTypes)
-            }).OrderBy(x => x.Text).ToList();
+                Range(1, Tokens.MaxTokenTypeID ?? 0).ToDictionary(x => (x, x.ToString()));
 
             {
                 var baseTypes = new[] { typeof(Parser), typeof(Lexer), typeof(ParserRuleContext) };

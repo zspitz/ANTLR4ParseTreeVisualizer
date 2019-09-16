@@ -10,5 +10,7 @@ namespace ParseTreeVisualizer.Util {
             src.Joined(delimiter, (x, index) => selector(x.Item1, x.Item2, index));
 
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey, TValue)> src) => src.ToDictionary(t => t.Item1, t => t.Item2);
+
+        public static void Add<T1, T2>(this List<(T1, T2)> lst, T1 item1, T2 item2) => lst.Add((item1, item2));
     }
 }

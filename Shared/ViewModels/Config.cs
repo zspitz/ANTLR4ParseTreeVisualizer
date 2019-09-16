@@ -58,7 +58,18 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool ShowTextTokens { get; set; } = true;
         public bool ShowWhitespaceTokens { get; set; } = true;
         public bool ShowErrorTokens { get; set; } = true;
-        public HashSet<int> SelectedTokenTypes { get; set; } = new HashSet<int>();
+
+        private HashSet<int> selectedTokenTypes = new HashSet<int>();
+        public HashSet<int> SelectedTokenTypes {
+            get {
+                if (tokenTypes != null) {
+                    selectedTokenTypes.Clear();
+                    tokenTypes.Where(x => x.IsSelected).Select(x => x.Index).AddRangeTo(selectedTokenTypes);
+                }
+                return selectedTokenTypes;
+            }
+        }
+
         public bool ShowTokenTreeNodes { get; set; } = true;
         public HashSet<int> SelectedRuleIDs { get; set; } = new HashSet<int>();
 
@@ -102,23 +113,18 @@ namespace ParseTreeVisualizer.ViewModels {
         public Config Clone() => new Config {
             SelectedParserName = SelectedParserName,
             SelectedLexerName = SelectedLexerName,
-            SelectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
+            selectedTokenTypes = SelectedTokenTypes.Select().ToHashSet(),
             _originalValues = this,
-            TokenTypes = TokenTypes?.Select().ToList(),
             ShowTextTokens = ShowTextTokens,
             ShowErrorTokens = ShowErrorTokens,
             ShowWhitespaceTokens = ShowWhitespaceTokens,
             ShowTokenTreeNodes = ShowTokenTreeNodes,
-            SelectedRuleIDs = SelectedRuleIDs.Select().ToHashSet()
+            SelectedRuleIDs = SelectedRuleIDs.Select().ToHashSet(),
+            TokenTypeMapping = TokenTypeMapping
         };
 
         public bool? ShouldTriggerReload() {
             if (_originalValues == null) { return null; }
-
-            if (TokenTypes != null) {
-                SelectedTokenTypes = TokenTypes.Where(x => x.IsSelected).Select(x => x.Index).ToHashSet();
-            }
-
             return _originalValues.SelectedParserName != SelectedParserName ||
                 _originalValues.SelectedLexerName != SelectedLexerName ||
                 !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes) ||
@@ -129,10 +135,26 @@ namespace ParseTreeVisualizer.ViewModels {
                 !_originalValues.SelectedRuleIDs.SetEquals(SelectedRuleIDs);
         }
 
-        // TokenTypes is on the Config and not on TreeVisualizer (like other state information) because TokenType also manages selection
-        // We want to be able to clone the config, make changes to the clone, and then cancel by discarding the clone
         [JsonIgnore]
-        public List<TokenType> TokenTypes { get; set; }
+        public Dictionary<int, string> TokenTypeMapping { private get; set; }
+
+        // TokenTypes is on the Config and not on TreeVisualizer (like other state information) because we only need it as a source for databinding
+        // We also need to be able to discard the cloned config.
+        [NonSerialized]
+        [JsonIgnore]
+        private List<TokenType> tokenTypes;
+
+        [JsonIgnore]
+        public List<TokenType> TokenTypes {
+            get {
+                if (tokenTypes == null) {
+                    tokenTypes = TokenTypeMapping.SelectKVP((id, text) => new TokenType(id, text) {
+                        IsSelected = id.In(SelectedTokenTypes)
+                    }).OrderBy(x => x.Text).ToList();
+                }
+                return tokenTypes;
+            }
+        }
     }
 
     internal class ConfigContractResolver : DefaultContractResolver {

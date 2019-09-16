@@ -129,6 +129,9 @@ namespace ParseTreeVisualizer {
         private void LoadDataContext() {
             if (_objectProvider == null || _config == null) { return; }
             DataContext = _objectProvider.TransferObject(_config);
+            if (DataContext == null) {
+                throw new InvalidOperationException("Unspecified error while serializing/deserializing");
+            }
             data.Root.IsExpanded = true;
             _config = data.Config;
             Config.Write();
