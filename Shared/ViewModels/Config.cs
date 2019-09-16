@@ -114,6 +114,11 @@ namespace ParseTreeVisualizer.ViewModels {
 
         public bool? ShouldTriggerReload() {
             if (_originalValues == null) { return null; }
+
+            if (TokenTypes != null) {
+                SelectedTokenTypes = TokenTypes.Where(x => x.IsSelected).Select(x => x.Index).ToHashSet();
+            }
+
             return _originalValues.SelectedParserName != SelectedParserName ||
                 _originalValues.SelectedLexerName != SelectedLexerName ||
                 !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes) ||
@@ -124,14 +129,10 @@ namespace ParseTreeVisualizer.ViewModels {
                 !_originalValues.SelectedRuleIDs.SetEquals(SelectedRuleIDs);
         }
 
-        // used for the view
+        // TokenTypes is on the Config and not on TreeVisualizer (like other state information) because TokenType also manages selection
+        // We want to be able to clone the config, make changes to the clone, and then cancel by discarding the clone
         [JsonIgnore]
         public List<TokenType> TokenTypes { get; set; }
-        public void UpdateSelectedTokenTypes() {
-            if (TokenTypes==null) { return; }
-            SelectedTokenTypes = TokenTypes.Where(x => x.IsSelected).Select(x => x.Index).ToHashSet();
-            TokenTypes = null;
-        }
     }
 
     internal class ConfigContractResolver : DefaultContractResolver {

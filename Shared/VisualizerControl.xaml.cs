@@ -46,7 +46,6 @@ namespace ParseTreeVisualizer {
 
                 configPopup.Closed += (s1, e1) => {
                     var popupConfig = configPopup.DataContext<Config>();
-                    popupConfig.UpdateSelectedTokenTypes(); // in case changes were made to the selection
                     if (popupConfig.ShouldTriggerReload() ?? false) {
                         Config = popupConfig;
                     }
