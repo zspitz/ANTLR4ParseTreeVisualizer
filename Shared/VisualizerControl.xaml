@@ -4,8 +4,9 @@
     <FrameworkElement.Resources>
         <my1:RootConverter x:Key="RootConverter" />
         <my1:NullConverter x:Key="NullConverter" />
-        <my1:NodeTypeConverter x:Key="NodeTypeConverter"/>
         <my1:ErrorColorConverter x:Key="ErrorColorConverter" />
+        <my1:NodeForegroundConverter x:Key="NodeForegroundConverter" />
+        <my1:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="HeadersVisibility" Value="Column"/>
@@ -116,7 +117,28 @@
                             <Border BorderThickness="1,0,0,0"  BorderBrush="Black">
                                 <StackPanel Margin="12">
                                     <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
-                                    <CheckBox IsChecked="{Binding ShowTokenTreeNodes}" />
+                                    <CheckBox IsChecked="{Binding ShowTreeTextTokens}">Show text tokens</CheckBox>
+                                    <CheckBox IsChecked="{Binding ShowTreeWhitespaceTokens}" Margin="0,9,0,0">Show .NET whitespace tokens</CheckBox>
+                                    <CheckBox IsChecked="{Binding ShowTreeErrorTokens}" Margin="0,9,0,0">Show errors</CheckBox>
+                                    <CheckBox IsChecked="{Binding ShowRuleContextNodes}" Margin="0,9,0,0">Show rule contexts</CheckBox>
+                                    <TextBlock Text="Filter rule contexts:" Style="{StaticResource LabelStyle}" Margin="0,12,0,0" />
+                                    <!--<ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" ItemsSource="{Binding ParserRuleContexts}">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock>
+                                                    <Run Text="{Binding RuleName}"/>
+                                                    <Run Text=" (" />
+                                                    <Run Text="{Binding Name}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>-->
                                 </StackPanel>
                             </Border>
 
@@ -132,7 +154,14 @@
     <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
-                <TextBlock Text="{Binding Caption}" Foreground="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" FontWeight="{Binding NodeType, Converter={StaticResource NodeTypeConverter}}" />
+                <TextBlock Text="{Binding Caption}" FontWeight="{Binding NodeType, Converter={StaticResource NodeFontWeightConverter}}">
+                    <TextBlock.Foreground>
+                        <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
+                            <Binding Path="NodeType" />
+                            <Binding Path="FilterState" />
+                        </MultiBinding>
+                    </TextBlock.Foreground>
+                </TextBlock>
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>
         <TreeView.ItemContainerStyle>

@@ -10,11 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Util\ComboBoxTemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ArrayT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\FrameworkElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableKeyValuePair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ListBoxExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ClassInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Config.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ParseRuleContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ParseTreeNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PropertyValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Converters.cs" />

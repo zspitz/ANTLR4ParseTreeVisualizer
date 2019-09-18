@@ -31,16 +31,20 @@ namespace ParseTreeVisualizer.ViewModels {
                 ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             }
 
-            Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config);
+            var rulenameMapping = new Dictionary<string, string>();
+            Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping);
 
             #region Load debuggee state
 
-            config.TokenTypeMapping =
-                tokenTypeMapping ??
-                Range(1, Tokens.MaxTokenTypeID ?? 0).ToDictionary(x => (x, x.ToString()));
+            if (tokenTypeMapping == null) {
+                tokenTypeMapping = Range(1, Tokens.MaxTokenTypeID()).ToDictionary(x => (x, x.ToString()));
+            }
+            config.TokenTypeMapping = tokenTypeMapping;
 
             {
-                var baseTypes = new[] { typeof(Parser), typeof(Lexer), typeof(ParserRuleContext) };
+                // load available parsers and lexers
+
+                var baseTypes = new[] { typeof(Parser), typeof(Lexer) };
                 var types = AppDomain.CurrentDomain.GetAssemblies()
                     .Where(x => x != GetType().Assembly)
                     .SelectMany(x => {
@@ -56,15 +60,25 @@ namespace ParseTreeVisualizer.ViewModels {
                     var dest =
                         t.InheritsFromOrImplements<Parser>() ? AvailableParsers :
                         t.InheritsFromOrImplements<Lexer>() ? AvailableLexers :
-                        t.InheritsFromOrImplements<ParserRuleContext>() ? ParserRuleContexts :
                         null;
-                    dest?.Add(new ClassInfo(t));
+
+                    if (dest != null) {
+                        IEnumerable<ClassInfo> relatedTypes = null;
+                        if (t.InheritsFromOrImplements<Parser>()) {
+                            relatedTypes = t.GetNestedTypes()
+                                .Where(x => x.InheritsFromOrImplements<ParserRuleContext>())
+                                .Select(x => {
+                                    rulenameMapping.TryGetValue(x.FullName, out var ruleName);
+                                    return new ParseRuleContextInfo(x, ruleName);
+                                });
+                        }
+                        dest.Add(new ClassInfo(t, relatedTypes));
+                    }
                 }
 
                 Comparison<ClassInfo> comparison = (x, y) => string.Compare(x.Name, y.Name);
                 AvailableParsers.Sort(comparison);
                 AvailableLexers.Sort(comparison);
-                ParserRuleContexts.Sort(comparison);
 
                 Config.SelectedParserName = fixList(AvailableParsers, Config.SelectedParserName);
                 Config.SelectedLexerName = fixList(AvailableLexers, Config.SelectedLexerName);
@@ -76,7 +90,6 @@ namespace ParseTreeVisualizer.ViewModels {
         #region Debuggee state
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();
-        public List<ClassInfo> ParserRuleContexts { get; } = new List<ClassInfo>();
         public List<string> AssemblyLoadErrors { get; } = new List<string>();
         #endregion
 

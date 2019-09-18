@@ -70,8 +70,20 @@ namespace ParseTreeVisualizer.ViewModels {
             }
         }
 
-        public bool ShowTokenTreeNodes { get; set; } = true;
-        public HashSet<int> SelectedRuleIDs { get; set; } = new HashSet<int>();
+        public bool ShowTreeTextTokens { get; set; } = true;
+        public bool ShowTreeWhitespaceTokens { get; set; } = true;
+        public bool ShowTreeErrorTokens { get; set; } = true;
+        public bool ShowRuleContextNodes { get; set; } = true;
+
+        public bool HasTreeFilter() => !(ShowTreeErrorTokens && ShowTreeWhitespaceTokens && ShowTreeTextTokens && ShowRuleContextNodes && selectedRuleContexts.None());
+
+        private HashSet<string> selectedRuleContexts = new HashSet<string>();
+        //public HashSet<string> SelectedRulecontexts {
+        //    get {
+
+        //    }
+        //}
+
 
         [NonSerialized]
         [JsonIgnore]
@@ -118,8 +130,10 @@ namespace ParseTreeVisualizer.ViewModels {
             ShowTextTokens = ShowTextTokens,
             ShowErrorTokens = ShowErrorTokens,
             ShowWhitespaceTokens = ShowWhitespaceTokens,
-            ShowTokenTreeNodes = ShowTokenTreeNodes,
-            SelectedRuleIDs = SelectedRuleIDs.Select().ToHashSet(),
+            ShowTreeTextTokens = ShowTreeTextTokens,
+            ShowTreeErrorTokens = ShowTreeErrorTokens,
+            ShowTreeWhitespaceTokens = ShowTreeWhitespaceTokens,
+            ShowRuleContextNodes = ShowRuleContextNodes,
             TokenTypeMapping = TokenTypeMapping
         };
 
@@ -131,8 +145,10 @@ namespace ParseTreeVisualizer.ViewModels {
                 _originalValues.ShowTextTokens != ShowTextTokens ||
                 _originalValues.ShowErrorTokens != ShowErrorTokens ||
                 _originalValues.ShowWhitespaceTokens != ShowWhitespaceTokens ||
-                _originalValues.ShowTokenTreeNodes != ShowTokenTreeNodes ||
-                !_originalValues.SelectedRuleIDs.SetEquals(SelectedRuleIDs);
+                _originalValues.ShowTreeErrorTokens != ShowTreeErrorTokens ||
+                _originalValues.ShowTreeTextTokens != ShowTreeTextTokens ||
+                _originalValues.ShowTreeWhitespaceTokens != ShowTreeWhitespaceTokens ||
+                _originalValues.ShowRuleContextNodes != ShowRuleContextNodes;
         }
 
         [JsonIgnore]

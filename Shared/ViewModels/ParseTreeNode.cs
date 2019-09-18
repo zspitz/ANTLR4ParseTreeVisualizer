@@ -15,6 +15,12 @@ namespace ParseTreeVisualizer.ViewModels {
         Error
     }
 
+    public enum FilterState {
+        NotMatched,
+        Matched,
+        DescendantMatched
+    }
+
     [Serializable]
     public class ParseTreeNode : INotifyPropertyChanged {
         public string Caption { get; }
@@ -23,22 +29,29 @@ namespace ParseTreeVisualizer.ViewModels {
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
         public (int startChar, int endChar) CharSpan { get; private set; }
         public TreeNodeType? NodeType { get; }
+        public FilterState? FilterState { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<string, string> ruleMapping) {
             var type = tree.GetType();
+            Token token = null;
 
             if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
-                Caption = type.Name;
-                if (ruleNames != null) {
-                    var ruleIndex = type.GetProperty("RuleIndex")?.GetValue(tree) as int?;
-                    if (ruleIndex.HasValue && ruleIndex >= 0 && ruleIndex < ruleNames.Length) {
-                        Caption = ruleNames[ruleIndex.Value];
+
+                if (!ruleMapping.TryGetValue(type.FullName, out var caption)) {
+                    var ruleIndex = (int)(type.GetProperty("RuleIndex")?.GetValue(tree) ?? -1);
+                    if (ruleNames.TryGetValue(ruleIndex, out caption)) {
+                        ruleMapping[type.FullName] = caption;
+                    } else {
+                        caption = type.Name;
+                        ruleMapping[type.FullName] = null;
                     }
                 }
+
+                Caption = caption;
                 CharSpan = (ruleContext.Start.StartIndex, ruleContext.Stop.StopIndex);
             } else if (tree is TerminalNodeImpl terminalNode) {
-                var token = new Token(terminalNode, tokenTypeMapping);
+                token = new Token(terminalNode, tokenTypeMapping);
 
                 if (token.IsError) {
                     Caption = token.Text;
@@ -69,14 +82,35 @@ namespace ParseTreeVisualizer.ViewModels {
 
             Properties = type.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValue(tree, prp)).ToList();
             Children = tree.Children()
-                .Select(x => {
-                    var ret = new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config);
-                    if (!config.ShowTokenTreeNodes && ret.NodeType != TreeNodeType.RuleContext) { return null; }
-                    return ret;
-                })
-                .Where(x => x!=null)
+                .Select(x => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config, ruleMapping))
+                .Where(x => x.FilterState != ViewModels.FilterState.NotMatched) // intentionally doesn't exclude null
                 .ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
+
+            var matched = true;
+            if (config.HasTreeFilter()) {
+                if (NodeType == TreeNodeType.Error) {
+                    matched = config.ShowTreeErrorTokens;
+                } else if (NodeType == TreeNodeType.RuleContext) {
+                    matched = config.ShowRuleContextNodes;
+                    // TODO also test against selected rule types
+
+                } else if (token.Text.IsNullOrWhitespace()) {
+                    // NodeType must be TreeNodeType.Token -- TODO fix with https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/27
+                    matched = config.ShowTreeWhitespaceTokens;
+                } else {
+                    matched = config.ShowTreeTextTokens;
+                }
+
+                if (matched) {
+                    FilterState = ViewModels.FilterState.Matched;
+                } else if (Children.Any(x => x.FilterState.In(ViewModels.FilterState.Matched, ViewModels.FilterState.DescendantMatched))) {
+                    FilterState = ViewModels.FilterState.DescendantMatched;
+                } else {
+                    FilterState = ViewModels.FilterState.NotMatched;
+                }
+            }
+
 
             // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
             //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));
@@ -110,6 +144,10 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool IsExpanded {
             get => isExpanded;
             set => this.NotifyChanged(ref isExpanded, value, args => PropertyChanged?.Invoke(this, args));
+        }
+        public void SetSubtreeExpanded(bool expand) {
+            IsExpanded = expand;
+            Children.ForEach(x => x.SetSubtreeExpanded(expand));
         }
     }
 }

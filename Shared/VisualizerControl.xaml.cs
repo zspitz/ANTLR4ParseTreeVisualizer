@@ -132,7 +132,11 @@ namespace ParseTreeVisualizer {
             if (DataContext == null) {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }
-            data.Root.IsExpanded = true;
+            if (data.Config.HasTreeFilter()) {
+                data.Root.SetSubtreeExpanded(true);
+            } else {
+                data.Root.IsExpanded = true;
+            }
             _config = data.Config;
             Config.Write();
 

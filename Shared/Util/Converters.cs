@@ -40,25 +40,28 @@ namespace ParseTreeVisualizer.Util {
         }
     }
 
-    public class NodeTypeConverter : ReadOnlyConverterBase {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var nodeType = (TreeNodeType)value;
+    public class ErrorColorConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((bool)value) ? Red : UnsetValue;
+    }
 
-            if (targetType==typeof(Brush)) {
-                switch (nodeType) {
-                    case TreeNodeType.RuleContext: return UnsetValue;
-                    case TreeNodeType.Token: return DimGray;
-                    case TreeNodeType.Error: return Red;
-                    default: throw new InvalidOperationException("Invalid NodeType value");
-                }
-            } else if (targetType == typeof(FontWeight)) {
-                return nodeType == TreeNodeType.RuleContext ? FontWeights.Bold : UnsetValue;
+    public class NodeForegroundConverter : ReadOnlyMultiConverterBase {
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+            var nodeType = (TreeNodeType)values[0];
+            var filterState = (FilterState?)values[1];
+            switch (nodeType) {
+                case TreeNodeType.RuleContext:
+                    if (filterState.In(null, FilterState.Matched)) { return Black; }
+                    return LightGray;
+                case TreeNodeType.Token:
+                    if (filterState.In(null,FilterState.Matched)) { return Black; }
+                    return LightGray;
+                case TreeNodeType.Error: return Red;
+                default: throw new InvalidOperationException("Invalid NodeType value");
             }
-            throw new InvalidOperationException("Converter only valid for Brush and FontWeight.");
         }
     }
 
-    public class ErrorColorConverter : ReadOnlyConverterBase {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((bool)value) ? Red : UnsetValue;
+    public class NodeFontWeightConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((TreeNodeType)value) == TreeNodeType.RuleContext? FontWeights.Bold : UnsetValue;
     }
 }

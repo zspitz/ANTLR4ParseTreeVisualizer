@@ -58,7 +58,6 @@ namespace ParseTreeVisualizer.ViewModels {
         private void recalculateProperties() {
             int? newStartChar = null;
             int? newEndChar = null;
-            int? newMaxTokenTypeID = null;
 
             foreach (var token in this) {
                 if (token.IsSelected) {
@@ -71,12 +70,10 @@ namespace ParseTreeVisualizer.ViewModels {
                             token.Span.stop:
                             Math.Max(newEndChar.Value, token.Span.stop);
                 }
-                newMaxTokenTypeID = Math.Max(newMaxTokenTypeID ?? 0, token.TokenTypeID);
             }
 
             this.NotifyChanged(ref selectionStartChar, newStartChar, OnPropertyChanged, nameof(SelectionStartChar));
             this.NotifyChanged(ref selectionEndChar, newEndChar, OnPropertyChanged, nameof(SelectionEndChar));
-            this.NotifyChanged(ref maxTokenTypeID, newMaxTokenTypeID, OnPropertyChanged, nameof(MaxTokenTypeID));
         }
 
         private int? selectionStartChar;
@@ -96,9 +93,6 @@ namespace ParseTreeVisualizer.ViewModels {
                 this.NotifyChanged(ref selectionEndChar, value, OnPropertyChanged);
             }
         }
-
-        private int? maxTokenTypeID;
-        public int? MaxTokenTypeID => maxTokenTypeID;
 
         public int[] GetSelectedIndexes() => this.Where(x => x.IsSelected).Select(x => x.Index).ToArray();
         public Token[] GetSelectedTokens() => this.Where(x => x.IsSelected).ToArray();
