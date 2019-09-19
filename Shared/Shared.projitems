@@ -9,6 +9,7 @@
     <Import_RootNamespace>ParseTreeVisualizer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ParserRuleDisplayNameSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\ComboBoxTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ArrayT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\FrameworkElement.cs" />

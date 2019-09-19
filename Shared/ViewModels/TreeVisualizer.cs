@@ -31,7 +31,7 @@ namespace ParseTreeVisualizer.ViewModels {
                 ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             }
 
-            var rulenameMapping = new Dictionary<string, string>();
+            var rulenameMapping = new Dictionary<Type, string>();
             Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping);
 
             #region Load debuggee state
@@ -68,9 +68,10 @@ namespace ParseTreeVisualizer.ViewModels {
                             relatedTypes = t.GetNestedTypes()
                                 .Where(x => x.InheritsFromOrImplements<ParserRuleContext>())
                                 .Select(x => {
-                                    rulenameMapping.TryGetValue(x.FullName, out var ruleName);
+                                    rulenameMapping.TryGetValue(x, out var ruleName);
                                     return new ParseRuleContextInfo(x, ruleName);
-                                });
+                                })
+                                .OrderBy(x => x.Name);
                         }
                         dest.Add(new ClassInfo(t, relatedTypes));
                     }
@@ -82,6 +83,14 @@ namespace ParseTreeVisualizer.ViewModels {
 
                 Config.SelectedParserName = fixList(AvailableParsers, Config.SelectedParserName);
                 Config.SelectedLexerName = fixList(AvailableLexers, Config.SelectedLexerName);
+
+                UsedRuleContexts = rulenameMapping.Keys
+                    .Select(x => {
+                        rulenameMapping.TryGetValue(x, out var ruleName);
+                        return new ParseRuleContextInfo(x, ruleName);
+                    })
+                    .OrderBy(x => x.Name)
+                    .ToList();
             }
 
             #endregion
@@ -90,6 +99,7 @@ namespace ParseTreeVisualizer.ViewModels {
         #region Debuggee state
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();
+        public List<ParseRuleContextInfo> UsedRuleContexts { get; } = new List<ParseRuleContextInfo>();
         public List<string> AssemblyLoadErrors { get; } = new List<string>();
         #endregion
 

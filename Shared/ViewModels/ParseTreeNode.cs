@@ -32,19 +32,19 @@ namespace ParseTreeVisualizer.ViewModels {
         public TreeNodeType? NodeType { get; }
         public FilterState? FilterState { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<string, string> ruleMapping) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, string> ruleMapping) {
             var type = tree.GetType();
 
             if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
 
-                if (!ruleMapping.TryGetValue(type.FullName, out var caption)) {
+                if (!ruleMapping.TryGetValue(type, out var caption)) {
                     var ruleIndex = (int)(type.GetProperty("RuleIndex")?.GetValue(tree) ?? -1);
                     if (ruleNames.TryGetValue(ruleIndex, out caption)) {
-                        ruleMapping[type.FullName] = caption;
+                        ruleMapping[type] = caption;
                     } else {
                         caption = type.Name;
-                        ruleMapping[type.FullName] = null;
+                        ruleMapping[type] = null;
                     }
                 }
 
@@ -110,13 +110,13 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             }
 
-            var toPromote = Children
-                .Select((child, index) => (grandchild: child.Children.OneOrDefault(x => x.FilterState == ViewModels.FilterState.Matched), index))
-                .WhereT((grandchild, index) => grandchild != null)
-                .ToList();
-            foreach (var (grandchild, index) in toPromote) {
-                Children[index] = grandchild;
-            }
+            //var toPromote = Children
+            //    .Select((child, index) => (grandchild: child.Children.OneOrDefault(x => x.FilterState == ViewModels.FilterState.Matched), index))
+            //    .WhereT((grandchild, index) => grandchild != null)
+            //    .ToList();
+            //foreach (var (grandchild, index) in toPromote) {
+            //    Children[index] = grandchild;
+            //}
  
             // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
             //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));

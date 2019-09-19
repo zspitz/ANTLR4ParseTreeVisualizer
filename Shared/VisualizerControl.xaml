@@ -2,11 +2,14 @@
            xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:my1="clr-namespace:ParseTreeVisualizer.Util" 
            xmlns:ag="clr-namespace:WpfAutoGrid">
     <FrameworkElement.Resources>
+
         <my1:RootConverter x:Key="RootConverter" />
         <my1:NullConverter x:Key="NullConverter" />
         <my1:ErrorColorConverter x:Key="ErrorColorConverter" />
         <my1:NodeForegroundConverter x:Key="NodeForegroundConverter" />
         <my1:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
+        <my1:NonEmptyListConverter x:Key="NonEmptyListConverter" />
+
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="HeadersVisibility" Value="Column"/>
@@ -15,6 +18,7 @@
             <Setter Property="DockPanel.Dock" Value="Top"/>
             <Setter Property="Margin" Value="0,0,0,3" />
         </Style>
+
         <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
             <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
                 <DataTemplate>
@@ -38,6 +42,26 @@
                 </DataTemplate>
             </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
         </my1:ComboBoxTemplateSelector>
+
+        <my:ParserRuleDisplayNameSelector x:Key="ParserRuleDisplayNameSelector">
+            <my:ParserRuleDisplayNameSelector.RuleNameTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding RuleName, Mode=OneWay}" />
+                        <Run Text="(Rule)" Foreground="DarkGray" />
+                    </TextBlock>
+                </DataTemplate>
+            </my:ParserRuleDisplayNameSelector.RuleNameTemplate>
+            <my:ParserRuleDisplayNameSelector.TypeNameTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Name, Mode=OneWay}" />
+                        <Run Text="(Type)" Foreground="DarkGray" />
+                    </TextBlock>
+                </DataTemplate>
+            </my:ParserRuleDisplayNameSelector.TypeNameTemplate>
+        </my:ParserRuleDisplayNameSelector>
+
     </FrameworkElement.Resources>
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
@@ -80,69 +104,87 @@
             <StackPanel>
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
-                    <Border Background="White" BorderBrush="Black" BorderThickness="1">
-                        <UniformGrid Columns="3" Rows="1">
-                            <UniformGrid.Resources>
+                    <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="12">
+                        <ag:AutoGrid RowCount="3" ColumnCount="5" Orientation="Vertical">
+
+                            <Grid.Resources>
                                 <Style x:Key="GroupingLabel" TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                     <Setter Property="TextAlignment" Value="Center"/>
                                     <Setter Property="FontWeight" Value="Bold"/>
                                     <Setter Property="Margin" Value="0,0,0,15" />
                                 </Style>
-                            </UniformGrid.Resources>
+                                <Style TargetType="CheckBox">
+                                    <Setter Property="Margin" Value="0,0,0,9" />
+                                </Style>
+                                <Style TargetType="Border" x:Key="SectionBorder">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="BorderBrush" Value="Black" />
+                                    <Setter Property="Width" Value="1" />
+                                    <Setter Property="Grid.RowSpan" Value="3"/>
+                                    <Setter Property="BorderThickness" Value="1,0,0,0" />
+                                    <Setter Property="Margin" Value="12,0,12,0" />
+                                </Style>
+                            </Grid.Resources>
 
-                            <StackPanel Margin="12">
-                                <TextBlock Text="General" Style="{StaticResource GroupingLabel}" />
-                                <TextBlock Text="Parser class:" Style="{StaticResource LabelStyle}"/>
-                                <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" />
+                            <TextBlock Text="General" Style="{StaticResource GroupingLabel}" />
+
+                            <StackPanel Grid.RowSpan="2">
+                                <TextBlock Text="Parser class:" />
+                                <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" MinWidth="200" />
                             </StackPanel>
 
-                            <Border BorderThickness="1,0,0,0" BorderBrush="Black">
-                                <StackPanel Margin="12">
-                                    <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
-                                    <CheckBox IsChecked="{Binding ShowTextTokens}">Show text tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowWhitespaceTokens}" Margin="0,9,0,0">Show .NET whitespace tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowErrorTokens}" Margin="0,9,0,0">Show errors</CheckBox>
-                                    <TextBlock Text="Filter token types:" Style="{StaticResource LabelStyle}" Margin="0,12,0,0" />
-                                    <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" DisplayMemberPath="Text" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}" Margin="0,3,0,0">
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-                                    </ListBox>
-                                </StackPanel>
-                            </Border>
+                            <Border Style="{StaticResource SectionBorder}" />
 
-                            <Border BorderThickness="1,0,0,0"  BorderBrush="Black">
-                                <StackPanel Margin="12">
-                                    <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
-                                    <CheckBox IsChecked="{Binding ShowTreeTextTokens}">Show text tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowTreeWhitespaceTokens}" Margin="0,9,0,0">Show .NET whitespace tokens</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowTreeErrorTokens}" Margin="0,9,0,0">Show errors</CheckBox>
-                                    <CheckBox IsChecked="{Binding ShowRuleContextNodes}" Margin="0,9,0,0">Show rule contexts</CheckBox>
-                                    <TextBlock Text="Filter rule contexts:" Style="{StaticResource LabelStyle}" Margin="0,12,0,0" />
-                                    <!--<ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" ItemsSource="{Binding ParserRuleContexts}">
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock>
-                                                    <Run Text="{Binding RuleName}"/>
-                                                    <Run Text=" (" />
-                                                    <Run Text="{Binding Name}" />
-                                                    <Run Text=")" />
-                                                </TextBlock>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>-->
-                                </StackPanel>
-                            </Border>
+                            <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
 
-                        </UniformGrid>
+                            <StackPanel>
+                                <CheckBox IsChecked="{Binding ShowTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowErrorTokens}">Show errors</CheckBox>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Filter token types:" />
+                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" DisplayMemberPath="Text" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}" Margin="0,3,0,0">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </StackPanel>
+
+                            <Border Style="{StaticResource SectionBorder}" />
+
+                            <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
+
+                            <StackPanel>
+                                <CheckBox IsChecked="{Binding ShowTreeTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowTreeWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowTreeErrorTokens}">Show errors</CheckBox>
+                                <CheckBox IsChecked="{Binding ShowRuleContextNodes}">Show rule contexts</CheckBox>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Filter rule contexts:" />
+                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" ItemTemplateSelector="{StaticResource ParserRuleDisplayNameSelector}" Margin="0,3,0,0">
+                                    <ListBox.ItemsSource>
+                                        <MultiBinding Converter="{StaticResource NonEmptyListConverter}">
+                                            <Binding ElementName="selectedParser" Path="SelectedItem.RelatedTypes" />
+                                            <Binding Path="DataContext.UsedRuleContexts" RelativeSource="{RelativeSource AncestorType=my:VisualizerControl}" />
+                                        </MultiBinding>
+                                    </ListBox.ItemsSource>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </StackPanel>
+
+                        </ag:AutoGrid>
+                        
                     </Border>
                 </Popup>
             </StackPanel>

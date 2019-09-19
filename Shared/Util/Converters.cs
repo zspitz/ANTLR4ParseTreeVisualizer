@@ -34,7 +34,7 @@ namespace ParseTreeVisualizer.Util {
             if (targetType == typeof(Brush)) {
                 return DarkGray;
             } else if (targetType == typeof(FontStyle)) {
-                return FontStyles.Italic ;
+                return FontStyles.Italic;
             }
             throw new InvalidOperationException("Converter only valid for Brush and FontStyle.");
         }
@@ -53,7 +53,7 @@ namespace ParseTreeVisualizer.Util {
                     if (filterState.In(null, FilterState.Matched)) { return Black; }
                     return LightGray;
                 case TreeNodeType.Token:
-                    if (filterState.In(null,FilterState.Matched)) { return Black; }
+                    if (filterState.In(null, FilterState.Matched)) { return Black; }
                     return LightGray;
                 case TreeNodeType.ErrorToken: return Red;
                 default: throw new InvalidOperationException("Invalid NodeType value");
@@ -62,6 +62,10 @@ namespace ParseTreeVisualizer.Util {
     }
 
     public class NodeFontWeightConverter : ReadOnlyConverterBase {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((TreeNodeType)value) == TreeNodeType.RuleContext? FontWeights.Bold : UnsetValue;
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((TreeNodeType)value) == TreeNodeType.RuleContext ? FontWeights.Bold : UnsetValue;
+    }
+
+    public class NonEmptyListConverter : ReadOnlyMultiConverterBase {
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) => values.OfType<IEnumerable<object>>().FirstOrDefault(x => x != null && x.Any());
     }
 }

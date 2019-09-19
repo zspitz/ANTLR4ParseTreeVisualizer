@@ -14,5 +14,6 @@ namespace ParseTreeVisualizer.ViewModels {
                 RuleName = ruleName;
             }
         }
+        public override string ToString() => RuleName ?? Name;
     }
 }

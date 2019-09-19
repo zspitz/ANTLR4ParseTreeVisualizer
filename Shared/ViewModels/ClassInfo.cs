@@ -15,12 +15,7 @@ namespace ParseTreeVisualizer.ViewModels {
         public string Namespace { get; }
         public string Assembly { get; }
         public string Antlr { get; private set; } // Runtime - in Antlr.Runtime, <number> - version
-        public string FullName {
-            get {
-                if (Namespace.IsNullOrWhitespace()) { return null; }
-                return $"{Namespace}.{Name}";
-            }
-        }
+        public string FullName { get; private set; }
         public List<ClassInfo> RelatedTypes { get; }
 
         private ClassInfo(string name) => Name = name;
@@ -35,6 +30,7 @@ namespace ParseTreeVisualizer.ViewModels {
                 t.IfAttribute<GeneratedCodeAttribute>(attr => Antlr = attr.Version);
             }
             RelatedTypes = relatedTypes?.ToList();
+            FullName = t.FullName;
         }
         public override string ToString() => FullName;
 
