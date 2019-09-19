@@ -12,7 +12,8 @@ namespace ParseTreeVisualizer.ViewModels {
     public enum TreeNodeType {
         RuleContext,
         Token,
-        Error
+        ErrorToken,
+        WhitespaceToken
     }
 
     public enum FilterState {
@@ -33,7 +34,6 @@ namespace ParseTreeVisualizer.ViewModels {
 
         public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<string, string> ruleMapping) {
             var type = tree.GetType();
-            Token token = null;
 
             if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
@@ -51,14 +51,14 @@ namespace ParseTreeVisualizer.ViewModels {
                 Caption = caption;
                 CharSpan = (ruleContext.Start.StartIndex, ruleContext.Stop.StopIndex);
             } else if (tree is TerminalNodeImpl terminalNode) {
-                token = new Token(terminalNode, tokenTypeMapping);
+                var token = new Token(terminalNode, tokenTypeMapping);
 
                 if (token.IsError) {
                     Caption = token.Text;
-                    NodeType = TreeNodeType.Error;
+                    NodeType = TreeNodeType.ErrorToken;
                 } else {
                     Caption = $"\"{token.Text}\"";
-                    NodeType = TreeNodeType.Token;
+                    NodeType = token.IsWhitespace ? TreeNodeType.WhitespaceToken : TreeNodeType.Token;
                 }
                 CharSpan = token.Span;
 
@@ -67,7 +67,7 @@ namespace ParseTreeVisualizer.ViewModels {
 
                 if (token.IsError) {
                     addToken = config.ShowErrorTokens;
-                } else if (token.Text.IsNullOrWhitespace()) {
+                } else if (token.IsWhitespace) {
                     addToken = config.ShowWhitespaceTokens;
                 } else { //token is not whitespace
                     addToken = config.ShowTextTokens;
@@ -89,16 +89,15 @@ namespace ParseTreeVisualizer.ViewModels {
 
             var matched = true;
             if (config.HasTreeFilter()) {
-                if (NodeType == TreeNodeType.Error) {
+                if (NodeType == TreeNodeType.ErrorToken) {
                     matched = config.ShowTreeErrorTokens;
                 } else if (NodeType == TreeNodeType.RuleContext) {
                     matched = config.ShowRuleContextNodes;
                     // TODO also test against selected rule types
 
-                } else if (token.Text.IsNullOrWhitespace()) {
-                    // NodeType must be TreeNodeType.Token -- TODO fix with https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/27
+                } else if (NodeType == TreeNodeType.WhitespaceToken) {
                     matched = config.ShowTreeWhitespaceTokens;
-                } else {
+                } else { // assumes NodeType == TreeNodeType.Token
                     matched = config.ShowTreeTextTokens;
                 }
 
@@ -111,7 +110,14 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             }
 
-
+            var toPromote = Children
+                .Select((child, index) => (grandchild: child.Children.OneOrDefault(x => x.FilterState == ViewModels.FilterState.Matched), index))
+                .WhereT((grandchild, index) => grandchild != null)
+                .ToList();
+            foreach (var (grandchild, index) in toPromote) {
+                Children[index] = grandchild;
+            }
+ 
             // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
             //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));
             //foreach (var error in errorChildren) {

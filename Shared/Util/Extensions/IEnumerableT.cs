@@ -53,5 +53,16 @@ namespace ParseTreeVisualizer.Util {
             if (src.None()) { return null; }
             return src.Max(selector);
         }
+
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> src, Action<T, int> action) {
+            var current = 0;
+            foreach (var item in src) {
+                action(item, current);
+                current += 1;
+            }
+            return src;
+        }
+
+        public static IEnumerable<(T1, T2)> WhereT<T1, T2>(this IEnumerable<(T1, T2)> src, Func<T1, T2, bool> predicate) => src.Where(x => predicate(x.Item1, x.Item2));
     }
 }

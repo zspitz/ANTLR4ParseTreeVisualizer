@@ -15,6 +15,7 @@ namespace ParseTreeVisualizer.ViewModels {
         public string Text { get; }
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
+        public bool IsWhitespace { get; }
 
         private bool isSelected;
         public bool IsSelected {
@@ -39,6 +40,8 @@ namespace ParseTreeVisualizer.ViewModels {
             }
 
             Span = (terminalNode.Payload.StartIndex, terminalNode.Payload.StopIndex);
+
+            IsWhitespace = terminalNode.Payload.Text.IsNullOrWhitespace();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

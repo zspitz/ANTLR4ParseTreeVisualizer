@@ -55,7 +55,7 @@ namespace ParseTreeVisualizer.Util {
                 case TreeNodeType.Token:
                     if (filterState.In(null,FilterState.Matched)) { return Black; }
                     return LightGray;
-                case TreeNodeType.Error: return Red;
+                case TreeNodeType.ErrorToken: return Red;
                 default: throw new InvalidOperationException("Invalid NodeType value");
             }
         }
