@@ -110,14 +110,14 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             }
 
-            //var toPromote = Children
-            //    .Select((child, index) => (grandchild: child.Children.OneOrDefault(x => x.FilterState == ViewModels.FilterState.Matched), index))
-            //    .WhereT((grandchild, index) => grandchild != null)
-            //    .ToList();
-            //foreach (var (grandchild, index) in toPromote) {
-            //    Children[index] = grandchild;
-            //}
- 
+            var toPromote = Children
+                .Select((child, index) => (grandchild: child.Children.OneOrDefault(x => x.FilterState.In(ViewModels.FilterState.Matched, ViewModels.FilterState.DescendantMatched)), index))
+                .WhereT((grandchild, index) => grandchild != null)
+                .ToList();
+            foreach (var (grandchild, index) in toPromote) {
+                Children[index] = grandchild;
+            }
+
             // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
             //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));
             //foreach (var error in errorChildren) {
@@ -127,6 +127,14 @@ namespace ParseTreeVisualizer.ViewModels {
             //        error.CharSpan = (previousChildren.Min(x => x.CharSpan.endChar) + 1, (tree as ParserRuleContext).Start.InputStream.Size);
             //    }
             //}
+        }
+
+        public string Stringify(int indentLevel=0) {
+            var ret = new string(' ', indentLevel*4) + Caption;
+            foreach (var child in Children) {
+                ret += "\n" + child.Stringify(indentLevel + 1);
+            }
+            return ret;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
