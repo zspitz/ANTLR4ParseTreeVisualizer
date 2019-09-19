@@ -65,12 +65,12 @@ namespace ParseTreeVisualizer.ViewModels {
                 // should the token be added to the token list?
                 var addToken = false;
 
-                if (token.IsError) {
-                    addToken = config.ShowErrorTokens;
-                } else if (token.IsWhitespace) {
-                    addToken = config.ShowWhitespaceTokens;
-                } else { //token is not whitespace
+                if (!token.IsError && !token.IsWhitespace) {
                     addToken = config.ShowTextTokens;
+                } else {
+                    addToken =
+                        (token.IsError ? config.ShowErrorTokens : true) &&
+                        (token.IsWhitespace ? config.ShowWhitespaceTokens : true);
                 }
 
                 addToken &= config.SelectedTokenTypes.None() || token.TokenTypeID.In(config.SelectedTokenTypes);
