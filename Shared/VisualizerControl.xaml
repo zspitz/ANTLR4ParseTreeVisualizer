@@ -197,6 +197,12 @@
                             <Binding Path="FilterState" />
                         </MultiBinding>
                     </TextBlock.Foreground>
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Expand recursively" Click="ExpandAll" />
+                            <MenuItem Header="Collapse recursively" Click="CollapseAll" />
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
                 </TextBlock>
             </HierarchicalDataTemplate>
         </TreeView.ItemTemplate>

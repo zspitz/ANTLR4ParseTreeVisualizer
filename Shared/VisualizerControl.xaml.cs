@@ -164,5 +164,8 @@ namespace ParseTreeVisualizer {
                 LoadDataContext();
             }
         }
+
+        private void ExpandAll(object sender, RoutedEventArgs e) => ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(true);
+        private void CollapseAll(object sender, RoutedEventArgs e) => ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(false);
     }
 }
