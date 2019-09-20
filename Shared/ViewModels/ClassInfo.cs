@@ -11,16 +11,17 @@ using System.Threading.Tasks;
 namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
     public class ClassInfo : INotifyPropertyChanged {
-        public string Name { get; }
-        public string Namespace { get; }
-        public string Assembly { get; }
-        public string Antlr { get; private set; } // Runtime - in Antlr.Runtime, <number> - version
-        public string FullName { get; private set; }
-        public List<ClassInfo> RelatedTypes { get; }
+        public string Name { get; protected set; }
+        public string Namespace { get; protected set;  }
+        public string Assembly { get; protected set; }
+        public string Antlr { get; protected set; } // Runtime - in Antlr.Runtime, <number> - version
+        public string FullName { get; protected set; }
 
         private ClassInfo(string name) => Name = name;
 
-        public ClassInfo(Type t, IEnumerable<ClassInfo> relatedTypes = null) {
+        protected ClassInfo() { }
+
+        public ClassInfo(Type t) {
             Name = t.Name;
             Namespace = t.Namespace;
             Assembly = t.Assembly.Location;
@@ -29,19 +30,20 @@ namespace ParseTreeVisualizer.ViewModels {
             } else {
                 t.IfAttribute<GeneratedCodeAttribute>(attr => Antlr = attr.Version);
             }
-            RelatedTypes = relatedTypes?.ToList();
             FullName = t.FullName;
         }
         public override string ToString() => FullName;
 
         public static readonly ClassInfo None = new ClassInfo("(None)");
 
+        [NonSerialized]
         private bool isSelected;
         public bool IsSelected {
             get => isSelected;
             set => this.NotifyChanged(ref isSelected, value, args => PropertyChanged?.Invoke(this, args));
         }
 
+        [field:NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -168,7 +168,7 @@
 
                             <StackPanel>
                                 <TextBlock Text="Filter rule contexts:" />
-                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" ItemTemplateSelector="{StaticResource ParserRuleDisplayNameSelector}" Margin="0,3,0,0" ItemsSource="{Binding DataContext.UsedRuleContexts, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}">
+                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" ItemTemplateSelector="{StaticResource ParserRuleDisplayNameSelector}" Margin="0,3,0,0" ItemsSource="{Binding RuleContextsViewModel}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="IsSelected" Value="{Binding IsSelected}" />

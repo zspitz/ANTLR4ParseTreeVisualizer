@@ -93,8 +93,9 @@ namespace ParseTreeVisualizer.ViewModels {
                     matched = config.ShowTreeErrorTokens;
                 } else if (NodeType == TreeNodeType.RuleContext) {
                     matched = config.ShowRuleContextNodes;
-                    // TODO also test against selected rule types
-
+                    if (config.SelectedRuleContexts?.Any() ?? false) {
+                        matched = matched && type.FullName.In(config.SelectedRuleContexts);
+                    }
                 } else if (NodeType == TreeNodeType.WhitespaceToken) {
                     matched = config.ShowTreeWhitespaceTokens;
                 } else { // assumes NodeType == TreeNodeType.Token

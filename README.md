@@ -22,6 +22,10 @@
 
   ![Token filtering](token-filtering.gif)
 
+* Filtering the parse tree nodes by text, whitespace, or error nodes; or by specific rule types.
+
+  ![Parse tree filtering](parse-tree-filtering.gif)
+
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
 ## Installation

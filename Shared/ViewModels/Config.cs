@@ -75,14 +75,18 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool ShowTreeErrorTokens { get; set; } = true;
         public bool ShowRuleContextNodes { get; set; } = true;
 
-        public bool HasTreeFilter() => !(ShowTreeErrorTokens && ShowTreeWhitespaceTokens && ShowTreeTextTokens && ShowRuleContextNodes && selectedRuleContexts.None());
+        public bool HasTreeFilter() => !(ShowTreeErrorTokens && ShowTreeWhitespaceTokens && ShowTreeTextTokens && ShowRuleContextNodes && SelectedRuleContexts.None());
 
         private HashSet<string> selectedRuleContexts = new HashSet<string>();
-        //public HashSet<string> SelectedRulecontexts {
-        //    get {
-
-        //    }
-        //}
+        public HashSet<string> SelectedRuleContexts {
+            get {
+                if (ruleContextsViewModel != null) {
+                    selectedRuleContexts.Clear();
+                    ruleContextsViewModel.Where(x => x.IsSelected).Select(x => x.FullName).AddRangeTo(selectedRuleContexts);
+                }
+                return selectedRuleContexts;
+            }
+        }
 
 
         [NonSerialized]
@@ -134,14 +138,23 @@ namespace ParseTreeVisualizer.ViewModels {
             ShowTreeErrorTokens = ShowTreeErrorTokens,
             ShowTreeWhitespaceTokens = ShowTreeWhitespaceTokens,
             ShowRuleContextNodes = ShowRuleContextNodes,
-            TokenTypeMapping = TokenTypeMapping
+            TokenTypeMapping = TokenTypeMapping,
+            selectedRuleContexts = SelectedRuleContexts.Select().ToHashSet(),
+            UsedRuleContexts = UsedRuleContexts
         };
 
         public bool? ShouldTriggerReload() {
             if (_originalValues == null) { return null; }
-            return _originalValues.SelectedParserName != SelectedParserName ||
+
+            // force load selection changes from the viewmodel objects
+            var selectedTokenTypes = SelectedTokenTypes;
+            var selectedRuleContexts = SelectedRuleContexts;
+
+            return
+                !_originalValues.SelectedRuleContexts.SetEquals(selectedRuleContexts) ||
+                !_originalValues.SelectedTokenTypes.SetEquals(selectedTokenTypes) ||
+                _originalValues.SelectedParserName != SelectedParserName ||
                 _originalValues.SelectedLexerName != SelectedLexerName ||
-                !_originalValues.SelectedTokenTypes.SetEquals(SelectedTokenTypes) ||
                 _originalValues.ShowTextTokens != ShowTextTokens ||
                 _originalValues.ShowErrorTokens != ShowErrorTokens ||
                 _originalValues.ShowWhitespaceTokens != ShowWhitespaceTokens ||
@@ -156,6 +169,7 @@ namespace ParseTreeVisualizer.ViewModels {
 
         // TokenTypes is on the Config and not on TreeVisualizer (like other state information) because we only need it as a source for databinding
         // We also need to be able to discard the cloned config.
+        // Everything else here should really be on the ViewModel, not the Model -- https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/23#issuecomment-532818529
         [NonSerialized]
         [JsonIgnore]
         private List<TokenType> tokenTypes;
@@ -169,6 +183,28 @@ namespace ParseTreeVisualizer.ViewModels {
                     }).OrderBy(x => x.Text).ToList();
                 }
                 return tokenTypes;
+            }
+        }
+
+        [JsonIgnore]
+        public List<ParseRuleContextInfo> UsedRuleContexts { private get; set; }
+
+        [NonSerialized]
+        [JsonIgnore]
+        private List<ParseRuleContextInfo> ruleContextsViewModel;
+
+        [JsonIgnore]
+        public List<ParseRuleContextInfo> RuleContextsViewModel {
+            get {
+                if (UsedRuleContexts == null) { return null; }
+                if (ruleContextsViewModel == null) {
+                    ruleContextsViewModel = UsedRuleContexts.Select(x => {
+                        var ret = x.Clone();
+                        ret.IsSelected = ret.FullName.In(selectedRuleContexts);
+                        return ret;
+                    }).ToList();
+                }
+                return ruleContextsViewModel;
             }
         }
     }
