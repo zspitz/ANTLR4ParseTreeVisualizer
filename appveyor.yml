@@ -46,15 +46,11 @@ for:
       - image: Visual Studio 2019
   configuration: ReleaseCI
   artifacts:
-    - path: 2019\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2019.dll
-      type: File
-      name: visualizer
-
-    - path: 2019\bin\ReleaseCI\Antlr4ParseTreeVisualizer.2019.pdb
+    - path: 2019\bin\Debug\Antlr4ParseTreeVisualizer.2019.*
       type: File
       name: visualizer
     
-    - path: 2019\bin\ReleaseCI\Newtonsoft.Json.*
+    - path: 2019\bin\Debug\Newtonsoft.Json.*
       type: File
       name: visualizer
 
@@ -71,15 +67,11 @@ for:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
   artifacts:
-    - path: 2017\bin\ReleaseCI2017\Antlr4ParseTreeVisualizer.2017.dll
+    - path: 2017\bin\Debug\Antlr4ParseTreeVisualizer.2017.*
       type: File
       name: visualizer
 
-    - path: 2017\bin\ReleaseCI2017\Antlr4ParseTreeVisualizer.2017.pdb
-      type: File
-      name: visualizer
-
-    - path: 2017\bin\ReleaseCI\Newtonsoft.Json.*
+    - path: 2017\bin\Debug\Newtonsoft.Json.*
       type: File
       name: visualizer
 

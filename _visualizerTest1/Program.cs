@@ -11,11 +11,12 @@ namespace _visualizerTest1 {
     class Program {
         static void Main(string[] args) {
             var code = @"
-Private Sub Detail_Format(Cancel As Integer, FormatCount As Integer)
-    ' This is a test comment
-    ShoppingListSRC.Visible = ShoppingListSRC.Report.HasData
-    PreparedMealsSRC.Visible = PreparedMealsSRC.Report.HasData
-    MeatsSRC.Visible = MeatsSRC.Report.HasData
+Public Sub DoSomething()
+    Debug.Print ""hi from path 1""
+    If True Then
+        MsgBox ""hello from path 2""
+    End If
+    Debug.Print ""still in path 1""
 End Sub".Trim();
             var stream = new AntlrInputStream(code);
             var lexer = new VBALexer(stream);
