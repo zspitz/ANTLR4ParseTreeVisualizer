@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\2019\2019.csproj">
-      <Project>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</Project>
+      <Project>{afded9cf-6e6d-461b-b996-3e2f364dd3ad}</Project>
       <Name>2019</Name>
     </ProjectReference>
   </ItemGroup>

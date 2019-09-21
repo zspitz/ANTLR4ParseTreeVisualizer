@@ -105,7 +105,7 @@
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="12">
-                        <ag:AutoGrid RowCount="3" ColumnCount="5" Orientation="Vertical">
+                        <ag:AutoGrid RowCount="3" ColumnCount="3" Orientation="Vertical">
 
                             <Grid.Resources>
                                 <Style x:Key="GroupingLabel" TargetType="TextBlock">
@@ -126,15 +126,6 @@
                                     <Setter Property="Margin" Value="12,0,12,0" />
                                 </Style>
                             </Grid.Resources>
-
-                            <TextBlock Text="General" Style="{StaticResource GroupingLabel}" />
-
-                            <StackPanel Grid.RowSpan="2">
-                                <TextBlock Text="Parser class:" />
-                                <ComboBox Name="selectedParser" ItemsSource="{Binding DataContext.AvailableParsers, RelativeSource={RelativeSource AncestorType=my:VisualizerControl}}" SelectedValue="{Binding SelectedParserName}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" MinWidth="200" />
-                            </StackPanel>
-
-                            <Border Style="{StaticResource SectionBorder}" />
 
                             <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
 

@@ -23,13 +23,11 @@ namespace ParseTreeVisualizer.ViewModels {
             string[] ruleNames = null;
             Dictionary<int, string> tokenTypeMapping = null;
 
-            if (!config.SelectedParserName.IsNullOrWhitespace()) {
-                var parserType = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetType(config.SelectedParserName)).FirstOrDefault(x => x != null);
-                var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
-                tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
+            var parserType = tree.GetType().DeclaringType;
+            var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
+            tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
-                ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
-            }
+            ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
 
             var rulenameMapping = new Dictionary<Type, string>();
             Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping);
