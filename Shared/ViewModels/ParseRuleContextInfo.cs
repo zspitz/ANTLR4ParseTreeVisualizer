@@ -9,11 +9,13 @@ namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
     public class ParseRuleContextInfo : ClassInfo {
         public string RuleName { get; private set; }
+        public int RuleID { get; private set; }
         private ParseRuleContextInfo() { }
-        public ParseRuleContextInfo(Type t, string ruleName) : base(t) {
+        public ParseRuleContextInfo(Type t, string ruleName, int ruleID) : base(t) {
             if (!ruleName.IsNullOrWhitespace()) {
                 RuleName = ruleName;
             }
+            RuleID = ruleID;
         }
         public override string ToString() => RuleName ?? Name;
 
@@ -23,7 +25,8 @@ namespace ParseTreeVisualizer.ViewModels {
             Name = Name,
             Namespace = Namespace,
             FullName = FullName,
-            RuleName = RuleName
+            RuleName = RuleName,
+            RuleID=RuleID
         };
     }
 }

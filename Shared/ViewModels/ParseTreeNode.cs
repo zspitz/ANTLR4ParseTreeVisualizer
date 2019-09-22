@@ -32,20 +32,23 @@ namespace ParseTreeVisualizer.ViewModels {
         public TreeNodeType? NodeType { get; }
         public FilterState? FilterState { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, string> ruleMapping) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping) {
             var type = tree.GetType();
 
             if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
 
-                if (!ruleMapping.TryGetValue(type, out var caption)) {
+                string caption = type.Name;
+                if (!ruleMapping.TryGetValue(type, out var x)) {
                     var ruleIndex = (int)(type.GetProperty("RuleIndex")?.GetValue(tree) ?? -1);
                     if (ruleNames.TryGetValue(ruleIndex, out caption)) {
-                        ruleMapping[type] = caption;
+                        ruleMapping[type] = (caption, ruleIndex);
                     } else {
                         caption = type.Name;
-                        ruleMapping[type] = null;
+                        ruleMapping[type] = (null, -1);
                     }
+                } else {
+                    caption = x.caption;
                 }
 
                 Caption = caption;

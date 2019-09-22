@@ -20,16 +20,15 @@ namespace ParseTreeVisualizer.ViewModels {
             Source = tree.GetText();
             Config = config;
 
-            string[] ruleNames = null;
             Dictionary<int, string> tokenTypeMapping = null;
 
             var parserType = tree.GetType().DeclaringType;
             var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
             tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
-            ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
+            var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
 
-            var rulenameMapping = new Dictionary<Type, string>();
+            var rulenameMapping = new Dictionary<Type, (string name, int index)>();
             Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping);
 
             #region Load debuggee state
@@ -41,8 +40,8 @@ namespace ParseTreeVisualizer.ViewModels {
 
             config.UsedRuleContexts = rulenameMapping.Keys
                 .Select(x => {
-                    rulenameMapping.TryGetValue(x, out var ruleName);
-                    return new ParseRuleContextInfo(x, ruleName);
+                    rulenameMapping.TryGetValue(x, out var y);
+                    return new ParseRuleContextInfo(x, y.name, y.index);
                 })
                 .OrderBy(x => x.Name)
                 .ToList();

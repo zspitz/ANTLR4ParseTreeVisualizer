@@ -43,7 +43,7 @@
             </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
         </my1:ComboBoxTemplateSelector>
 
-        <my:ParserRuleDisplayNameSelector x:Key="ParserRuleDisplayNameSelector">
+        <!--<my:ParserRuleDisplayNameSelector x:Key="ParserRuleDisplayNameSelector">
             <my:ParserRuleDisplayNameSelector.RuleNameTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -60,7 +60,7 @@
                     </TextBlock>
                 </DataTemplate>
             </my:ParserRuleDisplayNameSelector.TypeNameTemplate>
-        </my:ParserRuleDisplayNameSelector>
+        </my:ParserRuleDisplayNameSelector>-->
 
     </FrameworkElement.Resources>
 
@@ -137,12 +137,20 @@
 
                             <StackPanel>
                                 <TextBlock Text="Filter token types:" />
-                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" DisplayMemberPath="Text" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}" Margin="0,3,0,0">
+                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}" Margin="0,3,0,0">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="DarkGray">
+                                                <Run Text="{Binding Text, Mode=OneWay}" Foreground="Black" />
+                                                <Run Text="{Binding Index, Mode=OneWay, StringFormat=({0})}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                             </StackPanel>
 
@@ -159,12 +167,20 @@
 
                             <StackPanel>
                                 <TextBlock Text="Filter rule contexts:" />
-                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" ItemTemplateSelector="{StaticResource ParserRuleDisplayNameSelector}" Margin="0,3,0,0" ItemsSource="{Binding RuleContextsViewModel}">
+                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" Margin="0,3,0,0" ItemsSource="{Binding RuleContextsViewModel}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="DarkGray">
+                                                <Run Text="{Binding RuleName, Mode=OneWay}" Foreground="Black" />
+                                                <Run Text="{Binding RuleID, Mode=OneWay, StringFormat=({0})}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                             </StackPanel>
 
