@@ -207,6 +207,13 @@ namespace ParseTreeVisualizer.ViewModels {
                 return ruleContextsViewModel;
             }
         }
+
+        [JsonIgnore]
+        public string Version => GetType().Assembly.GetName().Version.ToString();
+        [JsonIgnore]
+        public string Location => GetType().Assembly.Location;
+        [JsonIgnore]
+        public string Filename => GetFileName(Location);
     }
 
     internal class ConfigContractResolver : DefaultContractResolver {

@@ -18,50 +18,6 @@
             <Setter Property="DockPanel.Dock" Value="Top"/>
             <Setter Property="Margin" Value="0,0,0,3" />
         </Style>
-
-        <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
-            <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                        <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
-                        <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
-                    </StackPanel>
-                </DataTemplate>
-            </my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
-            <my1:ComboBoxTemplateSelector.SelectedItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" FontWeight="Bold">
-                        <TextBlock.ToolTip>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Namespace}" Foreground="DarkGray" />
-                                <TextBlock Text="{Binding Assembly}" Foreground="DarkGray" />
-                            </StackPanel>
-                        </TextBlock.ToolTip>
-                    </TextBlock>
-                </DataTemplate>
-            </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
-        </my1:ComboBoxTemplateSelector>
-
-        <!--<my:ParserRuleDisplayNameSelector x:Key="ParserRuleDisplayNameSelector">
-            <my:ParserRuleDisplayNameSelector.RuleNameTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding RuleName, Mode=OneWay}" />
-                        <Run Text="(Rule)" Foreground="DarkGray" />
-                    </TextBlock>
-                </DataTemplate>
-            </my:ParserRuleDisplayNameSelector.RuleNameTemplate>
-            <my:ParserRuleDisplayNameSelector.TypeNameTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding Name, Mode=OneWay}" />
-                        <Run Text="(Type)" Foreground="DarkGray" />
-                    </TextBlock>
-                </DataTemplate>
-            </my:ParserRuleDisplayNameSelector.TypeNameTemplate>
-        </my:ParserRuleDisplayNameSelector>-->
-
     </FrameworkElement.Resources>
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
@@ -78,7 +34,7 @@
 
     <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
         <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
-        <TextBox Name="source" MinHeight="200" Text="{Binding Source, Mode=OneTime}" />
+        <TextBox Name="source" MinHeight="200" Text="{Binding Source, Mode=OneTime}" IsReadOnly="True" />
     </DockPanel>
 
     <Grid DockPanel.Dock="Right" Margin="12,0,0,0">
@@ -105,7 +61,7 @@
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="12">
-                        <ag:AutoGrid RowCount="3" ColumnCount="3" Orientation="Vertical">
+                        <ag:AutoGrid RowCount="4" ColumnCount="3" Orientation="Vertical">
 
                             <Grid.Resources>
                                 <Style x:Key="GroupingLabel" TargetType="TextBlock">
@@ -153,6 +109,18 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </StackPanel>
+
+                            <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="0,6,0,0" Foreground="DarkGray">
+                                <Run Text="{Binding Version, Mode=OneWay, StringFormat='Version: {0}'}" />
+                                /
+                                <Run Text="{Binding Filename, Mode=OneWay}" />
+                                <TextBlock.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Version, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding Location, Mode=OneWay}" />
+                                    </StackPanel>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
 
                             <Border Style="{StaticResource SectionBorder}" />
 
