@@ -45,7 +45,7 @@ Note that rule and token names aren't part of the `RuleContext` targeted by the 
 
 ## Contributing
 
-* Test the visualizer
+* Test the visualizer. (The significance of this kind of contribution cannot be overestimated.)
 * Suggest ideas and enhancements ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Notify about bugs ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Feel free to star the project
