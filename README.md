@@ -24,6 +24,11 @@
 
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
+## Requirements
+
+* Visual Studio 2017 or 2019  
+  (If you're using an older version of VS, you could probably use the visualizer as well. Compile against the appropriate version of Microsoft.VisualStudio.DebuggerVisualizers.dll.)
+
 ## Installation
 
 Download the DLLs from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page, and unblock (right-click from Explorer, select **Properties** and check the **Unblock** checkbox). Alternatively, you can compile the source yourself.
