@@ -25,6 +25,10 @@ namespace ParseTreeVisualizer.ViewModels {
                         -1
                 ).ToArray();
                 foreach (var pathPart in pathParts) {
+                    var nextTree = tree.GetChild(pathPart);
+                    if (nextTree == null) {
+                        break;
+                    }
                     tree = tree.GetChild(pathPart);
                 }
             }
@@ -39,7 +43,7 @@ namespace ParseTreeVisualizer.ViewModels {
             var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
 
             var rulenameMapping = new Dictionary<Type, (string name, int index)>();
-            var actualRoot = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping, null);
+            var actualRoot = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping, Config.RootNodePath);
             if (config.RootNodePath.IsNullOrWhitespace()) {
                 Root = actualRoot;
             } else {
