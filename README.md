@@ -10,10 +10,6 @@
 * Treeview of rule contexts and terminal nodes (error nodes in red)
 * Properties of selected treeview node (properties not declared in the Antlr namespace are checked)
 * Source view
-* Rule and token names are visible after choosing a parser class
-
-  ![Choosing a parser](choose-parser.gif)
-
 * Selection sync, when selecting in the token list, the tree view, or the source text.
 
   ![Selection sync](selection-sync.gif)
