@@ -10,10 +10,6 @@
 * Treeview of rule contexts and terminal nodes (error nodes in red)
 * Properties of selected treeview node (properties not declared in the Antlr namespace are checked)
 * Source view
-* Rule and token names are visible after choosing a parser class
-
-  ![Choosing a parser](choose-parser.gif)
-
 * Selection sync, when selecting in the token list, the tree view, or the source text.
 
   ![Selection sync](selection-sync.gif)
@@ -28,9 +24,14 @@
 
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
+## Requirements
+
+* Visual Studio 2017 or 2019  
+  (If you're using an older version of VS, you could probably use the visualizer as well. Compile against the appropriate version of Microsoft.VisualStudio.DebuggerVisualizers.dll.)
+
 ## Installation
 
-Download the DLLs from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page, and unblock (right-click from Explorer, select **Properties** and check the **Unblock** checkbox). Alternatively, you can compile the source  yourself.
+Download the DLLs from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page, and unblock (right-click from Explorer, select **Properties** and check the **Unblock** checkbox). Alternatively, you can compile the source yourself.
 
 Make sure the compiled visualizer DLL matches your version of Visual Studio -- 2019 or 2017.
 
@@ -49,7 +50,7 @@ Note that rule and token names aren't part of the `RuleContext` targeted by the 
 
 ## Contributing
 
-* Test the visualizer
+* Test the visualizer. (The significance of this kind of contribution cannot be overestimated.)
 * Suggest ideas and enhancements ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Notify about bugs ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Feel free to star the project
