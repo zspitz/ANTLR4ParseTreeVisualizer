@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.VisualStudio.DebuggerVisualizers;
-using static System.Windows.SystemColors;
 using ParseTreeVisualizer.ViewModels;
 
 [assembly: DebuggerVisualizer(
@@ -16,9 +15,6 @@ namespace ParseTreeVisualizer {
             if (windowService == null) { throw new ArgumentNullException(nameof(windowService)); }
 
             var window = new VisualizerWindow();
-            // When a control loses focus, it should look no different from when it had the focus (e.g. selection color)
-            window.Resources[InactiveSelectionHighlightBrushKey] = HighlightBrush;
-            window.Resources[InactiveSelectionHighlightTextBrushKey] = HighlightTextBrush;
 
             Config.AssemblyName = objectProvider.GetObject() as string;
 

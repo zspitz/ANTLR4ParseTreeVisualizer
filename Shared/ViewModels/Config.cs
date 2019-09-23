@@ -88,6 +88,7 @@ namespace ParseTreeVisualizer.ViewModels {
             }
         }
 
+        public string RootNodePath { get; set; }
 
         [NonSerialized]
         [JsonIgnore]

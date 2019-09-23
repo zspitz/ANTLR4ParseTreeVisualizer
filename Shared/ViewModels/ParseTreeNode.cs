@@ -13,7 +13,8 @@ namespace ParseTreeVisualizer.ViewModels {
         RuleContext,
         Token,
         ErrorToken,
-        WhitespaceToken
+        WhitespaceToken,
+        [Obsolete("Only for use until we have a proper split between model and viewmodel.")] Placeholder
     }
 
     public enum FilterState {
@@ -24,15 +25,24 @@ namespace ParseTreeVisualizer.ViewModels {
 
     [Serializable]
     public class ParseTreeNode : INotifyPropertyChanged {
-        public string Caption { get; }
+        public static ParseTreeNode GetPlaceholder(ParseTreeNode actualRoot) => new ParseTreeNode {
+            Caption = "(parent nodes)",
+            IsExpanded = true,
+            NodeType = TreeNodeType.Placeholder,
+            Children = new List<ParseTreeNode> { actualRoot },
+            CharSpan = actualRoot.CharSpan
+        };
+
+        public string Caption { get; private set; }
         public List<PropertyValue> Properties { get; }
-        public List<ParseTreeNode> Children { get; }
+        public List<ParseTreeNode> Children { get; private set; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
         public (int startChar, int endChar) CharSpan { get; private set; }
-        public TreeNodeType? NodeType { get; }
+        public TreeNodeType? NodeType { get; private set; }
         public FilterState? FilterState { get; }
+        public string Path { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping) {
+        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping, string path) {
             var type = tree.GetType();
 
             if (tree is ParserRuleContext ruleContext) {
@@ -83,9 +93,11 @@ namespace ParseTreeVisualizer.ViewModels {
                 }
             }
 
+            Path = path;
+            var pathDelimiter = path.IsNullOrWhitespace() ? "" : ".";
             Properties = type.GetProperties().OrderBy(x => x.Name).Select(prp => new PropertyValue(tree, prp)).ToList();
             Children = tree.Children()
-                .Select(x => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config, ruleMapping))
+                .Select((x, index) => new ParseTreeNode(x, tokens, ruleNames, tokenTypeMapping, config, ruleMapping, $"{path}{pathDelimiter}{index}"))
                 .Where(x => x.FilterState != ViewModels.FilterState.NotMatched) // intentionally doesn't exclude null
                 .ToList();
             TokenSpan = (tree.SourceInterval.a, tree.SourceInterval.b);
@@ -132,6 +144,8 @@ namespace ParseTreeVisualizer.ViewModels {
             //    }
             //}
         }
+
+        private ParseTreeNode() {}
 
         public string Stringify(int indentLevel=0) {
             var ret = new string(' ', indentLevel*4) + Caption;

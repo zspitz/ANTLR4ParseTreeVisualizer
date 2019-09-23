@@ -15,21 +15,37 @@ namespace ParseTreeVisualizer.ViewModels {
         public Config Config { get; }
         public ParseTreeNode Root { get; }
         public TokenList Tokens { get; } = new TokenList();
+        public int SourceOffset { get; }
 
         public TreeVisualizer(IParseTree tree, Config config) {
-            Source = tree.GetText();
-            Config = config;
+            if (!config.RootNodePath.IsNullOrWhitespace()) {
+                var pathParts = config.RootNodePath.Split('.').Select(x =>
+                    int.TryParse(x, out var ret) ?
+                        ret :
+                        -1
+                ).ToArray();
+                foreach (var pathPart in pathParts) {
+                    tree = tree.GetChild(pathPart);
+                }
+            }
 
-            Dictionary<int, string> tokenTypeMapping = null;
+            Config = config;
+            Source = tree.GetText();
 
             var parserType = tree.GetType().DeclaringType;
             var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
-            tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
+            var tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
             var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
 
             var rulenameMapping = new Dictionary<Type, (string name, int index)>();
-            Root = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping);
+            var actualRoot = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping, null);
+            if (config.RootNodePath.IsNullOrWhitespace()) {
+                Root = actualRoot;
+            } else {
+                Root = ParseTreeNode.GetPlaceholder(actualRoot);
+                SourceOffset = actualRoot.CharSpan.startChar;
+            }
 
             #region Load debuggee state
 

@@ -57,6 +57,7 @@ namespace ParseTreeVisualizer.Util {
                     return LightGray;
                 case TreeNodeType.ErrorToken: return Red;
                 case TreeNodeType.WhitespaceToken: return UnsetValue;
+                case TreeNodeType.Placeholder: return DarkGray;
                 default: throw new InvalidOperationException("Invalid NodeType value");
             }
         }

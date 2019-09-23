@@ -58,6 +58,8 @@ namespace ParseTreeVisualizer {
                 source.SelectAll();
             };
 
+            Unloaded += (s, e) => Config.Write();
+
             source.SelectionChanged += (s, e) => changeSelection(source);
             tokens.SelectionChanged += (s, e) => changeSelection(tokens);
             treeview.SelectedItemChanged += (s, e) => changeSelection(treeview);
@@ -84,8 +86,8 @@ namespace ParseTreeVisualizer {
             }
 
             if (sender != source) {
-                if (charSpan != null && charSpan != (-1,-1)) {
-                    source.Select(charSpan.Value.start, charSpan.Value.end - charSpan.Value.start + 1);
+                if (charSpan != null && charSpan != (-1, -1)) {
+                    source.Select(charSpan.Value.start - data.SourceOffset, charSpan.Value.end - charSpan.Value.start + 1);
                 } else {
                     source.Select(0, 0);
                 }
@@ -165,7 +167,22 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private void ExpandAll(object sender, RoutedEventArgs e) => ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(true);
-        private void CollapseAll(object sender, RoutedEventArgs e) => ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(false);
+        private void ExpandAll(object sender, RoutedEventArgs e) =>
+            ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(true);
+        private void CollapseAll(object sender, RoutedEventArgs e) =>
+            ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(false);
+        private void SetRootNode(object sender, RoutedEventArgs e) {
+            Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
+            LoadDataContext();
+        }
+
+        private void OpenRootNewWindow(object sender, RoutedEventArgs e) {
+            var newWindow = new VisualizerWindow();
+            var content = newWindow.Content as VisualizerControl;
+            content.Config = Config.Clone();
+            content.Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
+            content.objectProvider = objectProvider;
+            newWindow.ShowDialog();
+        }
     }
 }
