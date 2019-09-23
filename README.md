@@ -22,6 +22,10 @@
 
   ![Parse tree filtering](parse-tree-filtering.gif)
 
+* Set a specific node as the root node, either in the current window, or in a new window
+
+  ![Set node as root, in current or new window](set-root.gif)
+
 This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
 
 ## Requirements
