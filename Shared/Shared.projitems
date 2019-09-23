@@ -9,6 +9,7 @@
     <Import_RootNamespace>ParseTreeVisualizer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)WatchExpressionPrompt.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParserRuleDisplayNameSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\ComboBoxTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ArrayT.cs" />
@@ -48,6 +49,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)WpfAutoGrid\DependencyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)WatchExpressionPrompt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -58,6 +63,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="C:\Users\Spitz\source\repos\ANTLR4ParseTreeVisualizer\Shared\ExpressionRootPrompt.xaml.cs">
+      <DependentUpon>WatchExpressionPrompt.xaml</DependentUpon>
+    </Compile>
     <Compile Update="C:\Users\Spitz\source\repos\ANTLR4ParseTreeVisualizer\Shared\PropertyGrid.xaml.cs">
       <DependentUpon>PropertyGrid.xaml</DependentUpon>
     </Compile>

@@ -215,6 +215,9 @@ namespace ParseTreeVisualizer.ViewModels {
         public string Location => GetType().Assembly.Location;
         [JsonIgnore]
         public string Filename => GetFileName(Location);
+
+        [JsonIgnore]
+        public string WatchBaseExpression { get; set; }
     }
 
     internal class ConfigContractResolver : DefaultContractResolver {

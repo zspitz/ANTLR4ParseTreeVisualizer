@@ -175,7 +175,6 @@ namespace ParseTreeVisualizer {
             Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
             LoadDataContext();
         }
-
         private void OpenRootNewWindow(object sender, RoutedEventArgs e) {
             var newWindow = new VisualizerWindow();
             var content = newWindow.Content as VisualizerControl;
@@ -183,6 +182,23 @@ namespace ParseTreeVisualizer {
             content.Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
             content.objectProvider = objectProvider;
             newWindow.ShowDialog();
+        }
+
+        private void CopyWatchExpression(object sender, RoutedEventArgs e) {
+            var node = ((MenuItem)sender).DataContext<ParseTreeNode>();
+            if (node == null) { return; }
+
+            if (Config.WatchBaseExpression.IsNullOrWhitespace()) {
+                var dlg = new WatchExpressionPrompt();
+                dlg.ShowDialog();
+                Config.WatchBaseExpression = dlg.Expression;
+            }
+
+            var watchExpression = Config.WatchBaseExpression;
+            if (!node.Path.IsNullOrWhitespace()) {
+                watchExpression += node.Path.Split('.').Joined("", x => $".GetChild({x})");
+            }
+            Clipboard.SetText(watchExpression);
         }
     }
 }

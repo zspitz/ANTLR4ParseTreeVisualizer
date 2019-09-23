@@ -176,6 +176,7 @@
                         <ContextMenu>
                             <MenuItem Header="Set as root" Click="SetRootNode" />
                             <MenuItem Header="Open as root in new window" Click="OpenRootNewWindow" />
+                            <MenuItem Header="Copy watch expression" Click="CopyWatchExpression" />
                             <MenuItem Header="Expand recursively" Click="ExpandAll" />
                             <MenuItem Header="Collapse recursively" Click="CollapseAll" />
                         </ContextMenu>
