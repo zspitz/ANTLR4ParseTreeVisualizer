@@ -46,12 +46,8 @@ for:
       - image: Visual Studio 2019
   configuration: ReleaseCI
   artifacts:
-    - path: 2019\bin\Debug\net472\*.dll
-      type: File
-      name: visualizer
-    
-    - path: 2019\bin\Debug\net472\*.pdb
-      type: File
+    - path: 2019\bin\Debug\2019
+      type: zip
       name: visualizer
 
   deploy:
@@ -67,14 +63,10 @@ for:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
   artifacts:
-    - path: 2017\bin\Debug\net472\*.dll
-      type: File
+    - path: 2017\bin\Debug\2017
+      type: zip
       name: visualizer
     
-    - path: 2017\bin\Debug\net472\*.pdb
-      type: File
-      name: visualizer
-
   deploy:
     - provider: GitHub
       description: ''
