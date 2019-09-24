@@ -11,7 +11,7 @@
     <Copyright>Copyright ©  2019</Copyright>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
-    <OutputPath>bin\$(Configuration)\2017\</OutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
     <DebugType>portable</DebugType>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
