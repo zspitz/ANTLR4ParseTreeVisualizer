@@ -46,16 +46,16 @@ for:
       - image: Visual Studio 2019
   configuration: ReleaseCI
   artifacts:
-    - path: 2019\bin\Debug\2019
+    - path: 2019\bin\Debug
       type: zip
-      name: 2019
+      name: ANTLRVisualizer2019
 
   deploy:
     - provider: GitHub
       description: ''
       auth_token:
         secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
-      artifact: 2019
+      artifact: ANTLRVisualizer2019
 
 - 
   matrix:
@@ -63,13 +63,13 @@ for:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
   artifacts:
-    - path: 2017\bin\Debug\2017
+    - path: 2017\bin\Debug
       type: zip
-      name: 2017
-    
+      name: ANTLRVisualizer2017
+
   deploy:
     - provider: GitHub
       description: ''
       auth_token:
         secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
-      artifact: 2017
+      artifact: ANTLRVisualizer2017
