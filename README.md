@@ -32,17 +32,17 @@ This project is very much in an alpha stage. It currently only targets `RuleCont
 
 * Visual Studio 2017 or 2019  
   (If you're using an older version of VS, you could probably use the visualizer as well. Compile against the appropriate version of Microsoft.VisualStudio.DebuggerVisualizers.dll.)
+* The ANTLR Runtime DLL is also assumed to be loaded.
 
 ## Installation
 
-Download the DLLs from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page, and unblock (right-click from Explorer, select **Properties** and check the **Unblock** checkbox). Alternatively, you can compile the source yourself.
-
-Make sure the compiled visualizer DLL matches your version of Visual Studio -- 2019 or 2017.
-
-Save the compiled DLL in one of Visual Studio's recognized visualizer folders. You don't have to restart VS, just make sure VS is not currently in a debugging session:
+1. Download the ZIP file matching your version of Visual Studio (2019 or 2017) from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page.
+2. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders. You don't have to restart VS, just make sure VS is not currently in a debugging session:
 
 * _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
 * `My Documents\Visual Studio `_Version_`\Visualizers`
+
+You can also compile the source yourself and place the output DLLs in one of the visualizer folder.
 
 ## Usage
 
