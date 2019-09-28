@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
+    [Obsolete("Use either ParseTreeVisualizer.ClassInfo or ParseTreeVisualizer.ClassInfoViewModel")]
     public class ClassInfo : INotifyPropertyChanged {
         public string Name { get; protected set; }
         public string Namespace { get; protected set;  }

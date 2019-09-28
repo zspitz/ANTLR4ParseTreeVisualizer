@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,12 @@ namespace ParseTreeVisualizer.Util {
             return src.Max(selector);
         }
 
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> src, Action<T> action) {
+            foreach (var item in src) {
+                action(item);
+            }
+            return src;
+        }
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> src, Action<T, int> action) {
             var current = 0;
             foreach (var item in src) {

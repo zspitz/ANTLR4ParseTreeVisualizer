@@ -3,7 +3,6 @@ using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Tree;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer;
-using ParseTreeVisualizer.ViewModels;
 using Rubberduck.Parsing.Grammar;
 using System;
 using System.Collections.Generic;

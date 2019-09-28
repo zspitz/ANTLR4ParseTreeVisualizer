@@ -10,7 +10,7 @@ using static System.Windows.DependencyProperty;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows;
-using ParseTreeVisualizer.ViewModels;
+
 
 namespace ParseTreeVisualizer.Util {
     public abstract class ReadOnlyConverterBase : IValueConverter {
@@ -47,13 +47,13 @@ namespace ParseTreeVisualizer.Util {
     public class NodeForegroundConverter : ReadOnlyMultiConverterBase {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             var nodeType = (TreeNodeType)values[0];
-            var filterState = (FilterState?)values[1];
+            var filterState = (FilterStates?)values[1];
             switch (nodeType) {
                 case TreeNodeType.RuleContext:
-                    if (filterState.In(null, FilterState.Matched)) { return Black; }
+                    if (filterState.In(null, FilterStates.Matched)) { return Black; }
                     return LightGray;
                 case TreeNodeType.Token:
-                    if (filterState.In(null, FilterState.Matched)) { return Black; }
+                    if (filterState.In(null, FilterStates.Matched)) { return Black; }
                     return LightGray;
                 case TreeNodeType.ErrorToken: return Red;
                 case TreeNodeType.WhitespaceToken: return UnsetValue;

@@ -1,20 +1,17 @@
-﻿using System;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using ParseTreeVisualizer.Util;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using ParseTreeVisualizer.Util;
 
-namespace ParseTreeVisualizer.ViewModels {
+namespace ParseTreeVisualizer {
     [Serializable]
-    [Obsolete("Use ParseTreeVisualizer.ParseTreeNode or ParseTreeVisualizer.ParseTreeNodeViewModel")]
-    public class ParseTreeNode : INotifyPropertyChanged {
+    public class ParseTreeNode {
         public static ParseTreeNode GetPlaceholder(ParseTreeNode actualRoot) => new ParseTreeNode {
             Caption = "(parent nodes)",
-            IsExpanded = true,
             NodeType = TreeNodeType.Placeholder,
             Children = new List<ParseTreeNode> { actualRoot },
             CharSpan = actualRoot.CharSpan
@@ -29,7 +26,8 @@ namespace ParseTreeVisualizer.ViewModels {
         public FilterStates? FilterState { get; }
         public string Path { get; }
 
-        public ParseTreeNode(IParseTree tree, TokenList tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping, string path) {
+        private ParseTreeNode() { }
+        public ParseTreeNode(IParseTree tree, List<Token> tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping, string path) {
             var type = tree.GetType();
 
             if (tree is ParserRuleContext ruleContext) {
@@ -120,53 +118,14 @@ namespace ParseTreeVisualizer.ViewModels {
             foreach (var (grandchild, index) in toPromote) {
                 Children[index] = grandchild;
             }
-
-            // trying and failing to find the CharSpan for error nodes from all the previous nodes, to the end of the token
-            //var errorChildren = Children.Where(x => x.NodeType == TreeNodeType.Error && x.CharSpan == (-1, -1));
-            //foreach (var error in errorChildren) {
-            //    var index = Children.IndexOf(error);
-            //    if (index>0) {
-            //        var previousChildren = Children.Take(index - 1).ToList();
-            //        error.CharSpan = (previousChildren.Min(x => x.CharSpan.endChar) + 1, (tree as ParserRuleContext).Start.InputStream.Size);
-            //    }
-            //}
         }
 
-        private ParseTreeNode() {}
-
-        public string Stringify(int indentLevel=0) {
-            var ret = new string(' ', indentLevel*4) + Caption;
+        public string Stringify(int indentLevel = 0) {
+            var ret = new string(' ', indentLevel * 4) + Caption;
             foreach (var child in Children) {
                 ret += "\n" + child.Stringify(indentLevel + 1);
             }
             return ret;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NonSerialized]
-        private bool isSelected;
-        public bool IsSelected {
-            get => isSelected;
-            set => this.NotifyChanged(ref isSelected, value, args => PropertyChanged?.Invoke(this, args));
-        }
-
-        public void ClearSelection() {
-            IsSelected = false;
-            foreach (var child in Children) {
-                child.ClearSelection();
-            }
-        }
-
-        [NonSerialized]
-        private bool isExpanded;
-        public bool IsExpanded {
-            get => isExpanded;
-            set => this.NotifyChanged(ref isExpanded, value, args => PropertyChanged?.Invoke(this, args));
-        }
-        public void SetSubtreeExpanded(bool expand) {
-            IsExpanded = expand;
-            Children.ForEach(x => x.SetSubtreeExpanded(expand));
         }
     }
 }

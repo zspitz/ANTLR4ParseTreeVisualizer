@@ -14,6 +14,7 @@ namespace ParseTreeVisualizer.ViewModels {
     // Change notifications on IsSelected to the collection are ignored, while within the call to the property setter
 
     [Serializable]
+    [Obsolete("Use List<Token> or List<Selectable<Token>>; and the SelectionCharSpan extension method")]
     public class TokenList : ObservableCollection<Token>, INotifyPropertyChanged {
         private readonly PropertyChangedEventHandler tokenSelectionHandler;
 

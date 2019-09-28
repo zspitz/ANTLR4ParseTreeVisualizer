@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using static ParseTreeVisualizer.Util.Functions;
 
-namespace ParseTreeVisualizer.ViewModels {
+namespace ParseTreeVisualizer {
     [Serializable]
     public class PropertyValue {
         public bool Custom { get; }

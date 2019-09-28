@@ -8,6 +8,7 @@ using ParseTreeVisualizer.Util;
 
 namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
+    [Obsolete("Use either KeyValuePair<int,string> or ParseTreeVisualizer.TokenTypeViewModel")]
     public class TokenType : INotifyPropertyChanged {
         public int Index { get; }
         public string Text { get; }

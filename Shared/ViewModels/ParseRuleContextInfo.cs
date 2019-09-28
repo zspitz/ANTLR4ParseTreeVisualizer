@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
+    [Obsolete("Use either ParseTreeVisualizer.ClassInfo or Selectable<ClassInfo>")]
     public class ParseRuleContextInfo : ClassInfo {
         public string RuleName { get; private set; }
         public int RuleID { get; private set; }
@@ -19,6 +20,7 @@ namespace ParseTreeVisualizer.ViewModels {
         }
         public override string ToString() => RuleName ?? Name;
 
+        [Obsolete("Use ParseTreeVisualizer.ClassInfoViewModel")]
         public ParseRuleContextInfo Clone() => new ParseRuleContextInfo {
             Antlr = Antlr,
             Assembly = Assembly,

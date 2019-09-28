@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer.Util;
-using ParseTreeVisualizer.ViewModels;
+
 
 namespace ParseTreeVisualizer {
     public partial class VisualizerControl {
@@ -24,7 +24,7 @@ namespace ParseTreeVisualizer {
             }));
 
             tokens.AutoGeneratingColumn += (s, e) => {
-                if (e.PropertyName.In(nameof(Token.IsSelected), nameof(Token.TokenTypeID))) {
+                if (e.PropertyName.In(nameof(ViewModels.Token.IsSelected), nameof(ViewModels.Token.TokenTypeID))) {
                     e.Cancel = true;
                 }
             };
@@ -45,7 +45,7 @@ namespace ParseTreeVisualizer {
                 };
 
                 configPopup.Closed += (s1, e1) => {
-                    var popupConfig = configPopup.DataContext<Config>();
+                    var popupConfig = configPopup.DataContext<ViewModels.Config>();
                     if (popupConfig.ShouldTriggerReload() ?? false) {
                         Config = popupConfig;
                     }
@@ -65,7 +65,7 @@ namespace ParseTreeVisualizer {
             treeview.SelectedItemChanged += (s, e) => changeSelection(treeview);
         }
 
-        private TreeVisualizer data => (TreeVisualizer)DataContext;
+        private ViewModels.TreeVisualizer data => (ViewModels.TreeVisualizer)DataContext;
 
         private bool inChangeSelection;
         private void changeSelection(object sender) {
@@ -74,7 +74,7 @@ namespace ParseTreeVisualizer {
 
             (int start, int end)? charSpan = null;
             if (sender == treeview) {
-                charSpan = treeview.SelectedItem<ParseTreeNode>()?.CharSpan;
+                charSpan = treeview.SelectedItem<ViewModels.ParseTreeNode>()?.CharSpan;
             } else if (sender == source) {
                 charSpan = (source.SelectionStart, source.SelectionStart + source.SelectionLength);
             } else if (sender == tokens) {
@@ -111,7 +111,7 @@ namespace ParseTreeVisualizer {
                     var startChar = charSpan.Value.start;
                     var endChar = charSpan.Value.end;
 
-                    Func<ParseTreeNode, bool> matcher = x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar;
+                    Func<ViewModels.ParseTreeNode, bool> matcher = x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar;
                     var selectedNode = data.Root;
                     if (matcher(selectedNode)) {
                         while (true) {
@@ -157,8 +157,8 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private Config _config;
-        public Config Config {
+        private ViewModels.Config _config;
+        public ViewModels.Config Config {
             get => _config;
             set {
                 if (value == _config) { return; }
@@ -168,24 +168,24 @@ namespace ParseTreeVisualizer {
         }
 
         private void ExpandAll(object sender, RoutedEventArgs e) =>
-            ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(true);
+            ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.SetSubtreeExpanded(true);
         private void CollapseAll(object sender, RoutedEventArgs e) =>
-            ((MenuItem)sender).DataContext<ParseTreeNode>()?.SetSubtreeExpanded(false);
+            ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.SetSubtreeExpanded(false);
         private void SetRootNode(object sender, RoutedEventArgs e) {
-            Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
+            Config.RootNodePath = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.Path;
             LoadDataContext();
         }
         private void OpenRootNewWindow(object sender, RoutedEventArgs e) {
             var newWindow = new VisualizerWindow();
             var content = newWindow.Content as VisualizerControl;
             content.Config = Config.Clone();
-            content.Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNode>()?.Path;
+            content.Config.RootNodePath = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.Path;
             content.objectProvider = objectProvider;
             newWindow.ShowDialog();
         }
 
         private void CopyWatchExpression(object sender, RoutedEventArgs e) {
-            var node = ((MenuItem)sender).DataContext<ParseTreeNode>();
+            var node = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>();
             if (node == null) { return; }
 
             if (Config.WatchBaseExpression.IsNullOrWhitespace()) {

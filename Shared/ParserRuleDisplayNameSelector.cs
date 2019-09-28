@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ParseTreeVisualizer.ViewModels;
+
 
 namespace ParseTreeVisualizer {
     public class ParserRuleDisplayNameSelector : DataTemplateSelector {
         public DataTemplate RuleNameTemplate { get; set; }
         public DataTemplate TypeNameTemplate { get; set; }
         public override DataTemplate SelectTemplate(object item, DependencyObject container) => 
-            (item as ParseRuleContextInfo).RuleName == null ?
+            (item as ViewModels.ParseRuleContextInfo).RuleName == null ?
                 TypeNameTemplate :
                 RuleNameTemplate;
     }

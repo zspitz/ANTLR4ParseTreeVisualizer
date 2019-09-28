@@ -2,12 +2,13 @@
 using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ParseTreeVisualizer.ViewModels {
+namespace ParseTreeVisualizer {
     [Serializable]
-    [Obsolete("Use Token or Selectable<Token>")]
-    public class Token : INotifyPropertyChanged {
+    public class Token {
         public int Index { get; }
         public string TokenType { get; }
         public int TokenTypeID { get; }
@@ -17,19 +18,12 @@ namespace ParseTreeVisualizer.ViewModels {
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
         public bool IsWhitespace { get; }
-
-        private bool isSelected;
-        public bool IsSelected {
-            get => isSelected;
-            set => this.NotifyChanged(ref isSelected, value, args => PropertyChanged?.Invoke(this, args));
-        }
-
         public Token(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) {
             Index = terminalNode.Payload.TokenIndex;
 
             TokenTypeID = terminalNode.Payload.Type;
 
-            TokenType = 
+            TokenType =
                 tokenTypeMapping?[TokenTypeID] ??
                 TokenTypeID.ToString();
 
@@ -44,7 +38,5 @@ namespace ParseTreeVisualizer.ViewModels {
 
             IsWhitespace = terminalNode.Payload.Text.IsNullOrWhitespace();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

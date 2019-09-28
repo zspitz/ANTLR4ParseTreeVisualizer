@@ -10,6 +10,7 @@ using static System.IO.Path;
 
 namespace ParseTreeVisualizer.ViewModels {
     [Serializable]
+    [Obsolete("Use ParseTreeVisualizer.Config or ParseTreeVisualizer.ConfigViewModel")]
     public class Config {
         public static string AssemblyName { get; set; }
 
@@ -218,19 +219,5 @@ namespace ParseTreeVisualizer.ViewModels {
 
         [JsonIgnore]
         public string WatchBaseExpression { get; set; }
-    }
-
-    internal class ConfigContractResolver : DefaultContractResolver {
-        private static readonly string[] globalNames = new[] { "" };
-        public bool ForGlobal { get; set; } = true;
-
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {
-            var ret = base.CreateProperties(type, memberSerialization);
-            var predicate = ForGlobal ?
-                x => x.PropertyName.In(globalNames) :
-                (Func<JsonProperty, bool>)(x => x.PropertyName.NotIn(globalNames));
-            ret = ret.Where(predicate).ToList();
-            return ret;
-        }
     }
 }

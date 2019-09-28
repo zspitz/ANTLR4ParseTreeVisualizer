@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.VisualStudio.DebuggerVisualizers;
-using ParseTreeVisualizer.ViewModels;
+
 
 [assembly: DebuggerVisualizer(
     visualizer: typeof(ParseTreeVisualizer.Visualizer),
@@ -19,7 +19,7 @@ namespace ParseTreeVisualizer {
             Config.AssemblyName = objectProvider.GetObject() as string;
 
             var content = window.Content as VisualizerControl;
-            content.Config = Config.Get();
+            content.Config = ViewModels.Config.Get();
             content.objectProvider = objectProvider;
 
             window.ShowDialog();
