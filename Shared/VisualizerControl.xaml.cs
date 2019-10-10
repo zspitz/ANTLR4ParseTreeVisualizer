@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,14 +6,18 @@ using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using ParseTreeVisualizer.Util;
 
-
 namespace ParseTreeVisualizer {
     public partial class VisualizerControl {
         public VisualizerControl() {
             InitializeComponent();
 
             tokens.AutoGeneratingColumn += (s, e) => {
-                if (e.PropertyName == "IsError") { e.Cancel = true; }
+                if (e.PropertyName.In(
+                    nameof(ViewModelBase<string>.Model),
+                    nameof(Selectable<Token>.IsSelected)
+                )) {
+                    e.Cancel = true;
+                }
             };
 
             // scrolls the tree view item into view when expanded
@@ -23,11 +26,6 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
-            tokens.AutoGeneratingColumn += (s, e) => {
-                if (e.PropertyName.In(nameof(ViewModels.Token.IsSelected), nameof(ViewModels.Token.TokenTypeID))) {
-                    e.Cancel = true;
-                }
-            };
 
             Loaded += (s, e) => {
                 // https://stackoverflow.com/a/21436273/111794
@@ -39,15 +37,13 @@ namespace ParseTreeVisualizer {
                     };
                 configButton.Click += (s1, e1) => configPopup.IsOpen = true;
 
-                configPopup.Opened += (s1, e1) => {
-                    var cloned = data.Config.Clone();
-                    configPopup.DataContext = cloned;
-                };
+                configPopup.Opened += (s1, e1) => 
+                    configPopup.DataContext = new ConfigViewModel(data.Model.Config, data.Model);
 
                 configPopup.Closed += (s1, e1) => {
-                    var popupConfig = configPopup.DataContext<ViewModels.Config>();
-                    if (popupConfig.ShouldTriggerReload() ?? false) {
-                        Config = popupConfig;
+                    var popupConfig = configPopup.DataContext<ConfigViewModel>();
+                    if (popupConfig.IsDirty) {
+                        Config = popupConfig.Model;
                     }
                 };
 
@@ -55,95 +51,45 @@ namespace ParseTreeVisualizer {
 
                 source.LostFocus += (s1, e1) => e1.Handled = true;
                 source.Focus();
+                source.SelectionChanged += (s1, e1) => {
+                    data.SourceSelectionLength = source.SelectionLength;
+                    data.SourceSelectionStart = source.SelectionStart;
+                };
+                // this really should be done with databinding
+                data.PropertyChanged += (s1, e1) => {
+                    if (e1.PropertyName.In(
+                        nameof(VisualizerDataViewModel.SourceSelectionLength),
+                        nameof(VisualizerDataViewModel.SourceSelectionStart)
+                    )) {
+                        source.Select(data.SourceSelectionStart, data.SourceSelectionLength);
+                    }
+                };
                 source.SelectAll();
             };
 
             Unloaded += (s, e) => Config.Write();
-
-            source.SelectionChanged += (s, e) => changeSelection(source);
-            tokens.SelectionChanged += (s, e) => changeSelection(tokens);
-            treeview.SelectedItemChanged += (s, e) => changeSelection(treeview);
         }
 
-        private ViewModels.TreeVisualizer data => (ViewModels.TreeVisualizer)DataContext;
-
-        private bool inChangeSelection;
-        private void changeSelection(object sender) {
-            if (inChangeSelection) { return; }
-            inChangeSelection = true;
-
-            (int start, int end)? charSpan = null;
-            if (sender == treeview) {
-                charSpan = treeview.SelectedItem<ViewModels.ParseTreeNode>()?.CharSpan;
-            } else if (sender == source) {
-                charSpan = (source.SelectionStart, source.SelectionStart + source.SelectionLength);
-            } else if (sender == tokens) {
-                var tokensStartChar = data.Tokens.SelectionStartChar;
-                var tokensEndChar = data.Tokens.SelectionEndChar;
-                if (tokensStartChar != null && tokensEndChar != null) {
-                    charSpan = (tokensStartChar.Value, tokensEndChar.Value);
-                }
-            }
-
-            if (sender != source) {
-                if (charSpan != null && charSpan != (-1, -1)) {
-                    source.Select(charSpan.Value.start - data.SourceOffset, charSpan.Value.end - charSpan.Value.start + 1);
-                } else {
-                    source.Select(0, 0);
-                }
-            }
-
-            if (sender != tokens) {
-                if (charSpan == null) {
-                    data.Tokens.Select(null, null);
-                } else {
-                    data.Tokens.Select(charSpan.Value.start, charSpan.Value.end);
-                    var selected = data.Tokens.GetSelectedTokens().FirstOrDefault();
-                    if (selected != null) {
-                        tokens.ScrollIntoView(selected);
-                    }
-                }
-            }
-
-            if (sender != treeview) {
-                data.Root.ClearSelection();
-                if (charSpan != null) {
-                    var startChar = charSpan.Value.start;
-                    var endChar = charSpan.Value.end;
-
-                    Func<ViewModels.ParseTreeNode, bool> matcher = x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar;
-                    var selectedNode = data.Root;
-                    if (matcher(selectedNode)) {
-                        while (true) {
-                            var nextChild = selectedNode.Children.OneOrDefault(x => startChar >= x.CharSpan.startChar && endChar <= x.CharSpan.endChar);
-                            if (nextChild == null) { break; }
-                            selectedNode = nextChild;
-                            selectedNode.IsExpanded = true;
-                        }
-                        selectedNode.IsSelected = true;
-                    }
-                }
-            }
-
-            inChangeSelection = false;
-        }
+        private VisualizerDataViewModel data => (VisualizerDataViewModel)DataContext;
 
         private void LoadDataContext() {
-            if (_objectProvider == null || _config == null) { return; }
-            DataContext = _objectProvider.TransferObject(_config);
-            if (DataContext == null) {
+            if (_objectProvider == null || config == null) { return; }
+            var response = _objectProvider.TransferObject(config) as VisualizerData;
+            if (response == null) {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }
-            if (data.Config.HasTreeFilter()) {
+            DataContext = new VisualizerDataViewModel(response);
+            if (Config.HasTreeFilter()) {
                 data.Root.SetSubtreeExpanded(true);
             } else {
                 data.Root.IsExpanded = true;
             }
-            _config = data.Config;
+            config = data.Model.Config;
             Config.Write();
 
-            if (data.AssemblyLoadErrors.Any()) {
-                MessageBox.Show($"Error loading the following assemblies:\n\n{data.AssemblyLoadErrors.Joined("\n")}");
+            var assemblyLoadErrors = data.Model.AssemblyLoadErrors;
+            if (assemblyLoadErrors.Any()) {
+                MessageBox.Show($"Error loading the following assemblies:\n\n{assemblyLoadErrors.Joined("\n")}");
             }
         }
 
@@ -157,46 +103,47 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private ViewModels.Config _config;
-        public ViewModels.Config Config {
-            get => _config;
+        private Config config;
+        public Config Config {
+            get => config;
             set {
-                if (value == _config) { return; }
-                _config = value;
+                if (value == config) { return; }
+                config = value;
                 LoadDataContext();
             }
         }
 
         private void ExpandAll(object sender, RoutedEventArgs e) =>
-            ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.SetSubtreeExpanded(true);
+            ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.SetSubtreeExpanded(true);
         private void CollapseAll(object sender, RoutedEventArgs e) =>
-            ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.SetSubtreeExpanded(false);
+            ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.SetSubtreeExpanded(false);
         private void SetRootNode(object sender, RoutedEventArgs e) {
-            Config.RootNodePath = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.Path;
+            Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.Model.Path;
             LoadDataContext();
         }
         private void OpenRootNewWindow(object sender, RoutedEventArgs e) {
             var newWindow = new VisualizerWindow();
             var content = newWindow.Content as VisualizerControl;
             content.Config = Config.Clone();
-            content.Config.RootNodePath = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>()?.Path;
+            content.Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.Model.Path;
             content.objectProvider = objectProvider;
             newWindow.ShowDialog();
         }
 
         private void CopyWatchExpression(object sender, RoutedEventArgs e) {
-            var node = ((MenuItem)sender).DataContext<ViewModels.ParseTreeNode>();
+            var node = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>();
             if (node == null) { return; }
+            var model = node.Model;
 
-            if (Config.WatchBaseExpression.IsNullOrWhitespace()) {
+            if (data.Model.Config.WatchBaseExpression.IsNullOrWhitespace()) {
                 var dlg = new WatchExpressionPrompt();
                 dlg.ShowDialog();
-                Config.WatchBaseExpression = dlg.Expression;
+                data.Model.Config.WatchBaseExpression = dlg.Expression;
             }
 
             var watchExpression = Config.WatchBaseExpression;
-            if (!node.Path.IsNullOrWhitespace()) {
-                watchExpression += node.Path.Split('.').Joined("", x => $".GetChild({x})");
+            if (!model.Path.IsNullOrWhitespace()) {
+                watchExpression += model.Path.Split('.').Joined("", x => $".GetChild({x})");
             }
             Clipboard.SetText(watchExpression);
         }

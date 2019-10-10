@@ -46,6 +46,8 @@ namespace ParseTreeVisualizer.Util {
 
     public class NodeForegroundConverter : ReadOnlyMultiConverterBase {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+            if (values[0] == UnsetValue || values[1] == UnsetValue) { return UnsetValue; }
+
             var nodeType = (TreeNodeType)values[0];
             var filterState = (FilterStates?)values[1];
             switch (nodeType) {

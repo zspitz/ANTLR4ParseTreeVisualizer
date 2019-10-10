@@ -4,11 +4,10 @@ using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Linq.Enumerable;
 
 namespace ParseTreeVisualizer {
+    [Serializable]
     public class VisualizerData {
         public string Source { get; }
         public Config Config { get; }
@@ -58,9 +57,7 @@ namespace ParseTreeVisualizer {
             }
 
             #region Load debuggee state
-            TokenTypeMapping = 
-                tokenTypeMapping ??
-                Range(1, Tokens.MaxTokenTypeID()).ToDictionary(x => (x, x.ToString()));
+            TokenTypeMapping = tokenTypeMapping;
 
             UsedRuleContexts = rulenameMapping.Keys
                 .Select(x => {
@@ -93,18 +90,14 @@ namespace ParseTreeVisualizer {
                     dest?.Add(new ClassInfo(t));
                 }
 
-                Comparison<ClassInfo> comparison = (x, y) => string.Compare(x.Name, y.Name);
-                AvailableParsers.Sort(comparison);
-                AvailableLexers.Sort(comparison);
-
-                Config.SelectedParserName = fixList(AvailableParsers, Config.SelectedParserName);
-                Config.SelectedLexerName = fixList(AvailableLexers, Config.SelectedLexerName);
+                Config.SelectedParserName = checkSelection(AvailableParsers, Config.SelectedParserName);
+                Config.SelectedLexerName = checkSelection(AvailableLexers, Config.SelectedLexerName);
             }
 
             #endregion
         }
 
-        private string fixList(List<ClassInfo> lst, string selected) {
+        private string checkSelection(List<ClassInfo> lst, string selected) {
             if (lst.None(x => x.FullName == selected)) {
                 selected = null;
             }
@@ -118,5 +111,3 @@ namespace ParseTreeVisualizer {
         }
     }
 }
-
-// TODO ConfigViewModel should expose AvailableParsers + AvailableLexers; add None entry to list

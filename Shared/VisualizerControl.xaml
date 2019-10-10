@@ -1,6 +1,7 @@
 ﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
            xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:my1="clr-namespace:ParseTreeVisualizer.Util" 
-           xmlns:ag="clr-namespace:WpfAutoGrid">
+           xmlns:ag="clr-namespace:WpfAutoGrid"
+           xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
     <FrameworkElement.Resources>
 
         <my1:RootConverter x:Key="RootConverter" />
@@ -25,22 +26,33 @@
         <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="Foreground" Value="{Binding IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+                    <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                 </Style>
             </DataGrid.RowStyle>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItems, ElementName=tokens }" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
         </DataGrid>
     </DockPanel>
 
     <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
         <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
-        <TextBox Name="source" MinHeight="200" Text="{Binding Source, Mode=OneTime}" IsReadOnly="True" />
+        <TextBox x:Name="source" MinHeight="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </TextBox>
     </DockPanel>
 
     <Grid DockPanel.Dock="Right" Margin="12,0,0,0">
         <DockPanel >
             <TextBlock Text="Properties:" Style="{StaticResource LabelStyle}"/>
-            <DataGrid Name="properties" ItemsSource="{Binding SelectedItem.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
+            <DataGrid Name="properties" ItemsSource="{Binding SelectedItem.Model.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
                     <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
@@ -86,9 +98,9 @@
                             <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
 
                             <StackPanel>
-                                <CheckBox IsChecked="{Binding ShowTextTokens}">Show text tokens</CheckBox>
-                                <CheckBox IsChecked="{Binding ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
-                                <CheckBox IsChecked="{Binding ShowErrorTokens}">Show errors</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowErrorTokens}">Show errors</CheckBox>
                             </StackPanel>
 
                             <StackPanel>
@@ -127,15 +139,15 @@
                             <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
 
                             <StackPanel>
-                                <CheckBox IsChecked="{Binding ShowTreeTextTokens}">Show text tokens</CheckBox>
-                                <CheckBox IsChecked="{Binding ShowTreeWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
-                                <CheckBox IsChecked="{Binding ShowTreeErrorTokens}">Show errors</CheckBox>
-                                <CheckBox IsChecked="{Binding ShowRuleContextNodes}">Show rule contexts</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeErrorTokens}">Show errors</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowRuleContextNodes}">Show rule contexts</CheckBox>
                             </StackPanel>
 
                             <StackPanel>
                                 <TextBlock Text="Filter rule contexts:" />
-                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" Margin="0,3,0,0" ItemsSource="{Binding RuleContextsViewModel}">
+                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" Margin="0,3,0,0" ItemsSource="{Binding RuleContexts}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -144,8 +156,8 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Foreground="DarkGray">
-                                                <Run Text="{Binding RuleName, Mode=OneWay}" Foreground="Black" />
-                                                <Run Text="{Binding RuleID, Mode=OneWay, StringFormat=({0})}" />
+                                                <Run Text="{Binding Model.RuleName, Mode=OneWay}" Foreground="Black" />
+                                                <Run Text="{Binding Model.RuleID, Mode=OneWay, StringFormat=({0})}" />
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -165,17 +177,17 @@
     <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
         <TreeView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
-                <TextBlock Text="{Binding Caption}" FontWeight="{Binding NodeType, Converter={StaticResource NodeFontWeightConverter}}">
+                <TextBlock Text="{Binding Model.Caption}" FontWeight="{Binding Model.NodeType, Converter={StaticResource NodeFontWeightConverter}}">
                     <TextBlock.Foreground>
                         <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
-                            <Binding Path="NodeType" />
-                            <Binding Path="FilterState" />
+                            <Binding Path="Model.NodeType" />
+                            <Binding Path="Model.FilterState" />
                         </MultiBinding>
                     </TextBlock.Foreground>
                     <TextBlock.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Set as root" Click="SetRootNode" />
-                            <MenuItem Header="Open as root in new window" Click="OpenRootNewWindow" />
+                            <MenuItem Header="Scope to this" Click="SetRootNode" />
+                            <MenuItem Header="Scope to this in new window/" Click="OpenRootNewWindow" />
                             <MenuItem Header="Copy watch expression" Click="CopyWatchExpression" />
                             <MenuItem Header="Expand recursively" Click="ExpandAll" />
                             <MenuItem Header="Collapse recursively" Click="CollapseAll" />
@@ -190,6 +202,11 @@
                 <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
             </Style>
         </TreeView.ItemContainerStyle>
+        <b:Interaction.Triggers>
+            <b:EventTrigger EventName="SelectedItemChanged">
+                <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItem, ElementName=treeview }" />
+            </b:EventTrigger>
+        </b:Interaction.Triggers>
     </TreeView>
 
 </DockPanel>

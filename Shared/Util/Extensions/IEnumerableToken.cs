@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer.Util {
     public static class IEnumerableTokenExtensions {
-        public static int MaxTokenTypeID(this IEnumerable<ViewModels.Token> src) => src.MaxOrDefault(x => x.TokenTypeID) ?? 0;
-
         public static int MaxTokenTypeID(this IEnumerable<Token> src) => src.MaxOrDefault(x => x.TokenTypeID) ?? 0;
 
         public static (int start, int end)? SelectionCharSpan(this IEnumerable<Selectable<Token>> tokens) {

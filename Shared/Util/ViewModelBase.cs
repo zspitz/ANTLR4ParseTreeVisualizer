@@ -6,9 +6,7 @@ namespace ParseTreeVisualizer.Util {
     public abstract class ViewModelBase<TModel> : INotifyPropertyChanged {
         public TModel Model { get; }
 
-        public ViewModelBase(TModel model) {
-            Model = model;
-        }
+        protected ViewModelBase(TModel model) => Model = model;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

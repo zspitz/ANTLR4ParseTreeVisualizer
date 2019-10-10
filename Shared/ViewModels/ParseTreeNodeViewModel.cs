@@ -1,15 +1,18 @@
 ﻿using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer {
     public class ParseTreeNodeViewModel : Selectable<ParseTreeNode> {
-        public ParseTreeNodeViewModel(ParseTreeNode model) : base(model) { }
+        public ParseTreeNodeViewModel(ParseTreeNode model) : base(model) => 
+            Children = model.Children.Select(x => new ParseTreeNodeViewModel(x)).ToList().AsReadOnly();
 
-        public IReadOnlyCollection<ParseTreeNodeViewModel> Children { get; }
+        public ReadOnlyCollection<ParseTreeNodeViewModel> Children { get; }
 
         public void ClearSelection() {
             IsSelected = false;

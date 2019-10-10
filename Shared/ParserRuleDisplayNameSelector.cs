@@ -12,7 +12,7 @@ namespace ParseTreeVisualizer {
         public DataTemplate RuleNameTemplate { get; set; }
         public DataTemplate TypeNameTemplate { get; set; }
         public override DataTemplate SelectTemplate(object item, DependencyObject container) => 
-            (item as ViewModels.ParseRuleContextInfo).RuleName == null ?
+            (item as ClassInfo).RuleName == null ?
                 TypeNameTemplate :
                 RuleNameTemplate;
     }

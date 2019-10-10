@@ -108,11 +108,14 @@ namespace ParseTreeVisualizer {
                 ShowTreeTextTokens = ShowTreeTextTokens,
                 ShowTreeErrorTokens = ShowTreeErrorTokens,
                 ShowTreeWhitespaceTokens = ShowTreeWhitespaceTokens,
-                ShowRuleContextNodes = ShowRuleContextNodes
+                ShowRuleContextNodes = ShowRuleContextNodes,
+                WatchBaseExpression = WatchBaseExpression
             };
             SelectedTokenTypes.AddRangeTo(ret.SelectedTokenTypes);
             SelectedRuleContexts.AddRangeTo(ret.SelectedRuleContexts);
             return ret;
         }
+
+        public string WatchBaseExpression { get; set; }
     }
 }
