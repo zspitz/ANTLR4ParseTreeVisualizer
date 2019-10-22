@@ -20,11 +20,8 @@ namespace ParseTreeVisualizer {
                 }
             };
 
-            // scrolls the tree view item into view when expanded
-            AddHandler(TreeViewItem.ExpandedEvent, (RoutedEventHandler)((s, e) => {
-                var tvi = e.OriginalSource as TreeViewItem;
-                tvi.BringIntoView();
-            }));
+            // scrolls the tree view item into view when selected
+            AddHandler(TreeViewItem.SelectedEvent, (RoutedEventHandler)((s, e) => ((TreeViewItem)e.OriginalSource).BringIntoView()));
 
             Loaded += (s, e) => {
                 // https://stackoverflow.com/a/21436273/111794
@@ -36,7 +33,7 @@ namespace ParseTreeVisualizer {
                     };
                 configButton.Click += (s1, e1) => configPopup.IsOpen = true;
 
-                configPopup.Opened += (s1, e1) => 
+                configPopup.Opened += (s1, e1) =>
                     configPopup.DataContext = new ConfigViewModel(data.Model.Config, data.Model);
 
                 configPopup.Closed += (s1, e1) => {
