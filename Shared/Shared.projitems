@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ParseTreeNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Token.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\VisualizerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\BindableSelectionTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenViewModel.cs" />
     <Compile Include="..\Shared\Util\DebugTraceListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\HashSetT.cs" />

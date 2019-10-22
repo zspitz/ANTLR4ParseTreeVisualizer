@@ -21,7 +21,10 @@ namespace ParseTreeVisualizer {
             set => NotifyChanged(ref sourceSelectionLength, value);
         }
 
-        private int sourceSelectionEnd => sourceSelectionStart + sourceSelectionLength - 1;
+        private int sourceSelectionEnd => 
+            sourceSelectionLength == 0 ? 
+                sourceSelectionStart :
+                sourceSelectionStart + sourceSelectionLength - 1;
 
         public ParseTreeNodeViewModel Root { get; }
         public ReadOnlyCollection<TokenViewModel> Tokens { get; }

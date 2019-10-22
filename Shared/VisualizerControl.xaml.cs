@@ -26,7 +26,6 @@ namespace ParseTreeVisualizer {
                 tvi.BringIntoView();
             }));
 
-
             Loaded += (s, e) => {
                 // https://stackoverflow.com/a/21436273/111794
                 configPopup.CustomPopupPlacementCallback += (popupSize, targetSize, offset) =>
