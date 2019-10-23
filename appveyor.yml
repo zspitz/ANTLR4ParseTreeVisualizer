@@ -66,8 +66,8 @@ for:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
   install:
-    - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-    - ps: &"$env:temp\dotnet-install.ps1" -Architecture x64 -Version '3.0.100' -InstallDir "$env:ProgramFiles\dotnet"
+  - ps: Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
+  - ps: & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100' -InstallDir "$env:ProgramFiles\dotnet"
   build:
     project: 2017\2017.csproj
     verbosity: detailed
