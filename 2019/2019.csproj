@@ -3,7 +3,7 @@
     <ProjectGuid>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</ProjectGuid>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
     <AssemblyName>Antlr4ParseTreeVisualizer.2019</AssemblyName>
-    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AssemblyTitle>ANTLR4 Parse Tree Visualizer</AssemblyTitle>
     <Product>ANTLR4 Parse Tree Visualizer</Product>
