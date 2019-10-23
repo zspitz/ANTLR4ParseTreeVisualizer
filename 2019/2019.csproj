@@ -3,7 +3,7 @@
     <ProjectGuid>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</ProjectGuid>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
     <AssemblyName>Antlr4ParseTreeVisualizer.2019</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyTitle>ANTLR4 Parse Tree Visualizer</AssemblyTitle>
     <Product>ANTLR4 Parse Tree Visualizer</Product>
@@ -15,14 +15,10 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseCI|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
