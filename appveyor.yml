@@ -47,6 +47,7 @@ for:
   configuration: ReleaseCI
   build:
     project: 2019\2019.csproj
+    verbosity: detailed
   artifacts:
     - path: 2019\bin\Debug
       type: zip
