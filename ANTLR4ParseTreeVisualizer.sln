@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2019", "2019\2019.csproj", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{5F6D90BE-661E-4EED-BA7D-7ADCE968C72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_visualizerTest", "_visualizerTest\_visualizerTest.csproj", "{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_visualizerTest", "_visualizerTest\_visualizerTest.csproj", "{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2017", "2017\2017.csproj", "{BEB4FBE6-54E8-4212-9D94-C4E8F318FD9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_visualizerTest1", "_visualizerTest1\_visualizerTest1.csproj", "{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_visualizerTest1", "_visualizerTest1\_visualizerTest1.csproj", "{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_visualizerTestCore", "_visualizerTestCore\_visualizerTestCore.csproj", "{2D92774C-E2F4-47C4-9A04-09198B1182F8}"
 EndProject
@@ -53,7 +53,7 @@ Global
 		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.ReleaseCI|Any CPU.ActiveCfg = Release|Any CPU
-		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.ReleaseCI2017|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.ReleaseCI2017|Any CPU.ActiveCfg = Release|Any CPU
 		{2D92774C-E2F4-47C4-9A04-09198B1182F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D92774C-E2F4-47C4-9A04-09198B1182F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D92774C-E2F4-47C4-9A04-09198B1182F8}.Release|Any CPU.ActiveCfg = Release|Any CPU

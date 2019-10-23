@@ -3,7 +3,7 @@
     <ProjectGuid>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</ProjectGuid>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
     <AssemblyName>Antlr4ParseTreeVisualizer.2019</AssemblyName>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyTitle>ANTLR4 Parse Tree Visualizer</AssemblyTitle>
     <Product>ANTLR4 Parse Tree Visualizer</Product>
@@ -27,7 +27,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
   <ItemGroup>
@@ -36,10 +36,6 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>false</Private>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
