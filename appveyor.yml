@@ -45,6 +45,8 @@ for:
     only:
       - image: Visual Studio 2019
   configuration: ReleaseCI
+  build:
+    project: 2019\2019.csproj
   artifacts:
     - path: 2019\bin\Debug
       type: zip
@@ -62,6 +64,8 @@ for:
     only:
       - image: Visual Studio 2017
   configuration: ReleaseCI2017
+  build:
+    project: 2017\2017.csproj
   artifacts:
     - path: 2017\bin\Debug
       type: zip
