@@ -1,25 +1,27 @@
 version: 0.1.0.{build}
-image:
-  - Visual Studio 2019
-  - Visual Studio 2017
-configuration:
-  - ReleaseCI
-  - ReleaseCI2017
+
+environment:
+  matrix:
+  
+  - job_name: VS 2019 build
+    appveyor_build_worker_image: Visual Studio 2019
+    
+  - job_name: VS 2017 build
+    appveyor_build_worker_image: Visual Studio 2017
+
 init:
   - git config --global core.autocrlf false
 branches:
   only:
     - master
 skip_tags:  true
-only_commits:
-  files:
-    - Shared/
-assembly_info:
-  patch: true
-  file: AssemblyInfo.*
-  assembly_version: "{version}"
-  assembly_file_version: "{version}"
-  assembly_informational_version: "{version}"
+
+# assembly_info:
+#   patch: true
+#   file: AssemblyInfo.*
+#   assembly_version: "{version}"
+#   assembly_file_version: "{version}"
+#   assembly_informational_version: "{version}"
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -29,23 +31,17 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 before_build:
-- cmd: nuget restore
-build:
-  project: 2017\2017.csproj
+- cmd: dotnet restore
 
 matrix:
   fast_finish: true
-  exclude:
-    - image: Visual Studio 2019
-      configuration: ReleaseCI2017
-    - image: Visual Studio 2017
-      configuration: ReleaseCI
 
 for:
 - 
   matrix:
     only:
-      - image: Visual Studio 2019
+      - appveyor_build_worker_image: Visual Studio 2019
+
   configuration: ReleaseCI
   build:
     project: 2019\2019.csproj
@@ -64,14 +60,14 @@ for:
 - 
   matrix:
     only:
-      - image: Visual Studio 2017
+      - appveyor_build_worker_image: Visual Studio 2017
+
   configuration: ReleaseCI2017
-  install:
-  - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-  - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
+  # install:
+  # - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
+  # - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
   build:
     project: 2017\2017.csproj
-    verbosity: detailed
   artifacts:
     - path: 2017\bin\Debug
       type: zip
