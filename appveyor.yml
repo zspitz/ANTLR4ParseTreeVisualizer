@@ -30,8 +30,6 @@ dotnet_csproj:
   assembly_version: '{version}'
   file_version: '{version}'
   informational_version: '{version}'
-before_build:
-- cmd: dotnet restore
 
 matrix:
   fast_finish: true
@@ -45,6 +43,8 @@ for:
   configuration: ReleaseCI
   build:
     project: 2019\2019.csproj
+  before_build:
+  - cmd: dotnet restore 2019\2019.csproj
   artifacts:
     - path: 2019\bin\Debug
       type: zip
@@ -68,6 +68,8 @@ for:
   # - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
   build:
     project: 2017\2017.csproj
+  before_build:
+    - cmd: dotnet restore 2017\2017.csproj
   artifacts:
     - path: 2017\bin\Debug
       type: zip
