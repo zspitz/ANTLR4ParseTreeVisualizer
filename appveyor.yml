@@ -15,13 +15,13 @@ branches:
   only:
     - master
 skip_tags:  true
+only_commits:
+  files:
+    - Shared/
+    - 2017/
+    - 2019/
+    - appveyor.yml
 
-# assembly_info:
-#   patch: true
-#   file: AssemblyInfo.*
-#   assembly_version: "{version}"
-#   assembly_file_version: "{version}"
-#   assembly_informational_version: "{version}"
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -63,9 +63,6 @@ for:
       - appveyor_build_worker_image: Visual Studio 2017
 
   configuration: ReleaseCI2017
-  # install:
-  # - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-  # - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
   build:
     project: 2017\2017.csproj
   before_build:
