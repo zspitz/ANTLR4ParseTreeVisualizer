@@ -70,6 +70,8 @@ for:
   before_build:
     - cmd: dotnet restore 2017\2017.csproj
     - cmd: dotnet restore 2017.Standard\2017.Standard.csproj
+  build:
+    project: CI.2017.sln
   after_build:
     - cmd: 7z a ANTLRVisualizer2017.zip %APPVEYOR_BUILD_FOLDER%\2017\bin\Debug\*
     - cmd: 7z a ANTLRVisualizer2017.zip %APPVEYOR_BUILD_FOLDER%\2017.Standard\bin\Debug\*
