@@ -44,6 +44,8 @@ This project is very much in an alpha stage. It currently only targets `RuleCont
 
 You can also compile the source yourself and place the output DLLs in one of the visualizer folder.
 
+If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where installed the visualizer.
+
 ## Usage
 
 1. Begin a debugging session, and break at some point.
