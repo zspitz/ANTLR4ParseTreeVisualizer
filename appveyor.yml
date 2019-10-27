@@ -41,10 +41,6 @@ for:
       - appveyor_build_worker_image: Visual Studio 2019
 
   configuration: ReleaseCI
-  build:
-    project:
-      2019\2019.csproj
-      2019.Standard\2019.Standard.csproj
   before_build:
   - cmd: dotnet restore 2019\2019.csproj
   - cmd: dotnet restore 2019.Standard\2019.Standard.csproj
@@ -69,10 +65,6 @@ for:
       - appveyor_build_worker_image: Visual Studio 2017
 
   configuration: ReleaseCI2017
-  build:
-    project:
-      2017\2017.csproj
-      2017.Standard\2017.Standard.csproj
   before_build:
     - cmd: dotnet restore 2017\2017.csproj
     - cmd: dotnet restore 2017.Standard\2017.Standard.csproj
