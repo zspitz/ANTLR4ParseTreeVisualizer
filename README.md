@@ -36,13 +36,13 @@ This project is very much in an alpha stage. It currently only targets `RuleCont
 
 ## Installation
 
-1. Download the ZIP file matching your version of Visual Studio (2019 or 2017) from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page.
+1. Download the ZIP file matching your version of Visual Studio (2019 or 2017) from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. You may need to [unblock the ZIP file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
 2. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders. You don't have to restart VS, just make sure VS is not currently in a debugging session:
 
 * _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
 * `My Documents\Visual Studio `_Version_`\Visualizers`
 
-You can also compile the source yourself and place the output DLLs in one of the visualizer folder.
+You can also compile the source yourself (`2019.sln` or `2017.sln`) and place the output DLLs in one of the visualizer folder.
 
 If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where installed the visualizer.
 
