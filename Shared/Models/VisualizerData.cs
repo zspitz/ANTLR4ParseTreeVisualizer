@@ -42,8 +42,13 @@ namespace ParseTreeVisualizer {
             Source = tree.GetText();
 
             var parserType = tree.GetType().DeclaringType;
-            var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
-            var tokenTypeMapping = Range(1, vocabulary.MaxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
+            var vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as Vocabulary;
+#if ANTLR_RUNTIME
+            int maxTokenType = vocabulary.MaxTokenType;
+#else
+            int maxTokenType = vocabulary.getMaxTokenType();
+#endif
+            var tokenTypeMapping = Range(1, maxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
 
             var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
 
@@ -56,7 +61,7 @@ namespace ParseTreeVisualizer {
                 SourceOffset = actualRoot.CharSpan.startChar;
             }
 
-            #region Load debuggee state
+#region Load debuggee state
             TokenTypeMapping = tokenTypeMapping;
 
             UsedRuleContexts = rulenameMapping.Keys
@@ -94,7 +99,7 @@ namespace ParseTreeVisualizer {
                 Config.SelectedLexerName = checkSelection(AvailableLexers, Config.SelectedLexerName);
             }
 
-            #endregion
+#endregion
         }
 
         private string checkSelection(List<ClassInfo> lst, string selected) {

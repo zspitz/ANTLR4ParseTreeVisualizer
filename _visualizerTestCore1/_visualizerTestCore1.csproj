@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <JAVA_HOME>C:\Program Files (x86)\Java\jre1.8.0_231</JAVA_HOME>
     <Antlr4ToolPath>C:\Users\Spitz\source\repos\ANTLR4ParseTreeVisualizer\_visualizerTestCore\antlr-4.7.2-complete.jar</Antlr4ToolPath>
   </PropertyGroup>
@@ -14,16 +14,6 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2" />
     <PackageReference Include="Antlr4BuildTasks" Version="1.0.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\2019.Standard\2019.Standard.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

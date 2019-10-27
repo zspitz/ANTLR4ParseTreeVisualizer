@@ -25,7 +25,7 @@ namespace ParseTreeVisualizer {
             }
             if (value != null) { Value = StringValue(value); }
 
-            Custom = !prp.DeclaringType.Namespace.StartsWith("Antlr4");
+            Custom = !prp.DeclaringType?.Namespace?.StartsWith("Antlr4") ?? false;
         }
     }
 }

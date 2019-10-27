@@ -2,8 +2,8 @@
   <PropertyGroup>
     <ProjectGuid>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</ProjectGuid>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
-    <AssemblyName>Antlr4ParseTreeVisualizer.2019</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Antlr4.Runtime.ParseTreeVisualizer.2019</AssemblyName>
+    <TargetFrameworks>net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyTitle>ANTLR4 Parse Tree Visualizer</AssemblyTitle>
     <Product>ANTLR4 Parse Tree Visualizer</Product>
@@ -15,8 +15,9 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;ANTLR_RUNTIME</DefineConstants>
     <Optimize>false</Optimize>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseCI|AnyCPU'">
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -36,8 +37,9 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>false</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>
