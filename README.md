@@ -32,7 +32,7 @@ This project is very much in an alpha stage. It currently only targets `RuleCont
 
 * Visual Studio 2017 or 2019  
   (If you're using an older version of VS, you could probably use the visualizer as well. Compile against the appropriate version of Microsoft.VisualStudio.DebuggerVisualizers.dll.)
-* The ANTLR Runtime DLL is also assumed to be loaded.
+* Supports the current Antlr.Runtime.Standard.DLL (4.7.2) as well as the older Antlr.Runtime.DLL (4.6.6).
 
 ## Installation
 
