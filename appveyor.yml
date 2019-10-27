@@ -42,8 +42,7 @@ for:
 
   configuration: ReleaseCI
   before_build:
-  - cmd: dotnet restore 2019\2019.csproj
-  - cmd: dotnet restore 2019.Standard\2019.Standard.csproj
+  - cmd: dotnet restore
   after_build:
     - cmd: 7z a ANTLRVisualizer2019.zip %APPVEYOR_BUILD_FOLDER%\2019\bin\Debug\*
     - cmd: 7z a ANTLRVisualizer2019.zip %APPVEYOR_BUILD_FOLDER%\2019.Standard\bin\Debug\*
