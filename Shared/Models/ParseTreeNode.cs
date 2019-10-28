@@ -55,7 +55,7 @@ namespace ParseTreeVisualizer {
                 }
 
                 Caption = caption;
-                CharSpan = (ruleContext.Start.StartIndex, ruleContext.Stop.StopIndex);
+                CharSpan = (ruleContext.Start.StartIndex, ruleContext.Stop?.StopIndex ?? int.MaxValue);
             } else if (tree is TerminalNodeImpl terminalNode) {
                 var token = new Token(terminalNode, tokenTypeMapping);
 

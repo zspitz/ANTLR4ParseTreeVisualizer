@@ -71,5 +71,7 @@ namespace ParseTreeVisualizer.Util {
         }
 
         public static IEnumerable<(T1, T2)> WhereT<T1, T2>(this IEnumerable<(T1, T2)> src, Func<T1, T2, bool> predicate) => src.Where(x => predicate(x.Item1, x.Item2));
+
+        public static IOrderedEnumerable<T> Ordered<T>(this IEnumerable<T> src) => src.OrderBy(x => x);
     }
 }

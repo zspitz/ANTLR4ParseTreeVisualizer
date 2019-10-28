@@ -123,13 +123,13 @@
                             
                             <StackPanel Grid.RowSpan="2">
                                 <TextBlock Text="Selected lexer class" />
-                                <ComboBox ItemsSource="{Binding AvailableLexers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedLexerName}" />
+                                <ComboBox ItemsSource="{Binding AvailableLexers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedLexerName}" IsEnabled="{Binding CanSelectLexer}" />
 
                                 <TextBlock Text="Selected parser class" />
-                                <ComboBox Name="cmbAvailableParsers" ItemsSource="{Binding AvailableParsers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedParserName}"/>
+                                <ComboBox Name="cmbAvailableParsers" ItemsSource="{Binding AvailableParsers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedParserName}" IsEnabled="{Binding CanSelectParser}" />
 
                                 <TextBlock Text="Selected parser rule" />
-                                <ComboBox ItemsSource="{Binding SelectedItem.MethodNames, ElementName=cmbAvailableParsers}" SelectedItem="{Binding Model.ParseTokensWithRule}" />
+                                <ComboBox ItemsSource="{Binding SelectedItem.MethodNames, ElementName=cmbAvailableParsers}" SelectedItem="{Binding Model.ParseTokensWithRule}" IsEnabled="{Binding CanSelectParser}" />
                             </StackPanel>
 
                             <TextBlock Grid.ColumnSpan="5" HorizontalAlignment="Left" Margin="0,6,0,0" Foreground="DarkGray">

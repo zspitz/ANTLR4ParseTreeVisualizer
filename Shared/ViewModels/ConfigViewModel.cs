@@ -8,9 +8,9 @@ namespace ParseTreeVisualizer {
     public class ConfigViewModel : ViewModelBase<Config> {
         readonly Config _originalValues;
         public ConfigViewModel(Config config, VisualizerData visualizerData) : 
-            this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers) { }
+            this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers, visualizerData.CanSelectLexer, visualizerData.CanSelectParser) { }
 
-        public ConfigViewModel(Config config, Dictionary<int, string> tokenTypeMapping, List<ClassInfo> ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers) : base(config.Clone()) {
+        public ConfigViewModel(Config config, Dictionary<int, string> tokenTypeMapping, List<ClassInfo> ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers, bool canSelectLexer, bool canSelectParser) : base(config.Clone()) {
             TokenTypes = tokenTypeMapping?.SelectKVP((index, text) => {
                 var ret = new TokenTypeViewModel(index, text) {
                     IsSelected = index.In(Model.SelectedTokenTypes)
@@ -37,6 +37,9 @@ namespace ParseTreeVisualizer {
 
             AvailableLexers = getVMList(lexers);
             AvailableParsers = getVMList(parsers);
+
+            CanSelectLexer = canSelectLexer;
+            CanSelectParser = canSelectParser;
 
             _originalValues = config;
         }
@@ -76,5 +79,8 @@ namespace ParseTreeVisualizer {
                     !o.SelectedRuleContexts.SetEquals(m.SelectedRuleContexts);
             }
         }
+
+        public bool CanSelectLexer { get; }
+        public bool CanSelectParser { get; }
     }
 }

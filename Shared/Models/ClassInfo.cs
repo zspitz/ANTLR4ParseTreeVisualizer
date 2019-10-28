@@ -42,9 +42,12 @@ namespace ParseTreeVisualizer {
 
             if (loadMethodNames) {
                 MethodNames = t.GetMethods()
-                    .Where(x => x.ReturnType.InheritsFromOrImplements<ParserRuleContext>())
+                    .Where(x => !x.IsSpecialName && x.ReturnType.InheritsFromOrImplements<ParserRuleContext>())
                     .Select(x => x.Name)
-                    .ToList().AsReadOnly();
+                    .Where(x => x != "GetInvokingContext")
+                    .Ordered()
+                    .ToList()
+                    .AsReadOnly();
             }
         }
 

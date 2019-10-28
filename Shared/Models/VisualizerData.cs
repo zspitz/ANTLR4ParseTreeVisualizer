@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static System.Linq.Enumerable;
-using static ParseTreeVisualizer.Util.Functions;
 
 namespace ParseTreeVisualizer {
     [Serializable]
@@ -104,7 +103,7 @@ namespace ParseTreeVisualizer {
                 !Config.ParseTokensWithRule.IsNullOrWhitespace()
             ) {
                 var parser = createInstance<Parser>(Config.SelectedParserName, new[] { tokenStream });
-                tree = (IParseTree)parser.GetType().GetMethod(Config.ParseTokensWithRule).Invoke(parser, Array.Empty<object>());
+                tree = (IParseTree)parser.GetType().GetMethod(Config.ParseTokensWithRule ?? "")?.Invoke(parser, Array.Empty<object>());
                 vocabulary = parser.Vocabulary;
             }
 
