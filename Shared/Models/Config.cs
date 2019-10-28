@@ -111,7 +111,8 @@ namespace ParseTreeVisualizer {
                 ShowTreeErrorTokens = ShowTreeErrorTokens,
                 ShowTreeWhitespaceTokens = ShowTreeWhitespaceTokens,
                 ShowRuleContextNodes = ShowRuleContextNodes,
-                WatchBaseExpression = WatchBaseExpression
+                WatchBaseExpression = WatchBaseExpression,
+                ParseTokensWithRule = ParseTokensWithRule
             };
             SelectedTokenTypes.AddRangeTo(ret.SelectedTokenTypes);
             SelectedRuleContexts.AddRangeTo(ret.SelectedRuleContexts);
