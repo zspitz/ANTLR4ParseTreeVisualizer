@@ -90,7 +90,7 @@ namespace ParseTreeVisualizer {
                     throw new ArgumentException("Unhandled type");
             }
 
-            if (source is { } && !Config.SelectedLexerName.IsNullOrWhitespace()) {
+            if (source != null && !Config.SelectedLexerName.IsNullOrWhitespace()) {
                 var input = new AntlrInputStream(source);
                 var lexer = createInstance<Lexer>(Config.SelectedLexerName, new[] { input });
                 tokenStream = new CommonTokenStream(lexer);
@@ -98,7 +98,7 @@ namespace ParseTreeVisualizer {
             }
 
             if (
-                tokenStream is { } &&
+                tokenStream != null &&
                 !Config.SelectedParserName.IsNullOrWhitespace() &&
                 !Config.ParseTokensWithRule.IsNullOrWhitespace()
             ) {
