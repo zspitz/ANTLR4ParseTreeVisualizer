@@ -26,7 +26,7 @@
 
   ![Set node as root, in current or new window](set-root.gif)
 
-This project is very much in an alpha stage. It currently only targets `RuleContext` and derived classes.
+This project is very much in an alpha stage.
 
 ## Requirements
 
@@ -39,8 +39,8 @@ This project is very much in an alpha stage. It currently only targets `RuleCont
 1. Download the ZIP file matching your version of Visual Studio (2019 or 2017) from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. You may need to [unblock the ZIP file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
 2. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders. You don't have to restart VS, just make sure VS is not currently in a debugging session:
 
-* _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
-* `My Documents\Visual Studio `_Version_`\Visualizers`
+    * _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
+    * `My Documents\Visual Studio `_Version_`\Visualizers`
 
 You can also compile the source yourself (`2019.sln` or `2017.sln`) and place the output DLLs in one of the visualizer folder.
 
@@ -49,8 +49,10 @@ If you are debugging .NET Core applications, you may also need to put an additio
 ## Usage
 
 1. Begin a debugging session, and break at some point.
-2. Navigate to an instance of one of the visualizer target types (ATM only `RulerContext`, but can also be a subtype), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
+2. Navigate to an instance of one of the visualizer target types (`Antlr4.Runtime.RuleContext`, `Antlr4.Runtime.BufferedTokenStream`, or `string`), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
 3. Click on the magnifying glass to the right of the expression.
+4. You may need to choose a lexer class from the settings if you are visualizing a `string`, and you haven't already done so.
+5. You may need to choose a parser class from the settings, if you are visualizing a `BufferedTokenStream` or a `string`, or the debugged assemblies have multiple parser classes; you will also need to choose a parsing method. (These choices persist between sessions, so if you've already chosen, there's no need to do so again.) 
 
 ## Contributing
 
@@ -62,6 +64,5 @@ If you are debugging .NET Core applications, you may also need to put an additio
 
 ## Roadmap
 
-* The current visualization targets `RulerContext`. Some sort of visualization for token streams, usable from the `RulerContext` visualization, and independently.
 * [Parsing errors in a separate pane](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/24)
 * Live window, perhaps as a VS extension. It should be possible to select a lexer class from a lexer assembly, a parser class from a parser assembly, and display the resultant token stream and parse tree.
