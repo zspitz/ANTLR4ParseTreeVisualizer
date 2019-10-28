@@ -8,8 +8,9 @@ using System.Windows;
 namespace ParseTreeVisualizer.Util {
     public static class Functions {
         private static string ParseCallerMemberName(string callerMemberName) {
+            if (callerMemberName is null) { throw new ArgumentNullException(nameof(callerMemberName)); }
             var s = callerMemberName;
-            if (s.EndsWith("Property")) { s = s.Substring(0, s.Length - "Property".Length); }
+            if (s.EndsWith("Property", StringComparison.OrdinalIgnoreCase)) { s = s.Substring(0, s.Length - "Property".Length); }
             return s;
         }
         public static DependencyProperty DPRegister<TProperty, TOwner>(TProperty defaultValue = default, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
@@ -98,6 +99,7 @@ namespace ParseTreeVisualizer.Util {
 
         // TODO handle more than 8 values
         public static object[] TupleValues(object tuple) {
+            if (tuple is null) { throw new ArgumentNullException(nameof(tuple)); }
             if (!tuple.GetType().IsTupleType()) { throw new InvalidOperationException(); }
             var fields = tuple.GetType().GetFields();
             if (fields.Any()) { return tuple.GetType().GetFields().Select(x => x.GetValue(tuple)).ToArray(); }

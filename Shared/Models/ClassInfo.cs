@@ -1,8 +1,10 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using ParseTreeVisualizer.Util;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +22,12 @@ namespace ParseTreeVisualizer {
         public string RuleName { get; }
         public int? RuleID { get; }
 
+        public ReadOnlyCollection<string> MethodNames { get; }
+
         private ClassInfo(string name) => Name = name;
-        public ClassInfo(Type t, string ruleName = null, int? ruleID = null) {
+        public ClassInfo(Type t, string ruleName = null, int? ruleID = null, bool loadMethodNames = false) {
+            if (t is null) { throw new ArgumentNullException(nameof(t)); }
+
             Name = t.Name;
             Namespace = t.Namespace;
             Assembly = t.Assembly.Location;
@@ -33,6 +39,13 @@ namespace ParseTreeVisualizer {
             FullName = t.FullName;
             if (!ruleName.IsNullOrWhitespace()) { RuleName = ruleName; }
             RuleID = ruleID;
+
+            if (loadMethodNames) {
+                MethodNames = t.GetMethods()
+                    .Where(x => x.ReturnType.InheritsFromOrImplements<ParserRuleContext>())
+                    .Select(x => x.Name)
+                    .ToList().AsReadOnly();
+            }
         }
 
         public override string ToString() => FullName ?? Name;

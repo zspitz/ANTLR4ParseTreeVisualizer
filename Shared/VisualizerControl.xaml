@@ -19,6 +19,30 @@
             <Setter Property="DockPanel.Dock" Value="Top"/>
             <Setter Property="Margin" Value="0,0,0,3" />
         </Style>
+
+        <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
+            <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Namespace, Mode=OneWay}" Foreground="DarkGray" />
+                        <TextBlock Text="{Binding Assembly, Mode=OneWay}" Foreground="DarkGray" />
+                    </StackPanel>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+            <my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold">
+                        <TextBlock.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Namespace, Mode=OneWay}" Foreground="DarkGray" />
+                                <TextBlock Text="{Binding Assembly, Mode=OneWay}" Foreground="DarkGray" />
+                            </StackPanel>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+        </my1:ComboBoxTemplateSelector>
     </FrameworkElement.Resources>
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
@@ -73,7 +97,7 @@
                 <TextBlock Text="&#9881;" />
                 <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
                     <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="12">
-                        <ag:AutoGrid RowCount="4" ColumnCount="3" Orientation="Vertical">
+                        <ag:AutoGrid RowCount="4" ColumnCount="5" Orientation="Vertical">
 
                             <Grid.Resources>
                                 <Style x:Key="GroupingLabel" TargetType="TextBlock">
@@ -94,6 +118,33 @@
                                     <Setter Property="Margin" Value="12,0,12,0" />
                                 </Style>
                             </Grid.Resources>
+
+                            <TextBlock Text="General" Style="{StaticResource GroupingLabel}" />
+                            
+                            <StackPanel Grid.RowSpan="2">
+                                <TextBlock Text="Selected lexer class" />
+                                <ComboBox ItemsSource="{Binding AvailableLexers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedLexerName}" />
+
+                                <TextBlock Text="Selected parser class" />
+                                <ComboBox Name="cmbAvailableParsers" ItemsSource="{Binding AvailableParsers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedParserName}"/>
+
+                                <TextBlock Text="Selected parser rule" />
+                                <ComboBox ItemsSource="{Binding SelectedItem.MethodNames, ElementName=cmbAvailableParsers}" SelectedItem="{Binding Model.ParseTokensWithRule}" />
+                            </StackPanel>
+
+                            <TextBlock Grid.ColumnSpan="5" HorizontalAlignment="Left" Margin="0,6,0,0" Foreground="DarkGray">
+                                <Run Text="{Binding Version, Mode=OneWay, StringFormat='Version: {0}'}" />
+                                /
+                                <Run Text="{Binding Filename, Mode=OneWay}" />
+                                <TextBlock.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Version, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding Location, Mode=OneWay}" />
+                                    </StackPanel>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Border Style="{StaticResource SectionBorder}" />
 
                             <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
 
@@ -122,21 +173,9 @@
                                 </ListBox>
                             </StackPanel>
 
-                            <TextBlock Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="0,6,0,0" Foreground="DarkGray">
-                                <Run Text="{Binding Version, Mode=OneWay, StringFormat='Version: {0}'}" />
-                                /
-                                <Run Text="{Binding Filename, Mode=OneWay}" />
-                                <TextBlock.ToolTip>
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding Version, Mode=OneWay}"/>
-                                        <TextBlock Text="{Binding Location, Mode=OneWay}" />
-                                    </StackPanel>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-
                             <Border Style="{StaticResource SectionBorder}" />
 
-                            <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" />
+                            <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" Grid.Column="4" Grid.Row="0" />
 
                             <StackPanel>
                                 <CheckBox IsChecked="{Binding Model.ShowTreeTextTokens}">Show text tokens</CheckBox>

@@ -154,7 +154,7 @@ namespace WpfAutoGrid {
         /// Handle the columns changed event
         /// </summary>
         public static void ColumnsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if ((string)e.NewValue == string.Empty) { return; }
+            if ((e.NewValue as string).IsNullOrWhitespace()) { return; }
             (d as AutoGrid).buildColumnDefinitions();
         }
 
@@ -237,7 +237,7 @@ namespace WpfAutoGrid {
         /// Handle the rows changed event
         /// </summary>
         public static void RowsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if ((string)e.NewValue == string.Empty) { return; }
+            if ((e.NewValue as string).IsNullOrWhitespace()) { return; }
             (d as AutoGrid).buildRowDefinitions();
         }
 
@@ -323,7 +323,6 @@ namespace WpfAutoGrid {
 
             var position = 0;
             var skip = new HashSet<(int row, int col)>();
-            //var skip = new bool[rowCount, colCount];
             foreach (UIElement child in Children) {
                 var childIsCollapsed = child.Visibility == Visibility.Collapsed;
                 if (IsAutoIndexing && !childIsCollapsed) {

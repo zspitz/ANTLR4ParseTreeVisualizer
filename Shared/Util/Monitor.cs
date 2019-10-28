@@ -8,6 +8,7 @@ using System.Runtime.Versioning;
 namespace ParseTreeVisualizer.Util {
     // taken from https://www.wpftutorial.net/ScreenResolutions.html
     // Copyright (c) by Christian Moser, 2011
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1060:Move pinvokes to native methods class", Justification = "<Pending>")]
     public class Monitor {
         #region Dll imports
 
@@ -46,7 +47,7 @@ namespace ParseTreeVisualizer.Util {
 
         #endregion
 
-        public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
+        private static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
         public System.Windows.Rect Bounds { get; private set; }
         public System.Windows.Rect WorkingArea { get; private set; }
@@ -81,9 +82,7 @@ namespace ParseTreeVisualizer.Util {
         private class MonitorEnumCallback {
             public ArrayList Monitors { get; private set; }
 
-            public MonitorEnumCallback() {
-                Monitors = new ArrayList();
-            }
+            public MonitorEnumCallback() => Monitors = new ArrayList();
 
             public bool Callback(IntPtr monitor, IntPtr hdc,
                            IntPtr lprcMonitor, IntPtr lparam) {

@@ -51,6 +51,7 @@ namespace ParseTreeVisualizer {
         }
 
         public string SelectedParserName { get; set; }
+        public string ParseTokensWithRule { get; set; }
         public string SelectedLexerName { get; set; }
         public bool ShowTextTokens { get; set; } = true;
         public bool ShowWhitespaceTokens { get; set; } = true;
@@ -64,6 +65,7 @@ namespace ParseTreeVisualizer {
         public string RootNodePath { get; set; }
 
         public bool HasTreeFilter() => !(ShowTreeErrorTokens && ShowTreeWhitespaceTokens && ShowTreeTextTokens && ShowRuleContextNodes && SelectedRuleContexts.None());
+        public bool HasTokenListFilter() => !(ShowTextTokens && ShowErrorTokens && ShowWhitespaceTokens && SelectedTokenTypes.None());
 
         public void Write() {
             if (!Directory.Exists(ConfigFolder)) {

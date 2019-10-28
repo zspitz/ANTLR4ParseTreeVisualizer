@@ -48,7 +48,7 @@ namespace ParseTreeVisualizer {
                 charSpan = (sourceSelectionStart, sourceSelectionEnd);
                 source = "Source";
             } else if (parameter is ParseTreeNodeViewModel selectedNode) { // treeview.SelectedItem
-                charSpan = selectedNode.Model.CharSpan;
+                charSpan = selectedNode.Model?.CharSpan;
                 source = "Root";
             } else if (parameter is IList) { // selected items in datagrid
                 charSpan = Tokens.SelectionCharSpan();
@@ -79,7 +79,7 @@ namespace ParseTreeVisualizer {
                 }
             }
 
-            if (source != "Root") {
+            if (source != "Root" && Root.Model != null) {
                 Root.ClearSelection();
                 var selectedNode = Root;
 

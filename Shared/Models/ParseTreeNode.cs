@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 namespace ParseTreeVisualizer {
     [Serializable]
     public class ParseTreeNode {
-        public static ParseTreeNode GetPlaceholder(ParseTreeNode actualRoot) => new ParseTreeNode {
-            Caption = "(parent nodes)",
-            NodeType = TreeNodeType.Placeholder,
-            Children = new List<ParseTreeNode> { actualRoot },
-            CharSpan = actualRoot.CharSpan
-        };
+        public static ParseTreeNode GetPlaceholder(ParseTreeNode actualRoot) {
+            if (actualRoot is null) { throw new ArgumentNullException(nameof(actualRoot)); }
+            return new ParseTreeNode {
+                Caption = "(parent nodes)",
+                NodeType = TreeNodeType.Placeholder,
+                Children = new List<ParseTreeNode> { actualRoot },
+                CharSpan = actualRoot.CharSpan
+            };
+        }
 
         public string Caption { get; private set; }
         public List<PropertyValue> Properties { get; }
@@ -28,6 +31,11 @@ namespace ParseTreeVisualizer {
 
         private ParseTreeNode() { }
         public ParseTreeNode(IParseTree tree, List<Token> tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping, string path) {
+            if (tree is null) { throw new ArgumentNullException(nameof(tree)); }
+            if (ruleMapping is null) { throw new ArgumentNullException(nameof(ruleMapping)); }
+            if (tokens is null) { throw new ArgumentNullException(nameof(tokens)); }
+            if (config is null) { throw new ArgumentNullException(nameof(config)); }
+
             var type = tree.GetType();
 
             if (tree is ParserRuleContext ruleContext) {
@@ -60,20 +68,7 @@ namespace ParseTreeVisualizer {
                 }
                 CharSpan = token.Span;
 
-                // should the token be added to the token list?
-                var addToken = false;
-
-                if (!token.IsError && !token.IsWhitespace) {
-                    addToken = config.ShowTextTokens;
-                } else {
-                    addToken =
-                        (token.IsError ? config.ShowErrorTokens : true) &&
-                        (token.IsWhitespace ? config.ShowWhitespaceTokens : true);
-                }
-
-                addToken &= config.SelectedTokenTypes.None() || token.TokenTypeID.In(config.SelectedTokenTypes);
-
-                if (addToken) {
+                if (token.ShowToken(config)) {
                     tokens.Add(token);
                 }
             }

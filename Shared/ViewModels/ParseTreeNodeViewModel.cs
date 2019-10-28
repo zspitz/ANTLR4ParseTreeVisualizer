@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ParseTreeVisualizer {
     public class ParseTreeNodeViewModel : Selectable<ParseTreeNode> {
         public ParseTreeNodeViewModel(ParseTreeNode model) : base(model) => 
-            Children = model.Children.Select(x => new ParseTreeNodeViewModel(x)).ToList().AsReadOnly();
+            Children = (model?.Children.Select(x => new ParseTreeNodeViewModel(x)) ?? Enumerable.Empty<ParseTreeNodeViewModel>()).ToList().AsReadOnly();
 
         public ReadOnlyCollection<ParseTreeNodeViewModel> Children { get; }
 

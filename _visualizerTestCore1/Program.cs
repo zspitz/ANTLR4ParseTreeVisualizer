@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 
+[assembly: System.CLSCompliant(false)]
+
 namespace _visualizerTestCore1 {
     public class ErrorListener<S> : ConsoleErrorListener<S> {
         public bool hasError = false;

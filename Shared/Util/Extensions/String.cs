@@ -32,7 +32,7 @@ namespace ParseTreeVisualizer.Util {
                             literal.Append(c);
                         } else {
                             literal.Append(@"\u");
-                            literal.Append(((ushort)c).ToString("x4"));
+                            literal.Append($"{(ushort)c:x4}");
                         }
                         break;
                 }

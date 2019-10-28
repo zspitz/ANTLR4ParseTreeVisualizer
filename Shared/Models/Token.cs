@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
@@ -18,25 +19,44 @@ namespace ParseTreeVisualizer {
         public bool IsError { get; }
         public (int start, int stop) Span { get; }
         public bool IsWhitespace { get; }
-        public Token(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) {
-            Index = terminalNode.Payload.TokenIndex;
 
-            TokenTypeID = terminalNode.Payload.Type;
+        public Token(IToken itoken, Dictionary<int,string> tokenTypeMapping) {
+            Index = itoken.TokenIndex;
+            TokenTypeID = itoken.Type;
+            Line = itoken.Line;
+            Col = itoken.Column;
+            Text = itoken.Text.ToCSharpLiteral(false);
+            Span = (itoken.StartIndex, itoken.StopIndex);
+            IsWhitespace = itoken.Text.IsNullOrWhitespace();
 
+            string tokenType = null;
             TokenType =
-                tokenTypeMapping?[TokenTypeID] ??
-                TokenTypeID.ToString();
+                tokenTypeMapping?.TryGetValue(TokenTypeID, out tokenType) ?? false ?
+                tokenType :
+                $"{TokenTypeID}";
+        }
 
-            Line = terminalNode.Payload.Line;
-            Col = terminalNode.Payload.Column;
-            Text = terminalNode.Payload.Text.ToCSharpLiteral(false);
+        public Token(TerminalNodeImpl terminalNode, Dictionary<int,string> tokenTypeMapping) : this(terminalNode.Payload, tokenTypeMapping) {
             if (terminalNode is ErrorNodeImpl) {
                 IsError = true;
             }
+        }
 
-            Span = (terminalNode.Payload.StartIndex, terminalNode.Payload.StopIndex);
+        public bool ShowToken(Config config) {
+            if (!config.HasTokenListFilter()) { return true; }
+            var showToken = false;
 
-            IsWhitespace = terminalNode.Payload.Text.IsNullOrWhitespace();
+            if (!IsError && !IsWhitespace) {
+                showToken = config.ShowTextTokens;
+            } else {
+                showToken =
+                    (IsError ? config.ShowErrorTokens : true) &&
+                    (IsWhitespace ? config.ShowWhitespaceTokens : true);
+            }
+
+            showToken &= config.SelectedTokenTypes.None() || TokenTypeID.In(config.SelectedTokenTypes);
+
+            return showToken;
         }
     }
 }

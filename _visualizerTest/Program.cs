@@ -21,13 +21,21 @@ namespace _visualizerTest {
     End If
     Debug.Print ""still in path 1""
 End Sub";
+
+            //var visualizerHost = new VisualizerDevelopmentHost(code, typeof(Visualizer), typeof(ObjectSource));
+            //visualizerHost.ShowVisualizer();
+
             var stream = new AntlrInputStream(code);
             var lexer = new VBALexer(stream);
             var tokens = new CommonTokenStream(lexer);
+
+            //visualizerHost = new VisualizerDevelopmentHost(tokens, typeof(Visualizer), typeof(ObjectSource));
+            //visualizerHost.ShowVisualizer();
+
             var parser = new VBAParser(tokens);
             parser.Interpreter.PredictionMode = PredictionMode.Sll;
             var tree = parser.subStmt();
-            
+
             var visualizerHost = new VisualizerDevelopmentHost(tree, typeof(Visualizer), typeof(ObjectSource));
             visualizerHost.ShowVisualizer();
         }

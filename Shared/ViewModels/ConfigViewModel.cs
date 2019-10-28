@@ -23,7 +23,7 @@ namespace ParseTreeVisualizer {
                 return ret;
             }).OrderBy(x => x.Text).ToList().AsReadOnly();
 
-            RuleContexts = ruleContexts.Select(x => {
+            RuleContexts = ruleContexts?.Select(x => {
                 var ret = new Selectable<ClassInfo>(x) {
                     IsSelected = x.FullName.In(Model.SelectedRuleContexts)
                 };
@@ -41,18 +41,16 @@ namespace ParseTreeVisualizer {
             _originalValues = config;
         }
 
-        private ReadOnlyCollection<Selectable<ClassInfo>> getVMList(List<ClassInfo> models) {
-            var lst = models.Select(x => new Selectable<ClassInfo>(x) {
-                IsSelected = Model.SelectedParserName == x.FullName
-            }).OrderBy(x => x.Model.Name).ToList();
-            lst.Insert(0, new Selectable<ClassInfo>(ClassInfo.None));
+        private ReadOnlyCollection<ClassInfo> getVMList(List<ClassInfo> models) {
+            var lst = models.OrderBy(x => x.Name).ToList();
+            lst.Insert(0, ClassInfo.None);
             return lst.AsReadOnly();
         }
 
         public ReadOnlyCollection<TokenTypeViewModel> TokenTypes { get; }
         public ReadOnlyCollection<Selectable<ClassInfo>> RuleContexts { get; }
-        public ReadOnlyCollection<Selectable<ClassInfo>> AvailableParsers { get; }
-        public ReadOnlyCollection<Selectable<ClassInfo>> AvailableLexers { get; }
+        public ReadOnlyCollection<ClassInfo> AvailableParsers { get; }
+        public ReadOnlyCollection<ClassInfo> AvailableLexers { get; }
 
         public string Version => GetType().Assembly.GetName().Version.ToString();
         public string Location => GetType().Assembly.Location;
@@ -72,6 +70,7 @@ namespace ParseTreeVisualizer {
                     o.ShowTreeTextTokens != m.ShowTreeTextTokens ||
                     o.ShowTreeWhitespaceTokens != m.ShowTreeWhitespaceTokens ||
                     o.ShowRuleContextNodes != m.ShowRuleContextNodes ||
+                    o.ParseTokensWithRule != m.ParseTokensWithRule ||
 
                     !o.SelectedTokenTypes.SetEquals(m.SelectedTokenTypes) ||
                     !o.SelectedRuleContexts.SetEquals(m.SelectedRuleContexts);

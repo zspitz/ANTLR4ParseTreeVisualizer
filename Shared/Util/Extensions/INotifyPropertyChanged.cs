@@ -30,7 +30,7 @@ namespace ParseTreeVisualizer.Util {
             eventRaiser(new PropertyChangedEventArgs(name));
         }
 
-        public static void NotifyChangedElements<T, U>(this INotifyPropertyChanged inpc, ref T current, T newValue, Action<PropertyChangedEventArgs> eventRaiser, [CallerMemberName] string name = null) where T : IEnumerable<U> {
+        public static void NotifyChangedElements<TProperty, TElement>(this INotifyPropertyChanged inpc, ref TProperty current, TProperty newValue, Action<PropertyChangedEventArgs> eventRaiser, [CallerMemberName] string name = null) where TProperty : IEnumerable<TElement> {
             if (current == null && newValue==null) { return; }
             if (current!= null && current.SequenceEqual(newValue)) { return; }
             current = newValue;
