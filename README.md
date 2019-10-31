@@ -49,10 +49,12 @@ If you are debugging .NET Core applications, you may also need to put an additio
 ## Usage
 
 1. Begin a debugging session, and break at some point.
-2. Navigate to an instance of one of the visualizer target types (`Antlr4.Runtime.RuleContext`, `Antlr4.Runtime.BufferedTokenStream`, or `string`), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
+2. Hover over an instance of one of the visualizer target types (`Antlr4.Runtime.RuleContext`, `Antlr4.Runtime.BufferedTokenStream`, or `string`), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
 3. Click on the magnifying glass to the right of the expression.
-4. You may need to choose a lexer class from the settings if you are visualizing a `string`, and you haven't already done so.
-5. You may need to choose a parser class from the settings, if you are visualizing a `BufferedTokenStream` or a `string`, or the debugged assemblies have multiple parser classes; you will also need to choose a parsing method. (These choices persist between sessions, so if you've already chosen, there's no need to do so again.) 
+4. You may need to choose a lexer class if you are visualizing a `string` and there are multiple lexers in the debugged assemblies; and you haven't already done so.
+5. You may need to choose a parser class from the settings, if you are visualizing a `BufferedTokenStream` or a `string`, or the debugged assemblies have multiple parser classes; you will also need to choose a parsing method. (These choices persist between sessions, so if you've already chosen, there's no need to do so again.)
+
+  ![Visualizing a string](visualize-string.gif)
 
 ## Contributing
 
