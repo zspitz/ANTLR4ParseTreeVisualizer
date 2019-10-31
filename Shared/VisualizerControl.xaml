@@ -10,6 +10,8 @@
         <my1:NodeForegroundConverter x:Key="NodeForegroundConverter" />
         <my1:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
         <my1:NonEmptyListConverter x:Key="NonEmptyListConverter" />
+        <my1:HasItemsVisibilityConverter x:Key="HasItemsVisibilityConverter" />
+        <my1:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
 
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
@@ -47,19 +49,22 @@
 
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
         <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
-        <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard">
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="SelectionChanged">
-                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItems, ElementName=tokens }" />
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-        </DataGrid>
+        <Grid>
+            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource HasItemsVisibilityConverter}}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItems, ElementName=tokens }" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </DataGrid>
+            <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tokens. Choose a lexer class from the settings" Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=tokens,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+        </Grid>
     </DockPanel>
 
     <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">

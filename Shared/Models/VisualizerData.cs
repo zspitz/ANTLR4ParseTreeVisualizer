@@ -22,15 +22,14 @@ namespace ParseTreeVisualizer {
         public bool CanSelectLexer { get; }
         public bool CanSelectParser { get; }
 
-        [NonSerialized]
-        private Type[] types;
-        private T createInstance<T>(string typename, object[] args = null) =>
-            (T)Activator.CreateInstance(types.Single(x => x.FullName == typename), args);
-
         public VisualizerData(object o, Config config) {
             if (config is null) { throw new ArgumentNullException(nameof(config)); }
 
             Config = config;
+
+            Type[] types;
+            T createInstance<T>(string typename, object[] args = null) =>
+                (T)Activator.CreateInstance(types.Single(x => x.FullName == typename), args);
 
             {
                 var baseTypes = new[] { typeof(Parser), typeof(Lexer) };

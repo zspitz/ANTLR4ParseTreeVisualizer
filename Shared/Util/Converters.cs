@@ -10,7 +10,7 @@ using static System.Windows.DependencyProperty;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows;
-
+using System.Collections;
 
 namespace ParseTreeVisualizer.Util {
     public abstract class ReadOnlyConverterBase : IValueConverter {
@@ -73,5 +73,15 @@ namespace ParseTreeVisualizer.Util {
 
     public class NonEmptyListConverter : ReadOnlyMultiConverterBase {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) => values.OfType<IEnumerable<object>>().FirstOrDefault(x => x != null && x.Any());
+    }
+
+    public class HasItemsVisibilityConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            (value as IEnumerable).Cast<object>().Any() ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public class InvertVisibilityConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            ((Visibility)value) == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
     }
 }
