@@ -69,9 +69,8 @@ namespace ParseTreeVisualizer {
         private VisualizerDataViewModel data => (VisualizerDataViewModel)DataContext;
 
         private void LoadDataContext() {
-            if (_objectProvider == null || config == null) { return; }
-            var response = _objectProvider.TransferObject(config) as VisualizerData;
-            if (response == null) {
+            if (_objectProvider is null || config is null) { return; }
+            if (!(_objectProvider.TransferObject(config) is VisualizerData response)) {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }
             DataContext = new VisualizerDataViewModel(response);

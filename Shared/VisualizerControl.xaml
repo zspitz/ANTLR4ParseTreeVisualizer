@@ -10,8 +10,8 @@
         <my1:NodeForegroundConverter x:Key="NodeForegroundConverter" />
         <my1:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
         <my1:NonEmptyListConverter x:Key="NonEmptyListConverter" />
-        <my1:HasItemsVisibilityConverter x:Key="HasItemsVisibilityConverter" />
         <my1:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
+        <my1:HasValuesVisibilityConverter x:Key="HasValuesVisibilityConverter" />
 
         <Style TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="True" />
@@ -50,7 +50,12 @@
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0" VirtualizingStackPanel.VirtualizationMode="Standard">
         <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
         <Grid>
-            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource HasItemsVisibilityConverter}}">
+            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard">
+                <DataGrid.Visibility>
+                    <MultiBinding Converter="{StaticResource HasValuesVisibilityConverter}">
+                        <Binding Path="Model.Config.SelectedLexerName" Mode="OneWay" />
+                    </MultiBinding>
+                </DataGrid.Visibility>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
@@ -63,7 +68,7 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </DataGrid>
-            <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tokens. Choose a lexer class from the settings" Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=tokens,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+            <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tokens. Choose the lexer class from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=tokens,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
         </Grid>
     </DockPanel>
 
@@ -218,39 +223,49 @@
     </Grid>
 
     <TextBlock Text="Parse tree view:" Style="{StaticResource LabelStyle}" />
-    <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
-        <TreeView.ItemTemplate>
-            <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
-                <TextBlock Text="{Binding Model.Caption}" FontWeight="{Binding Model.NodeType, Converter={StaticResource NodeFontWeightConverter}}">
-                    <TextBlock.Foreground>
-                        <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
-                            <Binding Path="Model.NodeType" />
-                            <Binding Path="Model.FilterState" />
-                        </MultiBinding>
-                    </TextBlock.Foreground>
-                    <TextBlock.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Scope to this" Click="SetRootNode" />
-                            <MenuItem Header="Scope to this in new window/" Click="OpenRootNewWindow" />
-                            <MenuItem Header="Copy watch expression" Click="CopyWatchExpression" />
-                            <MenuItem Header="Expand recursively" Click="ExpandAll" />
-                            <MenuItem Header="Collapse recursively" Click="CollapseAll" />
-                        </ContextMenu>
-                    </TextBlock.ContextMenu>
-                </TextBlock>
-            </HierarchicalDataTemplate>
-        </TreeView.ItemTemplate>
-        <TreeView.ItemContainerStyle>
-            <Style TargetType="TreeViewItem">
-                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-            </Style>
-        </TreeView.ItemContainerStyle>
-        <b:Interaction.Triggers>
-            <b:EventTrigger EventName="SelectedItemChanged">
-                <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItem, ElementName=treeview }" />
-            </b:EventTrigger>
-        </b:Interaction.Triggers>
-    </TreeView>
+    <Grid>
+        <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200">
+            <TreeView.Visibility>
+                <MultiBinding Converter="{StaticResource HasValuesVisibilityConverter}">
+                    <Binding Path="Model.Config.SelectedLexerName" />
+                    <Binding Path="Model.Config.SelectedParserName" />
+                    <Binding Path="Model.Config.ParseTokensWithRule" />
+                </MultiBinding>
+            </TreeView.Visibility>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
+                    <TextBlock Text="{Binding Model.Caption}" FontWeight="{Binding Model.NodeType, Converter={StaticResource NodeFontWeightConverter}}">
+                        <TextBlock.Foreground>
+                            <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
+                                <Binding Path="Model.NodeType" />
+                                <Binding Path="Model.FilterState" />
+                            </MultiBinding>
+                        </TextBlock.Foreground>
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Scope to this" Click="SetRootNode" />
+                                <MenuItem Header="Scope to this in new window/" Click="OpenRootNewWindow" />
+                                <MenuItem Header="Copy watch expression" Click="CopyWatchExpression" />
+                                <MenuItem Header="Expand recursively" Click="ExpandAll" />
+                                <MenuItem Header="Collapse recursively" Click="CollapseAll" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectedItemChanged">
+                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItem, ElementName=treeview }" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </TreeView>
+        <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tree nodes. Choose the lexer class, the parser class, and the parse method from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=treeview,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+    </Grid>
 
 </DockPanel>
