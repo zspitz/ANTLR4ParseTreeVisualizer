@@ -12,7 +12,7 @@ namespace ParseTreeVisualizer {
         public string Source { get; }
         public Config Config { get; }
         public ParseTreeNode Root { get; }
-        public List<Token> Tokens { get; } = new List<Token>();
+        public List<Token> Tokens { get; }
         public int SourceOffset { get; }
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();
@@ -112,10 +112,10 @@ namespace ParseTreeVisualizer {
 
             if (tree is null) {
                 tokenStream.Fill();
-                tokenStream.GetTokens()
+                Tokens = tokenStream.GetTokens()
                     .Select(token => new Token(token, getTokenTypeMapping()))
                     .Where(token => token.ShowToken(config))
-                    .AddRangeTo(Tokens);
+                    .ToList();
                 return;
             }
 
@@ -144,6 +144,7 @@ namespace ParseTreeVisualizer {
 
             var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
             var rulenameMapping = new Dictionary<Type, (string name, int index)>();
+            Tokens = new List<Token>();
             var actualRoot = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping, Config.RootNodePath);
             if (config.RootNodePath.IsNullOrWhitespace()) {
                 Root = actualRoot;

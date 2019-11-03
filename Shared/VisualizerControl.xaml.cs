@@ -43,6 +43,13 @@ namespace ParseTreeVisualizer {
                     }
                 };
 
+                // TODO this works only because EnableRowVirtualization is set to False, which is a bad idea for performance
+                tokens.SelectionChanged += (s1, e1) => {
+                    var firstSelected = tokens.SelectedItems<object>().FirstOrDefault();
+                    if (firstSelected is null) { return; }
+                    tokens.ScrollIntoView(firstSelected);
+                };
+
                 data.Root.IsExpanded = true;
 
                 source.LostFocus += (s1, e1) => e1.Handled = true;
@@ -50,15 +57,6 @@ namespace ParseTreeVisualizer {
                 source.SelectionChanged += (s1, e1) => {
                     data.SourceSelectionLength = source.SelectionLength;
                     data.SourceSelectionStart = source.SelectionStart;
-                };
-                // this really should be done with databinding
-                data.PropertyChanged += (s1, e1) => {
-                    if (e1.PropertyName.In(
-                        nameof(VisualizerDataViewModel.SourceSelectionLength),
-                        nameof(VisualizerDataViewModel.SourceSelectionStart)
-                    )) {
-                        source.Select(data.SourceSelectionStart, data.SourceSelectionLength);
-                    }
                 };
                 source.SelectAll();
             };

@@ -77,11 +77,11 @@ namespace ParseTreeVisualizer.Util {
 
     public class InvertVisibilityConverter : ReadOnlyConverterBase {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            ((Visibility)value) == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            ((Visibility)value) == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
     }
 
-    public class HasValuesVisibilityConverter : ReadOnlyMultiConverterBase {
-        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) =>
-            values.All(x => x is string s && !s.IsNullOrWhitespace()) ? Visibility.Visible : Visibility.Hidden;
+    public class NonNullVisibilityConverter : ReadOnlyConverterBase {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            value is null ? Visibility.Hidden : Visibility.Visible;
     }
 }

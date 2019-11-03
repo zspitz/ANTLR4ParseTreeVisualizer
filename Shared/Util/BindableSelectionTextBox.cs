@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using static ParseTreeVisualizer.Util.Functions;
 
 namespace ParseTreeVisualizer {
     public class BindableSelectionTextBox : TextBox {
-        public static readonly DependencyProperty BindableSelectionStartProperty = 
+        public static readonly DependencyProperty BindableSelectionStartProperty =
             DPRegister<int, BindableSelectionTextBox>(0, OnBindableSelectionStartChanged);
 
-        public static readonly DependencyProperty BindableSelectionLengthProperty = 
-            DPRegister<int, BindableSelectionTextBox>(0, OnBindableSelectionStartChanged);
+        public static readonly DependencyProperty BindableSelectionLengthProperty =
+            DPRegister<int, BindableSelectionTextBox>(0, OnBindableSelectionLengthChanged);
 
         private bool changeFromUI;
 
