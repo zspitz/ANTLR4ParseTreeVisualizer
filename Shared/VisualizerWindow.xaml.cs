@@ -17,7 +17,10 @@ namespace ParseTreeVisualizer {
             // if we could find out which is the current monitor, that would be better
             var workingAreas = Monitor.AllMonitors.Select(x => x.WorkingArea).ToList();
             MaxWidth = workingAreas.Min(x => x.Width) * .90;
-            MaxHeight = workingAreas.Min(x => x.Height) * .90;
+            MinWidth = MaxWidth;
+            MaxHeight= workingAreas.Min(x => x.Height) * .90;
+            MinHeight = MaxHeight;
+
 
             PreviewKeyDown += (s, e) => {
                 if (e.Key == Key.Escape) { Close(); }

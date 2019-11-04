@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer {
     public class ParseTreeNodeViewModel : Selectable<ParseTreeNode> {
+        public static ParseTreeNodeViewModel Create(ParseTreeNode model) =>
+            model is null ?
+                null :
+                new ParseTreeNodeViewModel(model);
+
         public ParseTreeNodeViewModel(ParseTreeNode model) : base(model) => 
             Children = (model?.Children.Select(x => new ParseTreeNodeViewModel(x)) ?? Enumerable.Empty<ParseTreeNodeViewModel>()).ToList().AsReadOnly();
 

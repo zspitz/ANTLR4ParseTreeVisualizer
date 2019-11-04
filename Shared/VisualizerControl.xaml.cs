@@ -18,6 +18,11 @@ namespace ParseTreeVisualizer {
                 )) {
                     e.Cancel = true;
                 }
+
+                if (e.PropertyName == nameof(TokenViewModel.Text)) {
+                    e.Column.Width = 150;
+                    (e.Column as DataGridTextColumn).ElementStyle = FindResource("TextTrimmedTextbox") as Style;
+                }
             };
 
             // scrolls the tree view item into view when selected
@@ -50,8 +55,6 @@ namespace ParseTreeVisualizer {
                     tokens.ScrollIntoView(firstSelected);
                 };
 
-                data.Root.IsExpanded = true;
-
                 source.LostFocus += (s1, e1) => e1.Handled = true;
                 source.Focus();
                 source.SelectionChanged += (s1, e1) => {
@@ -72,11 +75,6 @@ namespace ParseTreeVisualizer {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }
             DataContext = new VisualizerDataViewModel(response);
-            if (Config.HasTreeFilter()) {
-                data.Root.SetSubtreeExpanded(true);
-            } else {
-                data.Root.IsExpanded = true;
-            }
             config = data.Model.Config;
             Config.Write();
 

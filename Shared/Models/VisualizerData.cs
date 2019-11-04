@@ -83,7 +83,7 @@ namespace ParseTreeVisualizer {
                     break;
                 case IParseTree tree1:
                     tree = tree1;
-                    Source = tree.GetText();
+                    Source = tree.GetPositionedText();
                     break;
                 default:
                     throw new ArgumentException("Unhandled type");

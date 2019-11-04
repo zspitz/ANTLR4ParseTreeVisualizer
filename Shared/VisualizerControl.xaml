@@ -21,6 +21,10 @@
             <Setter Property="DockPanel.Dock" Value="Top"/>
             <Setter Property="Margin" Value="0,0,0,3" />
         </Style>
+        <Style TargetType="TextBlock" x:Key="TextTrimmedTextbox">
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="ToolTip" Value="{Binding Text,RelativeSource={RelativeSource Self}}" />
+        </Style>
 
         <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
             <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
@@ -69,7 +73,7 @@
 
     <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
         <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
-        <my:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart}" BindableSelectionLength="{Binding SourceSelectionLength}">
+        <my:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart, Mode=TwoWay}" BindableSelectionLength="{Binding SourceSelectionLength, Mode=TwoWay}" TextWrapping="Wrap">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectionChanged">
                     <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding}" />
@@ -85,19 +89,13 @@
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
                     <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
-                    <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" MaxWidth="150" >
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" Width="150" ElementStyle="{StaticResource TextTrimmedTextbox}">
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
                                 <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
-                                <Setter Property="ToolTip" Value="{Binding Value}" />
                             </Style>
                         </DataGridTextColumn.CellStyle>
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
@@ -251,6 +249,11 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Resources>
+                        <Style TargetType="ItemsPresenter">
+                            <Setter Property="Margin" Value="-6,0,0,0" />
+                        </Style>
+                    </Style.Resources>
                 </Style>
             </TreeView.ItemContainerStyle>
             <b:Interaction.Triggers>

@@ -30,8 +30,16 @@ namespace ParseTreeVisualizer {
         public ReadOnlyCollection<TokenViewModel> Tokens { get; }
 
         public VisualizerDataViewModel(VisualizerData visualizerData) : base(visualizerData) {
-            Root = new ParseTreeNodeViewModel(visualizerData.Root);
-            Tokens = visualizerData.Tokens.OrderBy(x => x.Index).Select(x => new TokenViewModel(x)).ToList().AsReadOnly();
+            Root = ParseTreeNodeViewModel.Create(visualizerData.Root);
+            Tokens = visualizerData.Tokens?.OrderBy(x => x.Index).Select(x => new TokenViewModel(x)).ToList().AsReadOnly();
+
+            if (!(Root is null)) {
+                if (visualizerData.Config.HasTreeFilter()) {
+                    Root.SetSubtreeExpanded(true);
+                } else {
+                    Root.IsExpanded = true;
+                }
+            }
         }
 
         private bool inUpdateSelection;

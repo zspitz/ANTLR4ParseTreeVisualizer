@@ -25,14 +25,14 @@ namespace ParseTreeVisualizer.Util {
 
         public static string GetPositionedText(this IParseTree tree, char filler = ' ') {
             var sb = new StringBuilder();
-            foreach (var descendant in tree.Descendants()) {
-
+            foreach (var descendant in tree.Descendants().OfType<TerminalNodeImpl>()) {
+                var fillerCharCount = descendant.Payload.StartIndex - sb.Length;
+                if (fillerCharCount > 0) {
+                    sb.Append(filler, fillerCharCount);
+                }
+                sb.Append(descendant.Payload.Text);
             }
-            // get string length of tree, from last node
-            // create string with length of string length
-            // create string builder from string
-            // walk tree, filling in each node
-            throw new NotImplementedException();
+            return sb.ToString();
         }
     }
 }
