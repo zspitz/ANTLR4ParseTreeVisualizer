@@ -1,14 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using static ParseTreeVisualizer.Util.Functions;
+using static System.Windows.FrameworkPropertyMetadataOptions;
 
 namespace ParseTreeVisualizer {
     public class BindableSelectionTextBox : TextBox {
         public static readonly DependencyProperty BindableSelectionStartProperty =
-            DPRegister<int, BindableSelectionTextBox>(0, OnBindableSelectionStartChanged);
+            DPRegister<int, BindableSelectionTextBox>(0, BindsTwoWayByDefault, OnBindableSelectionStartChanged);
 
         public static readonly DependencyProperty BindableSelectionLengthProperty =
-            DPRegister<int, BindableSelectionTextBox>(0, OnBindableSelectionLengthChanged);
+            DPRegister<int, BindableSelectionTextBox>(0, BindsTwoWayByDefault, OnBindableSelectionLengthChanged);
 
         private bool changeFromUI;
 

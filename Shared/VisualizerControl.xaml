@@ -73,7 +73,7 @@
 
     <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
         <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
-        <my:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart, Mode=TwoWay}" BindableSelectionLength="{Binding SourceSelectionLength, Mode=TwoWay}" TextWrapping="Wrap">
+        <my:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart}" BindableSelectionLength="{Binding SourceSelectionLength}" TextWrapping="Wrap">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectionChanged">
                     <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding}" />
