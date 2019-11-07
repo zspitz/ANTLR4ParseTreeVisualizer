@@ -22,6 +22,10 @@ namespace ParseTreeVisualizer {
         public bool CanSelectLexer { get; }
         public bool CanSelectParser { get; }
 
+        private static readonly string[] loadErrorExceptions = new[] {
+            "Microsoft.Xaml.Behaviors.Wpf"
+        };
+
         public VisualizerData(object o, Config config) {
             if (config is null) { throw new ArgumentNullException(nameof(config)); }
 
@@ -36,14 +40,17 @@ namespace ParseTreeVisualizer {
                 types = AppDomain.CurrentDomain.GetAssemblies()
                     .Where(x => x != GetType().Assembly)
                     .SelectMany(x => {
-                        try {
-                            return x.GetTypes();
+                        var ret = Empty<Type>();
+                        if (!x.FullName.StartsWithAny(loadErrorExceptions)) {
+                            try {
+                                ret = x.GetTypes();
 #pragma warning disable CA1031 // Do not catch general exception types
-                        } catch {
+                            } catch {
 #pragma warning restore CA1031 // Do not catch general exception types
-                            AssemblyLoadErrors.Add(x.FullName);
-                            return Empty<Type>();
+                                AssemblyLoadErrors.Add(x.FullName);
+                            }
                         }
+                        return ret;
                     })
                     .Where(x => !x.IsAbstract)
                     .ToArray();
