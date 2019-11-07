@@ -13,9 +13,9 @@ namespace ParseTreeVisualizer.Util {
 
         public static readonly DependencyProperty AsProperty = DPRegisterAttached(typeof(ExposeControl), NoObject, BindsTwoWayByDefault, AsChanged);
 
-        public static object GetAs(DependencyObject obj) => obj.GetValue(AsProperty);
+        public static object GetAs(DependencyObject o) => o.GetValue(AsProperty);
 
-        public static void SetAs(DependencyObject obj, object value) => obj.SetValue(AsProperty, value);
+        public static void SetAs(DependencyObject o, object value) => o.SetValue(AsProperty, value);
 
         private static void AsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (e.NewValue == d) { return; }
