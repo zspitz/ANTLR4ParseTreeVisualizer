@@ -44,7 +44,7 @@ This project is very much in an alpha stage.
 
 You can also compile the source yourself (`2019.sln` or `2017.sln`) and place the output DLLs in one of the visualizer folder.
 
-If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where installed the visualizer.
+If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where you installed the visualizer.
 
 ## Usage
 
