@@ -42,5 +42,6 @@ namespace ParseTreeVisualizer.Util {
         }
 
         public static bool ContainsAny(this string s, params string[] testStrings) => testStrings.Any(x => s.Contains(x));
+        public static bool StartsWithAny(this string s, params string[] testStrings) => testStrings.Any(x => s.StartsWith(x, StringComparison.InvariantCulture));
     }
 }

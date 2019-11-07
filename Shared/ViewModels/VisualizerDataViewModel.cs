@@ -118,7 +118,7 @@ namespace ParseTreeVisualizer {
                 if (changeSelection == null) {
                     changeSelection = new RelayCommand(sender => {
                         updateSelection(sender);
-                        var firstSelected = Tokens.FirstOrDefault(x => x.IsSelected);
+                        var firstSelected = Tokens?.FirstOrDefault(x => x.IsSelected);
                         if (TokensGrid is null || firstSelected is null) { return; }
                         TokensGrid.ScrollIntoView(firstSelected);
                     });
