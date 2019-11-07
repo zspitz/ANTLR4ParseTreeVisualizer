@@ -26,8 +26,6 @@
 
   ![Set node as root, in current or new window](set-root.gif)
 
-This project is very much in an alpha stage.
-
 ## Requirements
 
 * Visual Studio 2017 or 2019  
