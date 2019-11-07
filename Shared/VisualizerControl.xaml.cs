@@ -48,16 +48,10 @@ namespace ParseTreeVisualizer {
                     }
                 };
 
-                // TODO this works only because EnableRowVirtualization is set to False, which is a bad idea for performance
-                tokens.SelectionChanged += (s1, e1) => {
-                    var firstSelected = tokens.SelectedItems<object>().FirstOrDefault();
-                    if (firstSelected is null) { return; }
-                    tokens.ScrollIntoView(firstSelected);
-                };
-
                 source.LostFocus += (s1, e1) => e1.Handled = true;
                 source.Focus();
                 source.SelectionChanged += (s1, e1) => {
+                    if (data == null) { return; }
                     data.SourceSelectionLength = source.SelectionLength;
                     data.SourceSelectionStart = source.SelectionStart;
                 };
@@ -71,6 +65,7 @@ namespace ParseTreeVisualizer {
 
         private void LoadDataContext() {
             if (_objectProvider is null || config is null) { return; }
+            DataContext = null;
             if (!(_objectProvider.TransferObject(config) is VisualizerData response)) {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }

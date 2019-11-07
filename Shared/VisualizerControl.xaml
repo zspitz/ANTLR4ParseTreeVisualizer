@@ -54,7 +54,7 @@
     <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
         <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
         <Grid>
-            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource NonNullVisibilityConverter}}" EnableRowVirtualization="False">
+            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource NonNullVisibilityConverter}}" my1:ExposeControl.As="{Binding TokensGrid}">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />

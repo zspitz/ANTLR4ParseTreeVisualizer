@@ -21,8 +21,8 @@ namespace ParseTreeVisualizer {
             set => NotifyChanged(ref sourceSelectionLength, value);
         }
 
-        private int sourceSelectionEnd => 
-            sourceSelectionLength == 0 ? 
+        private int sourceSelectionEnd =>
+            sourceSelectionLength == 0 ?
                 sourceSelectionStart :
                 sourceSelectionStart + sourceSelectionLength - 1;
 
@@ -69,25 +69,24 @@ namespace ParseTreeVisualizer {
             if (source != "Source") {
                 if (charSpan != null && charSpan != (-1, -1)) {
                     SourceSelectionStart = start - Model.SourceOffset;
-                    SourceSelectionLength = end -start + 1;
+                    SourceSelectionLength = end - start + 1;
                 } else {
                     SourceSelectionLength = 0;
                     SourceSelectionStart = 0;
                 }
             }
 
-            
-            if (source != "Tokens") {
+            if (source != "Tokens" && !(Tokens is null)) {
                 if (charSpan == null) {
                     Tokens.ForEach(x => x.IsSelected = false);
                 } else {
-                    Tokens.ForEach(x => 
+                    Tokens.ForEach(x =>
                         x.IsSelected = x.Model.Span.start <= end && x.Model.Span.stop >= start
                     );
                 }
             }
 
-            if (source != "Root" && Root.Model != null) {
+            if (source != "Root" && !(Root?.Model is null)) {
                 Root.ClearSelection();
                 var selectedNode = Root;
 
@@ -100,7 +99,7 @@ namespace ParseTreeVisualizer {
                 if (matcher(selectedNode)) {
                     while (true) {
                         var nextChild = selectedNode.Children.OneOrDefault(matcher);
-                        if (nextChild==null) { break; }
+                        if (nextChild is null) { break; }
                         selectedNode = nextChild;
                         selectedNode.IsExpanded = true;
                     }
@@ -117,10 +116,19 @@ namespace ParseTreeVisualizer {
         public RelayCommand ChangeSelection {
             get {
                 if (changeSelection == null) {
-                    changeSelection = new RelayCommand(sender => updateSelection(sender));
+                    changeSelection = new RelayCommand(sender => {
+                        updateSelection(sender);
+                        var firstSelected = Tokens.FirstOrDefault(x => x.IsSelected);
+                        if (TokensGrid is null || firstSelected is null) { return; }
+                        TokensGrid.ScrollIntoView(firstSelected);
+                    });
                 }
                 return changeSelection;
             }
         }
+
+        // https://stackoverflow.com/a/58755526/111794
+        // combined with https://blog.machinezoo.com/expose-wpf-control-to-view-model-iii
+        public dynamic TokensGrid { get; set; }
     }
 }
