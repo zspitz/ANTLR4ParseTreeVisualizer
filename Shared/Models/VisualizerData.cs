@@ -22,8 +22,8 @@ namespace ParseTreeVisualizer {
         public bool CanSelectLexer { get; }
         public bool CanSelectParser { get; }
 
-        private static readonly string[] loadErrorExceptions = new[] {
-            "Microsoft.Xaml.Behaviors.Wpf"
+        private static readonly string[] ignnoreLoadErrors = new[] {
+            "Microsoft.Xaml.Behaviors"
         };
 
         public VisualizerData(object o, Config config) {
@@ -41,7 +41,7 @@ namespace ParseTreeVisualizer {
                     .Where(x => x != GetType().Assembly)
                     .SelectMany(x => {
                         var ret = Empty<Type>();
-                        if (!x.FullName.StartsWithAny(loadErrorExceptions)) {
+                        if (!x.FullName.StartsWithAny(ignnoreLoadErrors)) {
                             try {
                                 ret = x.GetTypes();
 #pragma warning disable CA1031 // Do not catch general exception types

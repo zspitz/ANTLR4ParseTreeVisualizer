@@ -69,7 +69,15 @@ namespace ParseTreeVisualizer {
             if (!(_objectProvider.TransferObject(config) is VisualizerData response)) {
                 throw new InvalidOperationException("Unspecified error while serializing/deserializing");
             }
-            DataContext = new VisualizerDataViewModel(response);
+
+            var vm = new VisualizerDataViewModel(response);
+            vm.PropertyChanged += (s, e) => {
+                if (e.PropertyName != nameof(VisualizerDataViewModel.FirstSelectedToken)) { return; }
+                if (vm.FirstSelectedToken is null) { return; }
+                tokens.ScrollIntoView(vm.FirstSelectedToken);
+            };
+
+            DataContext = vm;
             config = data.Model.Config;
             Config.Write();
 

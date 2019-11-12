@@ -3,9 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.NotifyCollectionChangedAction;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {
@@ -26,12 +28,32 @@ namespace ParseTreeVisualizer {
                 sourceSelectionStart :
                 sourceSelectionStart + sourceSelectionLength - 1;
 
+        private TokenViewModel firstSelectedToken;
+        public TokenViewModel FirstSelectedToken => firstSelectedToken;
+
         public ParseTreeNodeViewModel Root { get; }
         public ReadOnlyCollection<TokenViewModel> Tokens { get; }
 
         public VisualizerDataViewModel(VisualizerData visualizerData) : base(visualizerData) {
             Root = ParseTreeNodeViewModel.Create(visualizerData.Root);
-            Tokens = visualizerData.Tokens?.OrderBy(x => x.Index).Select(x => new TokenViewModel(x)).ToList().AsReadOnly();
+            Tokens = visualizerData.Tokens?.OrderBy(x => x.Index).Select(x => {
+                var vm = new TokenViewModel(x);
+                vm.PropertyChanged += (s, e) => {
+                    if (e.PropertyName != nameof(vm.IsSelected)) { return; }
+
+                    if (vm.IsSelected) {
+                        if (firstSelectedToken is null || firstSelectedToken.Model.Index > vm.Model.Index) {
+                            NotifyChanged(ref firstSelectedToken, vm, nameof(FirstSelectedToken));
+                        }
+                    } else {
+                        if (firstSelectedToken != null && firstSelectedToken.Model.Index == vm.Model.Index) {
+                            var firstSelected = Tokens.Where(x => x.IsSelected).OrderBy(x => x.Model.Index).FirstOrDefault();
+                            NotifyChanged(ref firstSelectedToken, firstSelected, nameof(FirstSelectedToken));
+                        }
+                    }
+                };
+                return vm;
+            }).ToList().AsReadOnly();
 
             if (!(Root is null)) {
                 if (visualizerData.Config.HasTreeFilter()) {
@@ -61,6 +83,9 @@ namespace ParseTreeVisualizer {
             } else if (parameter is IList) { // selected items in datagrid
                 charSpan = Tokens.SelectionCharSpan();
                 source = "Tokens";
+            } else if (parameter is null) {
+                inUpdateSelection = false;
+                return;
             } else {
                 throw new Exception("Unknown sender");
             }
@@ -116,19 +141,10 @@ namespace ParseTreeVisualizer {
         public RelayCommand ChangeSelection {
             get {
                 if (changeSelection == null) {
-                    changeSelection = new RelayCommand(sender => {
-                        updateSelection(sender);
-                        var firstSelected = Tokens?.FirstOrDefault(x => x.IsSelected);
-                        if (TokensGrid is null || firstSelected is null) { return; }
-                        TokensGrid.ScrollIntoView(firstSelected);
-                    });
+                    changeSelection = new RelayCommand(sender => updateSelection(sender));
                 }
                 return changeSelection;
             }
         }
-
-        // https://stackoverflow.com/a/58755526/111794
-        // combined with https://blog.machinezoo.com/expose-wpf-control-to-view-model-iii
-        public dynamic TokensGrid { get; set; }
     }
 }

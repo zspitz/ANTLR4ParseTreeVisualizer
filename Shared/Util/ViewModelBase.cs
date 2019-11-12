@@ -10,8 +10,14 @@ namespace ParseTreeVisualizer.Util {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void NotifyChanged<T>(ref T current, T newValue, [CallerMemberName] string name = null) where T : IEquatable<T> {
-            if (current.Equals(newValue)) { return; }
+        protected void NotifyChanged<T>(ref T current, T newValue, [CallerMemberName] string name = null) {
+            if (current is IEquatable<T> equatable) {
+                if (equatable.Equals(newValue)) { return; }
+            } else if (current is null) {
+                if (newValue is null) { return; }
+            } else {
+                if (current.Equals(newValue)) { return; }
+            }
             current = newValue;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
