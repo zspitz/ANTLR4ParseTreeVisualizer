@@ -68,4 +68,4 @@ If you are debugging .NET Core applications, you may also need to put an additio
 ## Roadmap
 
 * [Parsing errors in a separate pane](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/24)
-* Live window, perhaps as a VS extension. It should be possible to select a lexer class from a lexer assembly, a parser class from a parser assembly, and display the resultant token stream and parse tree.
+* [Standalone viewer](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/19)
