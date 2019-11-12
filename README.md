@@ -9,7 +9,7 @@
 * List of tokens (error tokens are highlighted in red)
 * Treeview of rule contexts and terminal nodes (error nodes in red)
 * Properties of selected treeview node (properties not declared in the Antlr namespace are checked)
-* Source view
+* Input text, or the text from the current channel positioned as in the input
 * Selection sync, when selecting in the token list, the tree view, or the source text.
 
   ![Selection sync](selection-sync.gif)
