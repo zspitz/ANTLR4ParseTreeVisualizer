@@ -62,7 +62,8 @@ If you are debugging .NET Core applications, you may also need to put an additio
 * Suggest ideas and enhancements ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Notify about bugs ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new))
 * Provide screenshots which could be used to demonstrate different features of the visualizer (also via ([issues](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/new)))
-* Feel free to star the project
+* Star the project
+* Spread the word
 * Provide feedback to Microsoft about [these limitations to the visualizer API](https://github.com/zspitz/ExpressionToString/wiki/External-issues)
 
 ## Roadmap
