@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,19 +12,19 @@ namespace ParseTreeVisualizer.Util {
 
         public static void AddRangeTo<T>(this IEnumerable<T> src, ICollection<T> dest) => dest.AddRange(src);
 
-        public static string Joined<T>(this IEnumerable<T> source, string delimiter = ",", Func<T, string> selector = null) {
-            if (source == null) { return ""; }
-            if (selector == null) { return string.Join(delimiter, source); }
+        public static string Joined<T>(this IEnumerable<T> source, string delimiter = ",", Func<T, string>? selector = null) {
+            if (source is null) { return ""; }
+            if (selector is null) { return string.Join(delimiter, source); }
             return string.Join(delimiter, source.Select(selector));
         }
         public static string Joined<T>(this IEnumerable<T> source, string delimiter, Func<T, int, string> selector) {
-            if (source == null) { return ""; }
-            if (selector == null) { return string.Join(delimiter, source); }
+            if (source is null) { return ""; }
+            if (selector is null) { return string.Join(delimiter, source); }
             return string.Join(delimiter, source.Select(selector));
         }
 
-        public static bool None<T>(this IEnumerable<T> src, Func<T, bool> predicate = null) {
-            if (predicate != null) { return !src.Any(predicate); }
+        public static bool None<T>(this IEnumerable<T> src, Func<T, bool>? predicate = null) {
+            if (predicate is { }) { return !src.Any(predicate); }
             return !src.Any();
         }
 
@@ -31,13 +32,14 @@ namespace ParseTreeVisualizer.Util {
         /// Returns an element If the sequence has exactly one element; otherwise returns the default of T
         /// (unlike the standard SingleOrDefault, which will throw an exception on multiple elements).
         /// </summary>
-        public static T OneOrDefault<T>(this IEnumerable<T> src, Func<T,bool> predicate = null) {
-            if (src == null) { return default; }
+        [return: MaybeNull]
+        public static T OneOrDefault<T>(this IEnumerable<T>? src, Func<T,bool>? predicate = null) {
+            if (src == null) { return default!; }
             if (predicate != null) { src = src.Where(predicate); }
-            T ret = default;
+            T ret = default!;
             var counter = 0;
             foreach (var item in src.Take(2)) {
-                if (counter == 1) { return default; }
+                if (counter == 1) { return default!; }
                 ret = item;
                 counter += 1;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer.Util {
     public static class StringExtensions {
-        public static bool IsNullOrWhitespace(this string s) => string.IsNullOrWhiteSpace(s);
+        public static bool IsNullOrWhitespace([NotNullWhen(false)] this string? s) => string.IsNullOrWhiteSpace(s);
 
         // https://stackoverflow.com/a/14502246/111794
         public static string ToCSharpLiteral(this string input, bool withQuotationMarks = true) {

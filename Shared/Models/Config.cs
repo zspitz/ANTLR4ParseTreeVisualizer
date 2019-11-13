@@ -10,7 +10,7 @@ using System.Linq;
 namespace ParseTreeVisualizer {
     [Serializable]
     public class Config {
-        public static string AssemblyName { get; set; }
+        public static string? AssemblyName { get; set; }
 
         private static readonly string ConfigFolder = Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -25,7 +25,7 @@ namespace ParseTreeVisualizer {
 
         public static Config Get() {
             var ret = new JObject();
-            string fileText = null;
+            string? fileText = null;
 
             if (Directory.Exists(ConfigFolder)) {
                 var testPath = configPath(true);
@@ -47,12 +47,12 @@ namespace ParseTreeVisualizer {
                 }
             }
 
-            return ret.ToObject<Config>();
+            return ret.ToObject<Config>()!;
         }
 
-        public string SelectedParserName { get; set; }
-        public string ParseTokensWithRule { get; set; }
-        public string SelectedLexerName { get; set; }
+        public string? SelectedParserName { get; set; }
+        public string? ParseTokensWithRule { get; set; }
+        public string? SelectedLexerName { get; set; }
         public bool ShowTextTokens { get; set; } = true;
         public bool ShowWhitespaceTokens { get; set; } = true;
         public bool ShowErrorTokens { get; set; } = true;
@@ -61,8 +61,8 @@ namespace ParseTreeVisualizer {
         public bool ShowTreeWhitespaceTokens { get; set; } = true;
         public bool ShowTreeErrorTokens { get; set; } = true;
         public bool ShowRuleContextNodes { get; set; } = true;
-        public HashSet<string> SelectedRuleContexts { get; } = new HashSet<string>();
-        public string RootNodePath { get; set; }
+        public HashSet<string?> SelectedRuleContexts { get; } = new HashSet<string?>();
+        public string? RootNodePath { get; set; }
 
         public bool HasTreeFilter() => !(ShowTreeErrorTokens && ShowTreeWhitespaceTokens && ShowTreeTextTokens && ShowRuleContextNodes && SelectedRuleContexts.None());
         public bool HasTokenListFilter() => !(ShowTextTokens && ShowErrorTokens && ShowWhitespaceTokens && SelectedTokenTypes.None());
@@ -119,6 +119,6 @@ namespace ParseTreeVisualizer {
             return ret;
         }
 
-        public string WatchBaseExpression { get; set; }
+        public string? WatchBaseExpression { get; set; }
     }
 }

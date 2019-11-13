@@ -28,7 +28,7 @@ namespace ParseTreeVisualizer {
         }
 
         private static void OnBindableSelectionStartChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args) {
-            var textBox = dependencyObject as BindableSelectionTextBox;
+            var textBox = (dependencyObject as BindableSelectionTextBox)!;
 
             if (!textBox.changeFromUI) {
                 int newValue = (int)args.NewValue;
@@ -39,7 +39,7 @@ namespace ParseTreeVisualizer {
         }
 
         private static void OnBindableSelectionLengthChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args) {
-            var textBox = dependencyObject as BindableSelectionTextBox;
+            var textBox = (dependencyObject as BindableSelectionTextBox)!;
 
             if (!textBox.changeFromUI) {
                 int newValue = (int)args.NewValue;

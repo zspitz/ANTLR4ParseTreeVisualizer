@@ -4,6 +4,7 @@ using ParseTreeVisualizer.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using static System.Linq.Enumerable;
 
 namespace ParseTreeVisualizer {
@@ -11,14 +12,14 @@ namespace ParseTreeVisualizer {
     public class VisualizerData {
         public string Source { get; }
         public Config Config { get; }
-        public ParseTreeNode Root { get; }
-        public List<Token> Tokens { get; }
+        public ParseTreeNode? Root { get; }
+        public List<Token>? Tokens { get; }
         public int SourceOffset { get; }
         public List<ClassInfo> AvailableParsers { get; } = new List<ClassInfo>();
         public List<ClassInfo> AvailableLexers { get; } = new List<ClassInfo>();
         public List<string> AssemblyLoadErrors { get; } = new List<string>();
-        public Dictionary<int, string> TokenTypeMapping { get; private set; }
-        public List<ClassInfo> UsedRuleContexts { get; }
+        public Dictionary<int, string>? TokenTypeMapping { get; private set; }
+        public List<ClassInfo>? UsedRuleContexts { get; }
         public bool CanSelectLexer { get; }
         public bool CanSelectParser { get; }
 
@@ -32,7 +33,7 @@ namespace ParseTreeVisualizer {
             Config = config;
 
             Type[] types;
-            T createInstance<T>(string typename, object[] args = null) =>
+            T createInstance<T>(string typename, object[]? args = null) =>
                 (T)Activator.CreateInstance(types.Single(x => x.FullName == typename), args);
 
             {
@@ -55,25 +56,34 @@ namespace ParseTreeVisualizer {
                     .Where(x => !x.IsAbstract)
                     .ToArray();
                 foreach (var t in types) {
-                    var toAdd =
-                        t.InheritsFromOrImplements<Parser>() ? new ClassInfo(t, null, null, true) :
-                        t.InheritsFromOrImplements<Lexer>() ? new ClassInfo(t) :
-                        null;
-                    var dest =
-                        t.InheritsFromOrImplements<Parser>() ? AvailableParsers :
-                        t.InheritsFromOrImplements<Lexer>() ? AvailableLexers :
-                        null;
-                    dest?.Add(toAdd);
+                    if (t.InheritsFromOrImplements<Parser>()) {
+                        AvailableParsers.Add(new ClassInfo(t, null, null, true));
+                    } else if (t.InheritsFromOrImplements<Lexer>()) {
+                        AvailableLexers.Add(new ClassInfo(t));
+                    }
                 }
 
-                Config.SelectedParserName = checkSelection(AvailableParsers, Config.SelectedParserName);
                 Config.SelectedLexerName = checkSelection(AvailableLexers, Config.SelectedLexerName);
+                Config.SelectedParserName = checkSelection(AvailableParsers, Config.SelectedParserName);
+                if (!Config.SelectedParserName.IsNullOrWhitespace()) {
+                    var parserInfo = AvailableParsers.OneOrDefault(x => x.FullName == Config.SelectedParserName);
+                    if (parserInfo is null) {
+                        Config.ParseTokensWithRule = null;
+                    } else {
+                        if (Config.ParseTokensWithRule.NotIn(parserInfo.MethodNames)) {
+                            Config.ParseTokensWithRule = null;
+                        }
+                        if (Config.ParseTokensWithRule is null) {
+                            Config.ParseTokensWithRule = parserInfo.MethodNames.OneOrDefault();
+                        }
+                    }
+                }
             }
 
-            string source = null;
-            BufferedTokenStream tokenStream = null;
-            IParseTree tree = null;
-            IVocabulary vocabulary = null;
+            string? source = null;
+            BufferedTokenStream? tokenStream = null;
+            IParseTree? tree = null;
+            IVocabulary? vocabulary = null;
 
             // these three are mutually exclusive
             switch (o) {
@@ -98,7 +108,7 @@ namespace ParseTreeVisualizer {
 
             if (source != null && !Config.SelectedLexerName.IsNullOrWhitespace()) {
                 var input = new AntlrInputStream(source);
-                var lexer = createInstance<Lexer>(Config.SelectedLexerName, new[] { input });
+                var lexer = createInstance<Lexer>(Config.SelectedLexerName!, new[] { input });
                 tokenStream = new CommonTokenStream(lexer);
                 vocabulary = lexer.Vocabulary;
             }
@@ -109,7 +119,7 @@ namespace ParseTreeVisualizer {
                 !Config.ParseTokensWithRule.IsNullOrWhitespace()
             ) {
                 var parser = createInstance<Parser>(Config.SelectedParserName, new[] { tokenStream });
-                tree = (IParseTree)parser.GetType().GetMethod(Config.ParseTokensWithRule ?? "")?.Invoke(parser, Array.Empty<object>());
+                tree = (IParseTree)parser.GetType().GetMethod(Config.ParseTokensWithRule)?.Invoke(parser, Array.Empty<object>())!;
                 vocabulary = parser.Vocabulary;
             }
 
@@ -118,7 +128,7 @@ namespace ParseTreeVisualizer {
             }
 
             if (tree is null) {
-                tokenStream.Fill();
+                tokenStream!.Fill();
                 Tokens = tokenStream.GetTokens()
                     .Select(token => new Token(token, getTokenTypeMapping()))
                     .Where(token => token.ShowToken(config))
@@ -147,10 +157,10 @@ namespace ParseTreeVisualizer {
                 vocabulary = parserType.GetField("DefaultVocabulary").GetValue(null) as IVocabulary;
             }
 
-            var tokenTypeMapping = getTokenTypeMapping();
+            var tokenTypeMapping = getTokenTypeMapping()!;
 
-            var ruleNames = parserType.GetField("ruleNames").GetValue(null) as string[];
-            var rulenameMapping = new Dictionary<Type, (string name, int index)>();
+            var ruleNames = (parserType.GetField("ruleNames").GetValue(null) as string[])!;
+            var rulenameMapping = new Dictionary<Type, (string? name, int? index)>();
             Tokens = new List<Token>();
             var actualRoot = new ParseTreeNode(tree, Tokens, ruleNames, tokenTypeMapping, config, rulenameMapping, Config.RootNodePath);
             if (config.RootNodePath.IsNullOrWhitespace()) {
@@ -168,12 +178,12 @@ namespace ParseTreeVisualizer {
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            Dictionary<int, string> getTokenTypeMapping() {
-                if (vocabulary == null) { return null; }
+            Dictionary<int, string>? getTokenTypeMapping() {
+                if (vocabulary is null) { return null; }
 #if ANTLR_RUNTIME
                 int maxTokenType = vocabulary.MaxTokenType;
 #else
-                int maxTokenType = (vocabulary as Vocabulary).getMaxTokenType();
+                int maxTokenType = (vocabulary as Vocabulary)!.getMaxTokenType();
 #endif
                 TokenTypeMapping = Range(1, maxTokenType).ToDictionary(x => (x, vocabulary.GetSymbolicName(x)));
                 return TokenTypeMapping;
@@ -181,7 +191,7 @@ namespace ParseTreeVisualizer {
 
         }
 
-        private string checkSelection(List<ClassInfo> lst, string selected) {
+        private string? checkSelection(List<ClassInfo> lst, string? selected) {
             if (lst.None(x => x.FullName == selected)) {
                 selected = null;
             }

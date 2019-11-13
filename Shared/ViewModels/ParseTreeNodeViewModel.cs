@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ParseTreeVisualizer {
     public class ParseTreeNodeViewModel : Selectable<ParseTreeNode> {
-        public static ParseTreeNodeViewModel Create(ParseTreeNode model) =>
+        public static ParseTreeNodeViewModel? Create(ParseTreeNode? model) =>
             model is null ?
                 null :
                 new ParseTreeNodeViewModel(model);

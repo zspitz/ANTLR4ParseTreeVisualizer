@@ -21,7 +21,7 @@ namespace ParseTreeVisualizer {
 
                 if (e.PropertyName == nameof(TokenViewModel.Text)) {
                     e.Column.Width = 150;
-                    (e.Column as DataGridTextColumn).ElementStyle = FindResource("TextTrimmedTextbox") as Style;
+                    (e.Column as DataGridTextColumn)!.ElementStyle = FindResource("TextTrimmedTextbox") as Style;
                 }
             };
 
@@ -58,7 +58,7 @@ namespace ParseTreeVisualizer {
                 source.SelectAll();
             };
 
-            Unloaded += (s, e) => Config.Write();
+            Unloaded += (s, e) => Config?.Write();
         }
 
         private VisualizerDataViewModel data => (VisualizerDataViewModel)DataContext;
@@ -79,7 +79,7 @@ namespace ParseTreeVisualizer {
 
             DataContext = vm;
             config = data.Model.Config;
-            Config.Write();
+            Config?.Write();
 
             var assemblyLoadErrors = data.Model.AssemblyLoadErrors;
             if (assemblyLoadErrors.Any()) {
@@ -87,8 +87,8 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private IVisualizerObjectProvider _objectProvider;
-        public IVisualizerObjectProvider objectProvider {
+        private IVisualizerObjectProvider? _objectProvider;
+        public IVisualizerObjectProvider? objectProvider {
             get => _objectProvider;
             set {
                 if (value == _objectProvider) { return; }
@@ -97,8 +97,8 @@ namespace ParseTreeVisualizer {
             }
         }
 
-        private Config config;
-        public Config Config {
+        private Config? config;
+        public Config? Config {
             get => config;
             set {
                 if (value == config) { return; }
@@ -112,12 +112,14 @@ namespace ParseTreeVisualizer {
         private void CollapseAll(object sender, RoutedEventArgs e) =>
             ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.SetSubtreeExpanded(false);
         private void SetRootNode(object sender, RoutedEventArgs e) {
+            if (Config is null) { return; }
             Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.Model.Path;
             LoadDataContext();
         }
         private void OpenRootNewWindow(object sender, RoutedEventArgs e) {
+            if (Config is null) { return; }
             var newWindow = new VisualizerWindow();
-            var content = newWindow.Content as VisualizerControl;
+            var content = (newWindow.Content as VisualizerControl)!;
             content.Config = Config.Clone();
             content.Config.RootNodePath = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>()?.Model.Path;
             content.objectProvider = objectProvider;
@@ -125,6 +127,8 @@ namespace ParseTreeVisualizer {
         }
 
         private void CopyWatchExpression(object sender, RoutedEventArgs e) {
+            if (Config is null) { return; }
+
             var node = ((MenuItem)sender).DataContext<ParseTreeNodeViewModel>();
             if (node == null) { return; }
             var model = node.Model;

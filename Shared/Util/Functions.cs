@@ -7,32 +7,34 @@ using System.Windows;
 
 namespace ParseTreeVisualizer.Util {
     public static class Functions {
-        private static string ParseCallerMemberName(string callerMemberName) {
+        private static string ParseCallerMemberName(string? callerMemberName) {
             if (callerMemberName is null) { throw new ArgumentNullException(nameof(callerMemberName)); }
             var s = callerMemberName;
             if (s.EndsWith("Property", StringComparison.OrdinalIgnoreCase)) { s = s.Substring(0, s.Length - "Property".Length); }
             return s;
         }
-        public static DependencyProperty DPRegister<TProperty, TOwner>(TProperty defaultValue = default, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
+        public static DependencyProperty DPRegister<TProperty, TOwner>(TProperty defaultValue = default, PropertyChangedCallback? callback = null, [CallerMemberName] string? propertyName = null) =>
             DependencyProperty.Register(ParseCallerMemberName(propertyName), typeof(TProperty), typeof(TOwner), new PropertyMetadata(defaultValue, callback));
-        public static DependencyProperty DPRegister<TProperty, TOwner>(TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
+        public static DependencyProperty DPRegister<TProperty, TOwner>(TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback? callback = null, [CallerMemberName] string? propertyName = null) =>
             DependencyProperty.Register(ParseCallerMemberName(propertyName), typeof(TProperty), typeof(TOwner), new FrameworkPropertyMetadata(defaultValue, flags, callback));
 
-        public static DependencyProperty DPRegisterAttached<TProperty, TOwner>(TProperty defaultValue = default, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
+        public static DependencyProperty DPRegisterAttached<TProperty, TOwner>(TProperty defaultValue = default, PropertyChangedCallback? callback = null, [CallerMemberName] string? propertyName = null) =>
             DependencyProperty.RegisterAttached(ParseCallerMemberName(propertyName), typeof(TProperty), typeof(TOwner), new PropertyMetadata(defaultValue, callback));
-        public static DependencyProperty DPRegisterAttached<TProperty, TOwner>(TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
+        public static DependencyProperty DPRegisterAttached<TProperty, TOwner>(TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback? callback = null, [CallerMemberName] string? propertyName = null) =>
             DependencyProperty.RegisterAttached(ParseCallerMemberName(propertyName), typeof(TProperty), typeof(TOwner), new FrameworkPropertyMetadata(defaultValue, flags, callback));
-        public static DependencyProperty DPRegisterAttached<TProperty>(Type ownerType, TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback callback = null, [CallerMemberName] string propertyName = null) =>
+        public static DependencyProperty DPRegisterAttached<TProperty>(Type ownerType, TProperty defaultValue, FrameworkPropertyMetadataOptions flags, PropertyChangedCallback? callback = null, [CallerMemberName] string? propertyName = null) =>
             DependencyProperty.RegisterAttached(ParseCallerMemberName(propertyName), typeof(TProperty), ownerType, new FrameworkPropertyMetadata(defaultValue, flags, callback));
 
         public static KeyValuePair<TKey, TValue> KVP<TKey, TValue>(TKey key, TValue value) => new KeyValuePair<TKey, TValue>(key, value);
 
-        public static (bool isLiteral, string repr) TryRenderLiteral(object o) {
-            var type = o?.GetType().UnderlyingIfNullable();
-            bool rendered = true;
-            string ret = null;
+        public static (bool isLiteral, string repr) TryRenderLiteral(object? o) {
+            if (o is null) { return (true, "null"); }
 
-            if (o == null) {
+            var type = o.GetType().UnderlyingIfNullable();
+            bool rendered = true;
+            string? ret = null;
+
+            if (o is null) {
                 ret = "null";
             } else if (o is bool b) {
                 ret = b ? "true" : "false";
@@ -61,7 +63,7 @@ namespace ParseTreeVisualizer.Util {
                     if (mi is ConstructorInfo) {
                         ret += ".GetConstructor()";
                     } else {
-                        string methodName = null;
+                        string? methodName = null;
                         switch (mi) {
                             case EventInfo _:
                                 methodName = "GetEvent";
@@ -80,7 +82,7 @@ namespace ParseTreeVisualizer.Util {
                     }
                 }
             } else if (type.IsArray && !type.GetElementType().IsArray && type.GetArrayRank() == 1) {
-                var values = (o as dynamic[]).Joined(", ", x => RenderLiteral(x));
+                var values = (o as dynamic[])!.Joined(", ", x => RenderLiteral(x));
                 ret = $"new[] {{ {values} }}";
             } else if (type.IsTupleType()) {
                 ret = "(" + TupleValues(o).Select(x => RenderLiteral(x)).Joined(", ") + ")";
@@ -88,7 +90,7 @@ namespace ParseTreeVisualizer.Util {
                 ret = o.ToString();
             }
 
-            if (ret == null) {
+            if (ret is null) {
                 rendered = false;
                 ret = $"#{type.FriendlyName()}";
             }

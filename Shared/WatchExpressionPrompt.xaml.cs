@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace ParseTreeVisualizer {
     public partial class WatchExpressionPrompt {
-        public string Expression { get; private set; }
+        public string? Expression { get; private set; }
 
         public WatchExpressionPrompt() {
             InitializeComponent();

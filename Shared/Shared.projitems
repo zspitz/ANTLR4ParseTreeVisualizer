@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\VisualizerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\BindableSelectionTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\DependencyObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\NullableAttributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenViewModel.cs" />
     <Compile Include="..\Shared\Util\DebugTraceListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\HashSetT.cs" />

@@ -37,7 +37,7 @@ namespace ParseTreeVisualizer {
             Config.AssemblyName = objectProvider.GetObject() as string;
 
             var window = new VisualizerWindow();
-            var content = window.Content as VisualizerControl;
+            var content = (window.Content as VisualizerControl)!;
             content.Config = Config.Get();
             content.objectProvider = objectProvider;
 

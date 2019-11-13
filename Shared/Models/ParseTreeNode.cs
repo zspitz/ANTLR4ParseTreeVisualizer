@@ -12,25 +12,25 @@ namespace ParseTreeVisualizer {
     public class ParseTreeNode {
         public static ParseTreeNode GetPlaceholder(ParseTreeNode actualRoot) {
             if (actualRoot is null) { throw new ArgumentNullException(nameof(actualRoot)); }
-            return new ParseTreeNode {
-                Caption = "(parent nodes)",
-                NodeType = TreeNodeType.Placeholder,
-                Children = new List<ParseTreeNode> { actualRoot },
-                CharSpan = actualRoot.CharSpan
-            };
+            return new ParseTreeNode("(parent nodes)", TreeNodeType.Placeholder, new List<ParseTreeNode> { actualRoot }, actualRoot.CharSpan);
         }
 
-        public string Caption { get; private set; }
-        public List<PropertyValue> Properties { get; }
+        public string? Caption { get; private set; }
+        public List<PropertyValue>? Properties { get; }
         public List<ParseTreeNode> Children { get; private set; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
         public (int startChar, int endChar) CharSpan { get; private set; }
         public TreeNodeType? NodeType { get; private set; }
         public FilterStates? FilterState { get; }
-        public string Path { get; }
+        public string? Path { get; }
 
-        private ParseTreeNode() { }
-        public ParseTreeNode(IParseTree tree, List<Token> tokens, string[] ruleNames, Dictionary<int,string> tokenTypeMapping, Config config, Dictionary<Type, (string caption, int index)> ruleMapping, string path) {
+        private ParseTreeNode(string caption, TreeNodeType nodeType, List<ParseTreeNode> children, (int startChar, int endChar) charSpan) {
+            Caption = caption;
+            NodeType = nodeType;
+            Children = children;
+            CharSpan = charSpan;
+        }
+        public ParseTreeNode(IParseTree tree, List<Token> tokens, string[] ruleNames, Dictionary<int, string> tokenTypeMapping, Config config, Dictionary<Type, (string? caption, int? index)> ruleMapping, string? path) {
             if (tree is null) { throw new ArgumentNullException(nameof(tree)); }
             if (ruleMapping is null) { throw new ArgumentNullException(nameof(ruleMapping)); }
             if (tokens is null) { throw new ArgumentNullException(nameof(tokens)); }
@@ -41,14 +41,14 @@ namespace ParseTreeVisualizer {
             if (tree is ParserRuleContext ruleContext) {
                 NodeType = TreeNodeType.RuleContext;
 
-                string caption = type.Name;
+                string? caption = type.Name;
                 if (!ruleMapping.TryGetValue(type, out var x)) {
                     var ruleIndex = (int)(type.GetProperty("RuleIndex")?.GetValue(tree) ?? -1);
                     if (ruleNames.TryGetValue(ruleIndex, out caption)) {
                         ruleMapping[type] = (caption, ruleIndex);
                     } else {
                         caption = type.Name;
-                        ruleMapping[type] = (null, -1);
+                        ruleMapping[type] = (null, null);
                     }
                 } else {
                     caption = x.caption;
@@ -88,7 +88,7 @@ namespace ParseTreeVisualizer {
                     matched = config.ShowTreeErrorTokens;
                 } else if (NodeType == TreeNodeType.RuleContext) {
                     matched = config.ShowRuleContextNodes;
-                    if (config.SelectedRuleContexts?.Any() ?? false) {
+                    if (config.SelectedRuleContexts.Any()) {
                         matched = matched && type.FullName.In(config.SelectedRuleContexts);
                     }
                 } else if (NodeType == TreeNodeType.WhitespaceToken) {

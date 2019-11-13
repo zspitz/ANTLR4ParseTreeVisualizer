@@ -32,7 +32,7 @@ namespace ParseTreeVisualizer.Util {
 
         public static bool IsNumeric(this Type type) => type.UnderlyingIfNullable().In(numericTypes);
 
-        public static IEnumerable<(Type current, Type root)> NestedArrayTypes(this Type type) {
+        public static IEnumerable<(Type current, Type? element)> NestedArrayTypes(this Type type) {
             var currentType = type;
             while (currentType.IsArray) {
                 var nextType = currentType.GetElementType();
@@ -82,7 +82,7 @@ namespace ParseTreeVisualizer.Util {
                 string arraySpecifiers = nestedArrayTypes.Joined("",
                     (current, _, index) => left + Repeat("", current.GetArrayRank()).Joined() + right
                 );
-                return nestedArrayTypes.Last().root.FriendlyName() + arraySpecifiers;
+                return nestedArrayTypes.Last().element!.FriendlyName() + arraySpecifiers;
             }
 
             if (!type.IsGenericType) {

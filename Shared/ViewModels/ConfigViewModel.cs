@@ -10,7 +10,7 @@ namespace ParseTreeVisualizer {
         public ConfigViewModel(Config config, VisualizerData visualizerData) : 
             this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers, visualizerData.CanSelectLexer, visualizerData.CanSelectParser) { }
 
-        public ConfigViewModel(Config config, Dictionary<int, string> tokenTypeMapping, List<ClassInfo> ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers, bool canSelectLexer, bool canSelectParser) : base(config.Clone()) {
+        public ConfigViewModel(Config config, Dictionary<int, string>? tokenTypeMapping, List<ClassInfo>? ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers, bool canSelectLexer, bool canSelectParser) : base(config.Clone()) {
             TokenTypes = tokenTypeMapping?.SelectKVP((index, text) => {
                 var ret = new TokenTypeViewModel(index, text) {
                     IsSelected = index.In(Model.SelectedTokenTypes)
@@ -50,8 +50,8 @@ namespace ParseTreeVisualizer {
             return lst.AsReadOnly();
         }
 
-        public ReadOnlyCollection<TokenTypeViewModel> TokenTypes { get; }
-        public ReadOnlyCollection<Selectable<ClassInfo>> RuleContexts { get; }
+        public ReadOnlyCollection<TokenTypeViewModel>? TokenTypes { get; }
+        public ReadOnlyCollection<Selectable<ClassInfo>>? RuleContexts { get; }
         public ReadOnlyCollection<ClassInfo> AvailableParsers { get; }
         public ReadOnlyCollection<ClassInfo> AvailableLexers { get; }
 

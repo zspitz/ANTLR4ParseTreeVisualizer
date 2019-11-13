@@ -4,9 +4,9 @@ using System.Windows.Input;
 namespace ParseTreeVisualizer.Util {
     public class RelayCommand : ICommand {
         private readonly Action<object> execute;
-        private readonly Predicate<object> canExecute;
+        private readonly Predicate<object>? canExecute;
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null) {
+        public RelayCommand(Action<object> execute, Predicate<object>? canExecute = null) {
             this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = canExecute;
         }

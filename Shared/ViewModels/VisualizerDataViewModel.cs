@@ -28,11 +28,11 @@ namespace ParseTreeVisualizer {
                 sourceSelectionStart :
                 sourceSelectionStart + sourceSelectionLength - 1;
 
-        private TokenViewModel firstSelectedToken;
-        public TokenViewModel FirstSelectedToken => firstSelectedToken;
+        private TokenViewModel? firstSelectedToken;
+        public TokenViewModel? FirstSelectedToken => firstSelectedToken;
 
-        public ParseTreeNodeViewModel Root { get; }
-        public ReadOnlyCollection<TokenViewModel> Tokens { get; }
+        public ParseTreeNodeViewModel? Root { get; }
+        public ReadOnlyCollection<TokenViewModel>? Tokens { get; }
 
         public VisualizerDataViewModel(VisualizerData visualizerData) : base(visualizerData) {
             Root = ParseTreeNodeViewModel.Create(visualizerData.Root);
@@ -81,7 +81,7 @@ namespace ParseTreeVisualizer {
                 charSpan = selectedNode.Model?.CharSpan;
                 source = "Root";
             } else if (parameter is IList) { // selected items in datagrid
-                charSpan = Tokens.SelectionCharSpan();
+                charSpan = Tokens?.SelectionCharSpan();
                 source = "Tokens";
             } else if (parameter is null) {
                 inUpdateSelection = false;
@@ -137,7 +137,7 @@ namespace ParseTreeVisualizer {
 
         // TOOD move filtering to here
 
-        private RelayCommand changeSelection;
+        private RelayCommand? changeSelection;
         public RelayCommand ChangeSelection {
             get {
                 if (changeSelection == null) {

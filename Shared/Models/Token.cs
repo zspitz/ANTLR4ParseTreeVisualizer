@@ -20,7 +20,7 @@ namespace ParseTreeVisualizer {
         public (int start, int stop) Span { get; }
         public bool IsWhitespace { get; }
 
-        public Token(IToken itoken, Dictionary<int,string> tokenTypeMapping) {
+        public Token(IToken itoken, Dictionary<int,string>? tokenTypeMapping) {
             Index = itoken.TokenIndex;
             TokenTypeID = itoken.Type;
             Line = itoken.Line;
@@ -29,7 +29,7 @@ namespace ParseTreeVisualizer {
             Span = (itoken.StartIndex, itoken.StopIndex);
             IsWhitespace = itoken.Text.IsNullOrWhitespace();
 
-            string tokenType = null;
+            string tokenType = "";
             TokenType =
                 tokenTypeMapping?.TryGetValue(TokenTypeID, out tokenType) ?? false ?
                 tokenType :

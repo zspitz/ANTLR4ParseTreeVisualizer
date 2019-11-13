@@ -15,17 +15,17 @@ namespace ParseTreeVisualizer {
         public static readonly ClassInfo None = new ClassInfo("(None)");
 
         public string Name { get; }
-        public string Namespace { get; }
-        public string Assembly { get; }
-        public string Antlr { get; private set; } // Runtime - in Antlr.Runtime, <number> - version
-        public string FullName { get; }
-        public string RuleName { get; }
+        public string? Namespace { get; }
+        public string? Assembly { get; }
+        public string? Antlr { get; private set; } // Runtime - in Antlr.Runtime, <number> - version
+        public string? FullName { get; }
+        public string? RuleName { get; }
         public int? RuleID { get; }
 
-        public ReadOnlyCollection<string> MethodNames { get; }
+        public ReadOnlyCollection<string>? MethodNames { get; }
 
         private ClassInfo(string name) => Name = name;
-        public ClassInfo(Type t, string ruleName = null, int? ruleID = null, bool loadMethodNames = false) {
+        public ClassInfo(Type t, string? ruleName = null, int? ruleID = null, bool loadMethodNames = false) {
             if (t is null) { throw new ArgumentNullException(nameof(t)); }
 
             Name = t.Name;
@@ -37,7 +37,7 @@ namespace ParseTreeVisualizer {
                 t.IfAttribute<GeneratedCodeAttribute>(attr => Antlr = attr.Version);
             }
             FullName = t.FullName;
-            if (!ruleName.IsNullOrWhitespace()) { RuleName = ruleName; }
+            RuleName = ruleName.IsNullOrWhitespace() ? null : ruleName;
             RuleID = ruleID;
 
             if (loadMethodNames) {

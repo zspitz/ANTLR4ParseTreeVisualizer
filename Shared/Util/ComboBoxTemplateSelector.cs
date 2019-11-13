@@ -10,12 +10,12 @@ using System.Windows.Media;
 namespace ParseTreeVisualizer.Util {
     // https://stackoverflow.com/a/33421573/111794
     public class ComboBoxTemplateSelector : DataTemplateSelector {
-        public DataTemplate SelectedItemTemplate { get; set; }
-        public DataTemplateSelector SelectedItemTemplateSelector { get; set; }
-        public DataTemplate DropdownItemsTemplate { get; set; }
-        public DataTemplateSelector DropdownItemsTemplateSelector { get; set; }
+        public DataTemplate? SelectedItemTemplate { get; set; }
+        public DataTemplateSelector? SelectedItemTemplateSelector { get; set; }
+        public DataTemplate? DropdownItemsTemplate { get; set; }
+        public DataTemplateSelector? DropdownItemsTemplateSelector { get; set; }
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container) {
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container) {
             var itemToCheck = container;
 
             // Search up the visual tree, stopping at either a ComboBox or
