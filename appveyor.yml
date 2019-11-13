@@ -67,6 +67,9 @@ for:
       - appveyor_build_worker_image: Visual Studio 2017
 
   configuration: ReleaseCI2017
+  install:
+    - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
+    - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
   before_build:
     - cmd: dotnet restore 2017\2017.csproj
     - cmd: dotnet restore 2017.Standard\2017.Standard.csproj
