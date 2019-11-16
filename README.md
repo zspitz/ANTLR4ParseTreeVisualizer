@@ -56,7 +56,7 @@ If you are debugging .NET Core applications, you may also need to put an additio
 
   ![Visualizing a string](visualize-string.gif)
 
-> If you see an error message "Could not load this custom viewer", try turning Managed Compatibility off (**Tools** -> **Options...** -> **General** -> **Debugging**).
+> If you see an error message "Could not load this custom viewer", [try turning Managed Compatibility off](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/50) (**Tools** -> **Options...** -> **General** -> **Debugging**).
 
 ## Contributing
 
