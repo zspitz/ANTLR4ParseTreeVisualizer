@@ -29,11 +29,11 @@ before_build:
 build:
   project: CI.sln
 after_build:
-  - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime\bin\Debug\*
-  - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime.Standard\bin\Debug\*
+  - cmd: 7z a ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\Runtime\bin\Debug\*
+  - cmd: 7z a ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\Runtime.Standard\bin\Debug\*
 
 artifacts:
-  - path: ANTLRVisualizer.{version}.zip
+  - path: ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip
     name: ANTLRVisualizer
   
 deploy:
