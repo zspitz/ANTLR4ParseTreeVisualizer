@@ -30,7 +30,8 @@ build:
 after_build:
   - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime\bin\Debug\*
   - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime.Standard\bin\Debug\*
-artifact:
+
+artifacts:
   - path: ANTLRVisualizer.{version}.zip
     name: ANTLRVisualizer
   
