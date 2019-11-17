@@ -1,14 +1,5 @@
 version: 0.1.0.{build}
 
-environment:
-  matrix:
-  
-  - job_name: VS 2019 build
-    appveyor_build_worker_image: Visual Studio 2019
-    
-  - job_name: VS 2017 build
-    appveyor_build_worker_image: Visual Studio 2017
-
 init:
   - git config --global core.autocrlf false
 branches:
@@ -18,8 +9,8 @@ skip_tags:  true
 only_commits:
   files:
     - Shared/
-    - 2017/
-    - 2019/
+    - Runtime/
+    - Runtime.Standard/
     - appveyor.yml
 
 dotnet_csproj:
@@ -31,60 +22,22 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 
-matrix:
-  fast_finish: true
-
-for:
-- 
-  matrix:
-    only:
-      - appveyor_build_worker_image: Visual Studio 2019
-
-  configuration: ReleaseCI
-  before_build:
-  - cmd: dotnet restore 2019\2019.csproj
-  - cmd: dotnet restore 2019.Standard\2019.Standard.csproj
-  build:
-    project: CI.2019.sln
-  after_build:
-    - cmd: 7z a ANTLRVisualizer2019.zip %APPVEYOR_BUILD_FOLDER%\2019\bin\Debug\*
-    - cmd: 7z a ANTLRVisualizer2019.zip %APPVEYOR_BUILD_FOLDER%\2019.Standard\bin\Debug\*
-  artifacts:
-    - path: ANTLRVisualizer2019.zip
-      name: ANTLRVisualizer2019
-
-  deploy:
-    - provider: GitHub
-      description: ''
-      auth_token:
-        secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
-      artifact:
-        ANTLRVisualizer2019
-
-- 
-  matrix:
-    only:
-      - appveyor_build_worker_image: Visual Studio 2017
-
-  configuration: ReleaseCI2017
-  install:
-    - ps: Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-    - ps: '& $env:temp\dotnet-install.ps1 -Architecture x64 -Version "3.0.100" -InstallDir "$env:ProgramFiles\dotnet"'
-  before_build:
-    - cmd: dotnet restore 2017\2017.csproj
-    - cmd: dotnet restore 2017.Standard\2017.Standard.csproj
-  build:
-    project: CI.2017.sln
-  after_build:
-    - cmd: 7z a ANTLRVisualizer2017.zip %APPVEYOR_BUILD_FOLDER%\2017\bin\Debug\*
-    - cmd: 7z a ANTLRVisualizer2017.zip %APPVEYOR_BUILD_FOLDER%\2017.Standard\bin\Debug\*
-  artifacts:
-    - path: ANTLRVisualizer2017.zip
-      name: ANTLRVisualizer2017
-
-  deploy:
-    - provider: GitHub
-      description: ''
-      auth_token:
-        secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
-      artifact: ANTLRVisualizer2017
+before_build:
+  - cmd: dotnet restore Runtime\Runtime.csproj
+  - cmd: dotnet restore Runtime.Standard\Runtime.Standard.csproj
+build:
+  project: CI.sln
+after_build:
+  - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime\bin\Debug\*
+  - cmd: 7z a ANTLRVisualizer.{version}.zip %APPVEYOR_BUILD_FOLDER%\Runtime.Standard\bin\Debug\*
+artifact:
+  - path: ANTLRVisualizer.{version}.zip
+    name: ANTLRVisualizer
+  
+deploy:
+  - provider: GitHub
+    description: ''
+    auth_token:
+      secure: aJaTRXIa+zc+SOGdNPKTH+znUun60Jh5b5pdjzLslhnoKk4vh1eoqO/vnGcDEwig
+    artifact:
+      ANTLRVisualizer

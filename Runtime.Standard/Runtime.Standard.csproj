@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}</ProjectGuid>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
-    <AssemblyName>Antlr4.Runtime.ParseTreeVisualizer.2019</AssemblyName>
+    <AssemblyName>Antlr4.Runtime.Standard.ParseTreeVisualizer</AssemblyName>
     <TargetFrameworks>net472</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -16,17 +15,16 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <DefineConstants>TRACE;ANTLR_RUNTIME</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>false</Optimize>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseCI|AnyCPU'">
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.6">
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Costura.Fody" Version="4.1.0" />
@@ -52,8 +50,5 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
   </ItemGroup>
 </Project>

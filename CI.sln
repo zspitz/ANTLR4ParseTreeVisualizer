@@ -3,19 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2019", "2019\2019.csproj", "{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{5F6D90BE-661E-4EED-BA7D-7ADCE968C72F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2019.Standard", "2019.Standard\2019.Standard.csproj", "{EAD14068-AED2-40C7-B297-C6EF6518002D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime", "Runtime\Runtime.csproj", "{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runtime.Standard", "Runtime.Standard\Runtime.Standard.csproj", "{5876759E-3E05-40BA-BBA4-3750C9AE2A4F}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{5f6d90be-661e-4eed-ba7d-7adce968c72f}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFDED9CF-6E6D-461B-B996-3E2F364DD3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAD14068-AED2-40C7-B297-C6EF6518002D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAD14068-AED2-40C7-B297-C6EF6518002D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5876759E-3E05-40BA-BBA4-3750C9AE2A4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5876759E-3E05-40BA-BBA4-3750C9AE2A4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
