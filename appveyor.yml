@@ -1,4 +1,5 @@
 version: 0.1.0.{build}
+image: Visual Studio 2019
 
 init:
   - git config --global core.autocrlf false
