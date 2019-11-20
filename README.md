@@ -41,7 +41,7 @@
 
     You don't have to restart VS, just make sure VS is not currently in a debugging session
 
-You can also compile the source yourself (`2019.sln` or `2017.sln`) and place the output DLLs in one of the visualizer folders.
+You can also compile the source yourself (`CI.sln`) and place the output DLLs in one of the visualizer folders.
 
 If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where you installed the visualizer.
 
