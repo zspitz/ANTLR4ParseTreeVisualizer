@@ -28,13 +28,12 @@
 
 ## Requirements
 
-* Visual Studio 2017 or 2019  
-  (This is not a hard dependency; the visualizer can probably be compiled against an older version of Microsoft.VisualStudio.DebuggerVisualizers.dll and used with the relevant VS version.)
+* Tested with Visual Studio 2019 or 2017 (may work with older versions as well)  
 * Supports the current Antlr.Runtime.Standard.DLL (4.7.2) as well as the older Antlr.Runtime.DLL (4.6.6).
 
 ## Installation
 
-1. Download the ZIP file matching your version of Visual Studio (2019 or 2017) from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. You may need to [unblock the ZIP file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
+1. Download the ZIP file from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. You may need to [unblock the file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
 2. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders:
 
     * _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
