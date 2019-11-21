@@ -66,7 +66,7 @@ namespace ParseTreeVisualizer.Util {
         };
 
         public static string FriendlyName(this Type type) {
-            if (type.IsClosureClass()) { return "<closure>" ; }
+            if (type.IsClosureClass()) { return "<closure>"; }
 
             if (type.IsAnonymous()) {
                 return "{ " + type.GetProperties().Joined(", ", p => {
@@ -131,5 +131,6 @@ namespace ParseTreeVisualizer.Util {
 
         public static bool InheritsFromOrImplementsAny(this Type type, IEnumerable<Type> types) => types.Any(t => t.IsAssignableFrom(type));
         public static bool InheritsFromOrImplementsAny(this Type type, params Type[] types) => types.Any(t => t.IsAssignableFrom(type));
+        public static T CreateInstance<T>(this Type type, object[]? args = null) => (T)Activator.CreateInstance(type, args);
     }
 }

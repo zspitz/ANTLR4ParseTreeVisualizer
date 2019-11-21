@@ -33,8 +33,8 @@ namespace ParseTreeVisualizer {
             Config = config;
 
             Type[] types;
-            T createInstance<T>(string typename, object[]? args = null) =>
-                (T)Activator.CreateInstance(types.Single(x => x.FullName == typename), args);
+            T createInstance<T>(string typename, object[]? args = null) => 
+                types.Single(x => x.FullName == typename).CreateInstance<T>(args);
 
             {
                 var baseTypes = new[] { typeof(Parser), typeof(Lexer) };
