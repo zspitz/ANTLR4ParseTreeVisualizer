@@ -13,11 +13,11 @@ namespace ParseTreeVisualizer.Util {
 
         public static void Add<T1, T2>(this List<(T1, T2)> lst, T1 item1, T2 item2) => lst.Add((item1, item2));
 
-        public static IEnumerable<TResult> SelectT<T1, T2, TResult>(this IEnumerable<(T1, T2)> src, Func<T1, T2, TResult> selector) =>
+        public static IEnumerable<TResult> SelectT<T1, T2, TResult>(this IEnumerable<ValueTuple<T1, T2>> src, Func<T1, T2, TResult> selector) =>
             src.Select(x => selector(x.Item1, x.Item2));
-        public static IEnumerable<TResult> SelectT<T1, T2, T3, TResult>(this IEnumerable<(T1, T2, T3)> src, Func<T1, T2, T3, TResult> selector) =>
+        public static IEnumerable<TResult> SelectT<T1, T2, T3, TResult>(this IEnumerable<ValueTuple<T1, T2, T3>> src, Func<T1, T2, T3, TResult> selector) =>
             src.Select(x => selector(x.Item1, x.Item2));
-        public static IEnumerable<TResult> SelectT<T1, T2, , T3, T4, TResult>(this IEnumerable<(T1, T2, T3, T4)> src, Func<T1, T2, T3, T4, TResult> selector) =>
+        public static IEnumerable<TResult> SelectT<T1, T2, , T3, T4, TResult>(this IEnumerable<ValueTuple<T1, T2, T3, T4>> src, Func<T1, T2, T3, T4, TResult> selector) =>
             src.Select(x => selector(x.Item1, x.Item2, x.Item3, x.Item4));
     }
 }
