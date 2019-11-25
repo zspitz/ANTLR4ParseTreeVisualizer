@@ -16,7 +16,10 @@ namespace ParseTreeVisualizer.Tests {
         MsgBox ""hello from path 2""
     End If
     Debug.Print ""still in path 1""
-End Sub"
+End Sub",
+                    @"Public Sub DoSomething()
+    Debug.Print ""hi from path 1""
+    If True Then"
                 };
             lexerType = typeof(VBALexer);
             parserType = typeof(VBAParser);

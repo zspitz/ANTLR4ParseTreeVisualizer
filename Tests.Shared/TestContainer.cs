@@ -40,7 +40,7 @@ namespace ParseTreeVisualizer.Tests {
 
         [Theory]
         [MemberData(nameof(GetTargetsConfigs))]
-        public void ConstructVisualizerData_(object target, Config config) {
+        public void ConstructVisualizerData(object target, Config config) {
             var vd = new VisualizerData(target, config);
         }
 
