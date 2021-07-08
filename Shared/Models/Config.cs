@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 using ParseTreeVisualizer.Util;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace ParseTreeVisualizer {
     [Serializable]

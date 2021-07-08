@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 [assembly: DebuggerVisualizer(
     visualizer: typeof(ParseTreeVisualizer.Visualizer),
@@ -33,4 +28,4 @@ using System.Threading.Tasks;
     Description = "ANTLR4 Parse Tree Visualizer")]
 #else
     Description = "ANTLR4 Parse Tree Visualizer (Standard)")]
-#endif 
+#endif

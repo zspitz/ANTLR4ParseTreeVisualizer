@@ -50,11 +50,6 @@ namespace ParseTreeVisualizer {
 
                 source.LostFocus += (s1, e1) => e1.Handled = true;
                 source.Focus();
-                source.SelectionChanged += (s1, e1) => {
-                    if (data == null) { return; }
-                    data.SourceSelectionLength = source.SelectionLength;
-                    data.SourceSelectionStart = source.SelectionStart;
-                };
                 source.SelectAll();
             };
 

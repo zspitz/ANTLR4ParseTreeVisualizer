@@ -1,13 +1,8 @@
 ﻿using ParseTreeVisualizer.Util;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.NotifyCollectionChangedAction;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {
@@ -62,6 +57,8 @@ namespace ParseTreeVisualizer {
                     Root.IsExpanded = true;
                 }
             }
+
+            ChangeSelection = new RelayCommand(sender => updateSelection(sender));
         }
 
         private bool inUpdateSelection;
@@ -137,14 +134,6 @@ namespace ParseTreeVisualizer {
 
         // TOOD move filtering to here
 
-        private RelayCommand? changeSelection;
-        public RelayCommand ChangeSelection {
-            get {
-                if (changeSelection == null) {
-                    changeSelection = new RelayCommand(sender => updateSelection(sender));
-                }
-                return changeSelection;
-            }
-        }
+        public RelayCommand ChangeSelection { get; }
     }
 }

@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using static System.Windows.Media.Brushes;
 using static System.Windows.DependencyProperty;
-using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows;
-using System.Collections;
 
 namespace ParseTreeVisualizer.Util {
     public abstract class ReadOnlyConverterBase : IValueConverter {

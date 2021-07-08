@@ -45,7 +45,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\ICollectionT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IEnumerableTuple.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\INotifyPropertyChanged.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\IParseTree.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\MemberInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\Extensions\MultiSelector.cs" />

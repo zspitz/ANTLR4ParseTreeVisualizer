@@ -1,5 +1,4 @@
 ﻿using ParseTreeVisualizer.Util;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
