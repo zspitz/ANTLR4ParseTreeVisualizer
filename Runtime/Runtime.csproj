@@ -4,7 +4,7 @@
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
     <AssemblyName>Antlr4.Runtime.ParseTreeVisualizer</AssemblyName>
     <TargetFrameworks>net472</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyTitle>ANTLR4 Parse Tree Visualizer</AssemblyTitle>
     <Product>ANTLR4 Parse Tree Visualizer</Product>
