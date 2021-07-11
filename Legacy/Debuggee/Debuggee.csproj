@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>ParseTreeVisualizer.Debuggee</RootNamespace>
+    <AssemblyName>ParseTreeVisualizer.Legacy.Debuggee</AssemblyName>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <DefineConstants>VISUALIZER_DEBUGGEE;ANTLR_LEGACY</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZSpitz.Util" Version="0.1.112" />
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Import Project="..\..\Debuggee\Debuggee.projitems" Label="Shared" />
+  <Import Project="..\..\Serialization\Serialization.projitems" Label="Shared" />
+
+  <Target Name="CopyPackageAssembliesToSubFolder" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Condition=" '%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' " Update="%(ReferenceCopyLocalPaths)" DestinationSubDirectory="ParseTreeVisualizer.Legacy\" />
+    </ItemGroup>
+  </Target>
+</Project>
