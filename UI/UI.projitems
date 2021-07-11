@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e2b06997-76f1-48de-abe6-cf90427423bb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>UI</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ParserRuleDisplayNameSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConfigViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ParseTreeNodeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenTypeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerDataViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs">
+      <DependentUpon>VisualizerControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

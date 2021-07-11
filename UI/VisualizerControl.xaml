@@ -1,0 +1,268 @@
+﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:my="clr-namespace:ParseTreeVisualizer" xmlns:my1="clr-namespace:ParseTreeVisualizer.Util" 
+           xmlns:ag="clr-namespace:WpfAutoGrid"
+           xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
+    <FrameworkElement.Resources>
+
+        <my1:RootConverter x:Key="RootConverter" />
+        <my1:NullConverter x:Key="NullConverter" />
+        <my1:ErrorColorConverter x:Key="ErrorColorConverter" />
+        <my1:NodeForegroundConverter x:Key="NodeForegroundConverter" />
+        <my1:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
+        <my1:NonEmptyListConverter x:Key="NonEmptyListConverter" />
+        <my1:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
+        <my1:NonNullVisibilityConverter x:Key="NonNullVisibilityConverter" />
+
+        <Style TargetType="DataGrid">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="DockPanel.Dock" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextTrimmedTextbox">
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="ToolTip" Value="{Binding Text,RelativeSource={RelativeSource Self}}" />
+        </Style>
+
+        <my1:ComboBoxTemplateSelector x:Key="ComboBoxTemplateSelector">
+            <my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Namespace, Mode=OneWay}" Foreground="DarkGray" />
+                        <TextBlock Text="{Binding Assembly, Mode=OneWay}" Foreground="DarkGray" />
+                    </StackPanel>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.DropdownItemsTemplate>
+            <my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold">
+                        <TextBlock.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Namespace, Mode=OneWay}" Foreground="DarkGray" />
+                                <TextBlock Text="{Binding Assembly, Mode=OneWay}" Foreground="DarkGray" />
+                            </StackPanel>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                </DataTemplate>
+            </my1:ComboBoxTemplateSelector.SelectedItemTemplate>
+        </my1:ComboBoxTemplateSelector>
+    </FrameworkElement.Resources>
+
+    <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
+        <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
+        <Grid>
+            <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource NonNullVisibilityConverter}}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItems, ElementName=tokens }" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </DataGrid>
+            <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tokens. Choose the lexer class from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=tokens,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+        </Grid>
+    </DockPanel>
+
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+        <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
+        <my:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart}" BindableSelectionLength="{Binding SourceSelectionLength}" TextWrapping="Wrap">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </my:BindableSelectionTextBox>
+    </DockPanel>
+
+    <Grid DockPanel.Dock="Right" Margin="12,0,0,0">
+        <DockPanel >
+            <TextBlock Text="Properties:" Style="{StaticResource LabelStyle}"/>
+            <DataGrid Name="properties" ItemsSource="{Binding SelectedItem.Model.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" Width="150" ElementStyle="{StaticResource TextTrimmedTextbox}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                                <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <Button Name="configButton" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0">
+            <StackPanel>
+                <TextBlock Text="&#9881;" />
+                <Popup Name="configPopup" AllowsTransparency="True" Placement="Custom" PlacementTarget="{Binding ElementName=configButton}" StaysOpen="False" DataContext="{x:Null}">
+                    <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="12">
+                        <ag:AutoGrid RowCount="4" ColumnCount="5" Orientation="Vertical">
+
+                            <Grid.Resources>
+                                <Style x:Key="GroupingLabel" TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Margin" Value="0,0,0,15" />
+                                </Style>
+                                <Style TargetType="CheckBox">
+                                    <Setter Property="Margin" Value="0,0,0,9" />
+                                </Style>
+                                <Style TargetType="Border" x:Key="SectionBorder">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="BorderBrush" Value="Black" />
+                                    <Setter Property="Width" Value="1" />
+                                    <Setter Property="Grid.RowSpan" Value="3"/>
+                                    <Setter Property="BorderThickness" Value="1,0,0,0" />
+                                    <Setter Property="Margin" Value="12,0,12,0" />
+                                </Style>
+                            </Grid.Resources>
+
+                            <TextBlock Text="General" Style="{StaticResource GroupingLabel}" />
+                            
+                            <StackPanel Grid.RowSpan="2">
+                                <TextBlock Text="Selected lexer class" />
+                                <ComboBox ItemsSource="{Binding AvailableLexers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedLexerName}" IsEnabled="{Binding CanSelectLexer}" />
+
+                                <TextBlock Text="Selected parser class" />
+                                <ComboBox Name="cmbAvailableParsers" ItemsSource="{Binding AvailableParsers}" SelectedValuePath="FullName" ItemTemplateSelector="{StaticResource ComboBoxTemplateSelector}" SelectedValue="{Binding Model.SelectedParserName}" IsEnabled="{Binding CanSelectParser}" />
+
+                                <TextBlock Text="Selected parser rule" />
+                                <ComboBox ItemsSource="{Binding SelectedItem.MethodNames, ElementName=cmbAvailableParsers}" SelectedItem="{Binding Model.ParseTokensWithRule}" IsEnabled="{Binding CanSelectParser}" />
+                            </StackPanel>
+
+                            <TextBlock Grid.ColumnSpan="5" HorizontalAlignment="Left" Margin="0,6,0,0" Foreground="DarkGray">
+                                <Run Text="{Binding Version, Mode=OneWay, StringFormat='Version: {0}'}" />
+                                /
+                                <Run Text="{Binding Filename, Mode=OneWay}" />
+                                <TextBlock.ToolTip>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Version, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding Location, Mode=OneWay}" />
+                                    </StackPanel>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Border Style="{StaticResource SectionBorder}" />
+
+                            <TextBlock Text="Token list" Style="{StaticResource GroupingLabel}" />
+
+                            <StackPanel>
+                                <CheckBox IsChecked="{Binding Model.ShowTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowErrorTokens}">Show errors</CheckBox>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Filter token types:" />
+                                <ListBox Name="lbSelectedTokenTypes" MaxHeight="200" SelectedValuePath="Index" SelectionMode="Multiple" ItemsSource="{Binding TokenTypes}" Margin="0,3,0,0">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="DarkGray">
+                                                <Run Text="{Binding Text, Mode=OneWay}" Foreground="Black" />
+                                                <Run Text="{Binding Index, Mode=OneWay, StringFormat=({0})}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+
+                            <Border Style="{StaticResource SectionBorder}" />
+
+                            <TextBlock Text="Parse tree" Style="{StaticResource GroupingLabel}" Grid.Column="4" Grid.Row="0" />
+
+                            <StackPanel>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeTextTokens}">Show text tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeWhitespaceTokens}">Show .NET whitespace tokens</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowTreeErrorTokens}">Show errors</CheckBox>
+                                <CheckBox IsChecked="{Binding Model.ShowRuleContextNodes}">Show rule contexts</CheckBox>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Filter rule contexts:" />
+                                <ListBox Name="lbSelectedRuleContexts" MaxHeight="200" SelectionMode="Multiple" Width="300" Margin="0,3,0,0" ItemsSource="{Binding RuleContexts}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="DarkGray">
+                                                <Run Text="{Binding Model.RuleName, Mode=OneWay}" Foreground="Black" />
+                                                <Run Text="{Binding Model.RuleID, Mode=OneWay, StringFormat=({0})}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+
+                        </ag:AutoGrid>
+                        
+                    </Border>
+                </Popup>
+            </StackPanel>
+        </Button>
+
+    </Grid>
+
+    <TextBlock Text="Parse tree view:" Style="{StaticResource LabelStyle}" />
+    <Grid>
+        <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200" Visibility="{Binding Root, Converter={StaticResource NonNullVisibilityConverter}}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
+                    <TextBlock Text="{Binding Model.Caption}" FontWeight="{Binding Model.NodeType, Converter={StaticResource NodeFontWeightConverter}}">
+                        <TextBlock.Foreground>
+                            <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
+                                <Binding Path="Model.NodeType" />
+                                <Binding Path="Model.FilterState" />
+                            </MultiBinding>
+                        </TextBlock.Foreground>
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Scope to this" Click="SetRootNode" />
+                                <MenuItem Header="Scope to this in new window/" Click="OpenRootNewWindow" />
+                                <MenuItem Header="Copy watch expression" Click="CopyWatchExpression" />
+                                <MenuItem Header="Expand recursively" Click="ExpandAll" />
+                                <MenuItem Header="Collapse recursively" Click="CollapseAll" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Resources>
+                        <Style TargetType="ItemsPresenter">
+                            <Setter Property="Margin" Value="-6,0,0,0" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectedItemChanged">
+                    <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItem, ElementName=treeview }" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </TreeView>
+        <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tree nodes. Choose the lexer class, the parser class, and the parse method from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=treeview,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+    </Grid>
+
+</DockPanel>

@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debuggee", "Legacy\Debuggee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debuggee", "Standard\Debuggee\Debuggee.csproj", "{AE5A655C-C17C-4FBB-BE45-13E49A5C7BC8}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UI", "UI\UI.shproj", "{E2B06997-76F1-48DE-ABE6-CF90427423BB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Debuggee\Debuggee.projitems*{127b215f-f3f8-44df-a2d1-9aaf95b3f8f3}*SharedItemsImports = 13
@@ -27,6 +29,7 @@ Global
 		Serialization\Serialization.projitems*{305ba350-a048-4bbe-8b0b-f41bd4a5e2e5}*SharedItemsImports = 5
 		Debuggee\Debuggee.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
 		Serialization\Serialization.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
+		UI\UI.projitems*{e2b06997-76f1-48de-abe6-cf90427423bb}*SharedItemsImports = 13
 		Serialization\Serialization.projitems*{e3b0367b-3649-4b77-878a-85a8a11c4c09}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
