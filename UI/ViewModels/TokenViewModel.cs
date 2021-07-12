@@ -1,4 +1,5 @@
-﻿using ParseTreeVisualizer.Util;
+﻿using ZSpitz.Util.Wpf;
+using ParseTreeVisualizer.Serialization;
 
 namespace ParseTreeVisualizer {
     public class TokenViewModel : Selectable<Token> {

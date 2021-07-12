@@ -1,8 +1,10 @@
-﻿using ParseTreeVisualizer.Util;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ZSpitz.Util.Wpf;
+using ParseTreeVisualizer.Serialization;
+using ZSpitz.Util;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {
@@ -120,7 +122,7 @@ namespace ParseTreeVisualizer {
 
                 if (matcher(selectedNode)) {
                     while (true) {
-                        var nextChild = selectedNode.Children.OneOrDefault(matcher);
+                        var nextChild = selectedNode.Children.SingleOrDefaultExt(matcher);
                         if (nextChild is null) { break; }
                         selectedNode = nextChild;
                         selectedNode.IsExpanded = true;

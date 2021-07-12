@@ -1,16 +1,17 @@
-﻿using ParseTreeVisualizer.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using static System.IO.Path;
+using ZSpitz.Util.Wpf;
+using ParseTreeVisualizer.Serialization;
+using ZSpitz.Util;
 
 namespace ParseTreeVisualizer {
     public class ConfigViewModel : ViewModelBase<Config> {
-        readonly Config _originalValues;
         public ConfigViewModel(Config config, VisualizerData visualizerData) : 
-            this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers, visualizerData.CanSelectLexer, visualizerData.CanSelectParser) { }
+            this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers) { }
 
-        public ConfigViewModel(Config config, Dictionary<int, string>? tokenTypeMapping, List<ClassInfo>? ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers, bool canSelectLexer, bool canSelectParser) : base(config.Clone()) {
+        public ConfigViewModel(Config config, Dictionary<int, string>? tokenTypeMapping, List<ClassInfo>? ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers) : base(config.Clone()) {
             TokenTypes = tokenTypeMapping?.SelectKVP((index, text) => {
                 var ret = new TokenTypeViewModel(index, text) {
                     IsSelected = index.In(Model.SelectedTokenTypes)
@@ -37,11 +38,6 @@ namespace ParseTreeVisualizer {
 
             AvailableLexers = getVMList(lexers);
             AvailableParsers = getVMList(parsers);
-
-            CanSelectLexer = canSelectLexer;
-            CanSelectParser = canSelectParser;
-
-            _originalValues = config;
         }
 
         private ReadOnlyCollection<ClassInfo> getVMList(List<ClassInfo> models) {
@@ -58,29 +54,5 @@ namespace ParseTreeVisualizer {
         public string Version => GetType().Assembly.GetName().Version.ToString();
         public string Location => GetType().Assembly.Location;
         public string Filename => GetFileName(Location);
-
-        public bool IsDirty {
-            get {
-                var m = Model;
-                var o = _originalValues;
-                return
-                    o.SelectedParserName != m.SelectedParserName ||
-                    o.SelectedLexerName != m.SelectedLexerName ||
-                    o.ShowTextTokens != m.ShowTextTokens ||
-                    o.ShowErrorTokens != m.ShowErrorTokens ||
-                    o.ShowWhitespaceTokens != m.ShowWhitespaceTokens ||
-                    o.ShowTreeErrorTokens != m.ShowTreeErrorTokens ||
-                    o.ShowTreeTextTokens != m.ShowTreeTextTokens ||
-                    o.ShowTreeWhitespaceTokens != m.ShowTreeWhitespaceTokens ||
-                    o.ShowRuleContextNodes != m.ShowRuleContextNodes ||
-                    o.ParseTokensWithRule != m.ParseTokensWithRule ||
-
-                    !o.SelectedTokenTypes.SetEquals(m.SelectedTokenTypes) ||
-                    !o.SelectedRuleContexts.SetEquals(m.SelectedRuleContexts);
-            }
-        }
-
-        public bool CanSelectLexer { get; }
-        public bool CanSelectParser { get; }
     }
 }

@@ -9,20 +9,13 @@
     <Import_RootNamespace>UI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Converters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParserRuleDisplayNameSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConfigViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ParseTreeNodeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenTypeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerDataViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs">
-      <DependentUpon>VisualizerControl.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
+using ParseTreeVisualizer.Serialization;
 
 namespace ParseTreeVisualizer {
     public class ParserRuleDisplayNameSelector : DataTemplateSelector {

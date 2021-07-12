@@ -1,6 +1,8 @@
-﻿using ParseTreeVisualizer.Util;
+﻿using ParseTreeVisualizer.Serialization;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ZSpitz.Util;
+using ZSpitz.Util.Wpf;
 
 namespace ParseTreeVisualizer {
     public class ParseTreeNodeViewModel : Selectable<ParseTreeNode> {

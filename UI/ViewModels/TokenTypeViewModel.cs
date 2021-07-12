@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using ParseTreeVisualizer.Util;
-using static ParseTreeVisualizer.Util.Functions;
+﻿using System.Collections.Generic;
+using ZSpitz.Util.Wpf;
+using static ZSpitz.Util.Functions;
 
 namespace ParseTreeVisualizer {
     public class TokenTypeViewModel : Selectable<KeyValuePair<int,string>> {
@@ -11,6 +10,6 @@ namespace ParseTreeVisualizer {
         public TokenTypeViewModel(int index, string text): this(KVP(index,text)) { }
 
         public TokenTypeViewModel(KeyValuePair<int, string> tokenType) : base(tokenType) => 
-            (Index, Text) = tokenType;
+            (Index, Text) = (tokenType.Key, tokenType.Value);
     }
 }
