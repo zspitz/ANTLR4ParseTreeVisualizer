@@ -16,15 +16,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Standard", "Standard", "{C0
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Debuggee", "Debuggee\Debuggee.shproj", "{127B215F-F3F8-44DF-A2D1-9AAF95B3F8F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debuggee", "Legacy\Debuggee\Debuggee.csproj", "{305BA350-A048-4BBE-8B0B-F41BD4A5E2E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Debuggee", "Legacy\Debuggee\Legacy.Debuggee.csproj", "{305BA350-A048-4BBE-8B0B-F41BD4A5E2E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debuggee", "Standard\Debuggee\Debuggee.csproj", "{AE5A655C-C17C-4FBB-BE45-13E49A5C7BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Debuggee", "Standard\Debuggee\Standard.Debuggee.csproj", "{AE5A655C-C17C-4FBB-BE45-13E49A5C7BC8}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UI", "UI\UI.shproj", "{E2B06997-76F1-48DE-ABE6-CF90427423BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debugger", "Legacy\Debugger\Debugger.csproj", "{1E333B8D-7EE1-479B-AAE0-20A6744A03C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Debugger", "Legacy\Debugger\Legacy.Debugger.csproj", "{1E333B8D-7EE1-479B-AAE0-20A6744A03C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Debugger", "Standard\Debugger\Debugger.csproj", "{74F8A769-77D2-4889-BB81-2FF397C220B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Debugger", "Standard\Debugger\Standard.Debugger.csproj", "{74F8A769-77D2-4889-BB81-2FF397C220B9}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
