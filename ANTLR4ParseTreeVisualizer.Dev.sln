@@ -26,9 +26,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Debugger", "Legacy\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Debugger", "Standard\Debugger\Standard.Debugger.csproj", "{74F8A769-77D2-4889-BB81-2FF397C220B9}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Visualizer", "Visualizer\Visualizer.shproj", "{3C553FFD-FA4E-4EAB-AD03-9534C7CB8F3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_visualizerTest", "_visualizerTest\_visualizerTest.csproj", "{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Debuggee\Debuggee.projitems*{127b215f-f3f8-44df-a2d1-9aaf95b3f8f3}*SharedItemsImports = 13
+		Visualizer\Visualizer.projitems*{3c553ffd-fa4e-4eab-ad03-9534c7cb8f3e}*SharedItemsImports = 13
 		Debuggee\Debuggee.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
 		Serialization\Serialization.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
 		UI\UI.projitems*{e2b06997-76f1-48de-abe6-cf90427423bb}*SharedItemsImports = 13
@@ -55,6 +60,10 @@ Global
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D2CC07-B4FA-4CAE-8A90-2B3081B5B9A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,17 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using static System.IO.Path;
 using ZSpitz.Util.Wpf;
 using ParseTreeVisualizer.Serialization;
 using ZSpitz.Util;
 
 namespace ParseTreeVisualizer {
     public class ConfigViewModel : ViewModelBase<Config> {
-        public ConfigViewModel(Config config, VisualizerData visualizerData) : 
-            this(config, visualizerData.TokenTypeMapping, visualizerData.UsedRuleContexts, visualizerData.AvailableLexers, visualizerData.AvailableParsers) { }
+        public ConfigViewModel(VisualizerData vd) : 
+            this(vd.Config, vd.TokenTypeMapping, vd.UsedRuleContexts, vd.AvailableLexers, vd.AvailableParsers, vd.CanSelectLexer, vd.CanSelectParser) { }
 
-        public ConfigViewModel(Config config, Dictionary<int, string>? tokenTypeMapping, List<ClassInfo>? ruleContexts, List<ClassInfo> lexers, List<ClassInfo> parsers) : base(config.Clone()) {
+        public ConfigViewModel(
+                    Config config, 
+                    Dictionary<int, string>? tokenTypeMapping, 
+                    List<ClassInfo>? ruleContexts, 
+                    List<ClassInfo> lexers, 
+                    List<ClassInfo> parsers,
+                    bool canSelectLexer,
+                    bool canSelectParser
+                ) : base(config) {
+
             TokenTypes = tokenTypeMapping?.SelectKVP((index, text) => {
                 var ret = new TokenTypeViewModel(index, text) {
                     IsSelected = index.In(Model.SelectedTokenTypes)
@@ -38,6 +46,8 @@ namespace ParseTreeVisualizer {
 
             AvailableLexers = getVMList(lexers);
             AvailableParsers = getVMList(parsers);
+            CanSelectLexer = canSelectLexer;
+            CanSelectParser = canSelectParser;
         }
 
         private ReadOnlyCollection<ClassInfo> getVMList(List<ClassInfo> models) {
@@ -51,8 +61,7 @@ namespace ParseTreeVisualizer {
         public ReadOnlyCollection<ClassInfo> AvailableParsers { get; }
         public ReadOnlyCollection<ClassInfo> AvailableLexers { get; }
 
-        public string Version => GetType().Assembly.GetName().Version.ToString();
-        public string Location => GetType().Assembly.Location;
-        public string Filename => GetFileName(Location);
+        public bool CanSelectLexer { get; private set; }
+        public bool CanSelectParser { get; private set; }
     }
 }

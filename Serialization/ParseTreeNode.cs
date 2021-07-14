@@ -13,12 +13,12 @@ namespace ParseTreeVisualizer.Serialization {
                 throw new ArgumentNullException(nameof(actualRoot)) :
                 new("(parent nodes)", TreeNodeType.Placeholder, new List<ParseTreeNode> { actualRoot }, actualRoot.CharSpan);
 
-        public string? Caption { get; private set; }
+        public string? Caption { get; }
         public List<PropertyValue>? Properties { get; }
-        public List<ParseTreeNode> Children { get; private set; }
+        public List<ParseTreeNode> Children { get; }
         public (int startTokenIndex, int endTokenIndex) TokenSpan { get; }
-        public (int startChar, int endChar) CharSpan { get; private set; }
-        public TreeNodeType? NodeType { get; private set; }
+        public (int startChar, int endChar) CharSpan { get; }
+        public TreeNodeType? NodeType { get; }
         public FilterStates? FilterState { get; }
         public string? Path { get; }
 

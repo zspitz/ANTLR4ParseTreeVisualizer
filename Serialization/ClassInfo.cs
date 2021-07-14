@@ -15,7 +15,7 @@ namespace ParseTreeVisualizer.Serialization {
         public string Name { get; }
         public string? Namespace { get; }
         public string? Assembly { get; }
-        public string? Antlr { get; private set; } // Runtime - in Antlr.Runtime, <number> - version
+        public string? Antlr { get; } // Runtime - in Antlr.Runtime, <number> - version
         public string? FullName { get; }
         public string? RuleName { get; }
         public int? RuleID { get; }
@@ -31,7 +31,7 @@ namespace ParseTreeVisualizer.Serialization {
             Assembly = t.Assembly.Location;
             if (t.Assembly == typeof(IParseTree).Assembly) {
                 Antlr = "Runtime";
-            } else if (t.GetCustomAttribute<GeneratedCodeAttribute>() is var attr) {
+            } else if (t.GetCustomAttribute<GeneratedCodeAttribute>() is GeneratedCodeAttribute attr) {
                 Antlr = attr.Version;
             }
             FullName = t.FullName;

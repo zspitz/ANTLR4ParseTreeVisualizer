@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZSpitz.Util" Version="0.1.112" />
-    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.112" />
+    <PackageReference Include="ZSpitz.Util" Version="0.1.113" />
+    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.113" />
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.DebuggerVisualizers.dll</HintPath>
@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <Import Project="..\..\UI\UI.projitems" Label="UI" />
+  <Import Project="..\..\Visualizer\Visualizer.projitems" Label="UI" />
 
   <Target Name="CopyPackageAssembliesToSubFolder" AfterTargets="ResolveReferences">
     <ItemGroup>

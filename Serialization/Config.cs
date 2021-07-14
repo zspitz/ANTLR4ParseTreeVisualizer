@@ -1,4 +1,6 @@
-﻿using Periscope.Debuggee;
+﻿#if VISUALIZER_DEBUGGEE
+using Periscope.Debuggee;
+#endif
 using System;
 using System.Collections.Generic;
 using ZSpitz.Util;
@@ -6,7 +8,7 @@ using ZSpitz.Util;
 namespace ParseTreeVisualizer.Serialization {
     [Serializable]
 #if VISUALIZER_DEBUGGEE
-    public class Config : Periscope.Debuggee.ConfigBase<Config> {
+    public class Config : ConfigBase<Config> {
 #else
     public class Config {
 #endif

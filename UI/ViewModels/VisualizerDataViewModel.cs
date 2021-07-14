@@ -5,6 +5,7 @@ using System.Linq;
 using ZSpitz.Util.Wpf;
 using ParseTreeVisualizer.Serialization;
 using ZSpitz.Util;
+using System.Windows.Input;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {
@@ -31,8 +32,11 @@ namespace ParseTreeVisualizer {
         public ParseTreeNodeViewModel? Root { get; }
         public ReadOnlyCollection<TokenViewModel>? Tokens { get; }
 
-        public VisualizerDataViewModel(VisualizerData visualizerData) : base(visualizerData) {
-            Root = ParseTreeNodeViewModel.Create(visualizerData.Root);
+        public VisualizerDataViewModel(VisualizerData visualizerData, ICommand? openInNewWindow, RelayCommand? copyWatchExpression, RelayCommand? setAsRootNode) : base(visualizerData) {
+            if (visualizerData.Root is not null) {
+                Root = new ParseTreeNodeViewModel(visualizerData.Root, openInNewWindow, copyWatchExpression, setAsRootNode);
+            }
+
             Tokens = visualizerData.Tokens?.OrderBy(x => x.Index).Select(x => {
                 var vm = new TokenViewModel(x);
                 vm.PropertyChanged += (s, e) => {

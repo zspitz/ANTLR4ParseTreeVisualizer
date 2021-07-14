@@ -28,11 +28,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Periscope\VisualizerWindowChrome.xaml.cs">
       <DependentUpon>VisualizerWindowChrome.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SettingsControl.xaml.cs">
+      <DependentUpon>SettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConfigViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ParseTreeNodeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenTypeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TokenViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\VisualizerDataViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml.cs">
+      <DependentUpon>VisualizerControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Periscope\.gitignore" />
@@ -45,6 +51,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Periscope\VisualizerWindowChrome.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)SettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)VisualizerControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

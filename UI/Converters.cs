@@ -58,16 +58,4 @@ namespace ParseTreeVisualizer {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) => 
             values.OfType<IEnumerable<object>>().FirstOrDefault(x => x != null && x.Any());
     }
-
-    [Obsolete("Use VisibilityConverter with MatchValue set to Visibility.Visible and Invert set to true")]
-    public class InvertVisibilityConverter : ReadOnlyConverterBase {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            ((Visibility)value) == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-    }
-
-    [Obsolete("Use VisibilityConverter with MatchValue set to null and Invert set to true")]
-    public class NonNullVisibilityConverter : ReadOnlyConverterBase {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value is null ? Visibility.Hidden : Visibility.Visible;
-    }
 }
