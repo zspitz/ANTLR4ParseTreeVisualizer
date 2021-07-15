@@ -9,15 +9,44 @@
     <Import_RootNamespace>Visualizer</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\ConfigContractResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\ConfigProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\ExpressionRootPrompt.xaml.cs">
+      <DependentUpon>ExpressionRootPrompt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\GithubProjectInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\IProjectInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\KeyedConfigPropertyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\NullableAttributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\Persistence.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\Visualizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\VisualizerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\VisualizerWindowBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope\VisualizerWindowChrome.xaml.cs">
+      <DependentUpon>VisualizerWindowChrome.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Visualizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualizerWindow.xaml.cs">
       <DependentUpon>VisualizerWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Periscope\ExpressionRootPrompt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Periscope\VisualizerWindowChrome.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)VisualizerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Periscope\.gitignore" />
+    <None Include="$(MSBuildThisFileDirectory)Periscope\LICENSE" />
+    <None Include="$(MSBuildThisFileDirectory)Periscope\README.md" />
   </ItemGroup>
 </Project>

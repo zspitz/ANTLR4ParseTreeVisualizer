@@ -1,14 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
-    <AssemblyName>ParseTreeVisualizer.UI</AssemblyName>
+    <AssemblyName>ParseTreeVisualizer.UI.Legacy</AssemblyName>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>ANTLR_LEGACY</DefineConstants>
     <UseWPF>true</UseWPF>
+
+    <Version>1.0.0</Version>
+    <Title>ANTLR4 ParseTree Visualizer UI (Legacy)</Title>
+    <Authors>Zev Spitz</Authors>
+    <Description>UI components for visualizing ANTLR tokens and parse trees</Description>
+    <Copyright>Copyright (c) 2021 Zev Spitz</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/zspitz/ANTLR4ParseTreeVisualizer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zspitz/ANTLR4ParseTreeVisualizer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>.net csharp antlr4</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

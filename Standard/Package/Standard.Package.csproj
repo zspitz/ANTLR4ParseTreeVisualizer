@@ -1,16 +1,38 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
-    <AssemblyName>ParseTreeVisualizer.UI</AssemblyName>
+    <AssemblyName>ParseTreeVisualizer.UI.Standard</AssemblyName>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <DefineConstants>ANTLR_LEGACY</DefineConstants>
     <UseWPF>true</UseWPF>
+
+    <Version>1.0.0</Version>
+    <Title>ANTLR4 ParseTree Visualizer UI (Standard)</Title>
+    <Authors>Zev Spitz</Authors>
+    <Description>UI components for visualizing ANTLR tokens and parse trees</Description>
+    <Copyright>Copyright (c) 2021 Zev Spitz</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/zspitz/ANTLR4ParseTreeVisualizer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zspitz/ANTLR4ParseTreeVisualizer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>.net csharp antlr4</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  
-  
+
+  <ItemGroup>
+    <PackageReference Include="ZSpitz.Util" Version="0.1.113" />
+    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.113" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+  </ItemGroup>
+
+  <Import Project="..\..\Serialization\Serialization.projitems" Label="Serialization" />
+  <Import Project="..\..\UI\UI.projitems" Label="UI" />
 
 </Project>

@@ -6,7 +6,7 @@ using ZSpitz.Util.Wpf;
 using ParseTreeVisualizer.Serialization;
 using ZSpitz.Util;
 using System.Windows.Input;
-using System.Collections.Generic;
+using ParseTreeVisualizer.UI;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {

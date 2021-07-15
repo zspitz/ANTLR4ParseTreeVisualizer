@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using ZSpitz.Util.Wpf;
 
-namespace ParseTreeVisualizer {
+namespace ParseTreeVisualizer.UI {
     public static class Extensions {
         public static (int start, int end)? SelectionCharSpan(this IEnumerable<Selectable<Token>> tokens) {
             int? startChar = null;
