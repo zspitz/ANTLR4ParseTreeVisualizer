@@ -33,18 +33,30 @@
 
 ## Installation
 
-1. Download the ZIP file from the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. You may need to [unblock the file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
-2. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders:
+Before installing, you need to determine two things:
+
+1. There are two .NET variants of the ANTLR4 runtime library: the "standard" version -- [Antlr4.Runtime.Standard](https://www.nuget.org/packages/Antlr4.Runtime.Standard/) -- and the "legacy" [Antlr4.Runtime](https://www.nuget.org/packages/Antlr4.Runtime/) at version 4.6.6. Which variant is your code using?
+2. Are you using Visual Studio 2019 or 2017?
+
+Then:
+
+1. Go to the [releases](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/releases) page. Choose the appropriate ZIP file(s) based on the Antlr4 variant and your version of Visual Studio.
+
+   For example, if you're in Visual Studio 2019 and debugging code written against `Antlr4.Runtime.Standard`, download the `ParseTreeVisualizer.Standard.2019.zip` file.
+
+   Note: if you need to, you can download and install all four ZIP files; they won't overwrite each other.
+
+2. You may need to [unblock the file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
+3. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders:
 
     * _VisualStudioInstallPath_`\Common7\Packages\Debugger\Visualizers`
     * `My Documents\Visual Studio `_Version_`\Visualizers`
 
     You don't have to restart VS, just make sure VS is not currently in a debugging session
 
-You can also compile the source yourself (`CI.sln`) and place the output DLLs in one of the visualizer folders.
+You can also compile the source yourself (`ANTLR4ParseTreeVisualizer.sln`) and place the output DLLs in one of the appropriate visualizer folders.
 
-If you are debugging .NET Core applications, you may also need to put an additional copy of the visualizer files in a subfolder called `netstandard2.0`, under the folder where you installed the visualizer.
-
+Note: For VS 2017, the DLLs will end up in either the `Visualizers` parent folder, or a single subfolder. For VS 2019, there are additional subfolders for debugging various target frameworks.
 ## Usage
 
 1. Begin a debugging session, and break at some point.
