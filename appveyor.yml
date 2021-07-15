@@ -19,6 +19,7 @@ only_commits:
     - Legacy/
     - Standard/
     - appveyor.yml
+    - ANTLR4ParseTreeVisualizer.sln
 
 dotnet_csproj:
   patch: true
@@ -46,13 +47,13 @@ after_build:
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debugger\bin\Debug\net472\*.dll
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debuggee\bin\Debug\*.dll
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debugger\bin\Debug\net472\*.dll
-  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debuggee\bin\Debug\net2.0\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debuggee\bin\Debug\netstandard2.0\*.dll
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debugger\bin\Debug\net472\*.dll
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debuggee\bin\Debug\*.dll
   - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debugger\bin\Debug\net472\*.dll
 
 artifacts:
-  - path: '%APPVEYOR_BUILD_FOLDER%\*.zip'
+  - path: '*.zip'
     name: ParseTreeVisualizer
 
   - path: '**\*.nupkg'
