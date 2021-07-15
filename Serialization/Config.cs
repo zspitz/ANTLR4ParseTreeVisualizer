@@ -68,5 +68,11 @@ namespace ParseTreeVisualizer.Serialization {
             SelectedRuleContexts.AddRangeTo(ret.SelectedRuleContexts);
             return ret;
         }
+
+        public void Deconstruct(out string? lexer, out string? parser, out string? ruleContext) {
+            lexer = SelectedLexerName;
+            parser = SelectedParserName;
+            ruleContext = ParseTokensWithRule;
+        }
     }
 }

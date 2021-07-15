@@ -6,6 +6,7 @@ using ZSpitz.Util.Wpf;
 using ParseTreeVisualizer.Serialization;
 using ZSpitz.Util;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace ParseTreeVisualizer {
     public class VisualizerDataViewModel : ViewModelBase<VisualizerData> {
@@ -78,7 +79,7 @@ namespace ParseTreeVisualizer {
             (int start, int end)? charSpan = null;
             string source;
             if (parameter == this) { // textbox's data context
-                charSpan = (sourceSelectionStart, sourceSelectionEnd);
+                charSpan = (sourceSelectionStart + Model.SourceOffset, sourceSelectionEnd + Model.SourceOffset);
                 source = "Source";
             } else if (parameter is ParseTreeNodeViewModel selectedNode) { // treeview.SelectedItem
                 charSpan = selectedNode.Model?.CharSpan;
@@ -141,5 +142,18 @@ namespace ParseTreeVisualizer {
         // TOOD move filtering to here
 
         public RelayCommand ChangeSelection { get; }
+
+        public string WindowTitle {
+            get {
+                var (lexer, parser, rule) = Model.Config;
+                return new[] {
+                    ("Lexer", lexer ),
+                    ("Parser", parser ),
+                    ("Rule context", rule )
+                }
+                .WhereT((name, val) => val is not null)
+                .JoinedT("  /   ", (name, val) => $"{name}: {val}");
+            }
+        }
     }
 }
