@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>ParseTreeVisualizer</RootNamespace>
+    <AssemblyName>ParseTreeVisualizer.UI</AssemblyName>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <DefineConstants>ANTLR_LEGACY</DefineConstants>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  
+  
+
+</Project>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>ParseTreeVisualizer</RootNamespace>
+    <AssemblyName>ParseTreeVisualizer.UI</AssemblyName>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <DefineConstants>ANTLR_LEGACY</DefineConstants>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZSpitz.Util" Version="0.1.113" />
+    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.113" />
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+  </ItemGroup>
+
+  <Import Project="..\..\Serialization\Serialization.projitems" Label="Serialization" />
+  <Import Project="..\..\UI\UI.projitems" Label="UI" />
+
+</Project>
