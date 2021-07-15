@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Legacy\Debuggee\bin\Debug\net2.0\*.dll &quot;%userprofile%\Documents\Visual Studio 2017\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Legacy\Debugger\bin\Debug\net472\*.dll &quot;%userprofile%\Documents\Visual Studio 2017\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Legacy\Debuggee\bin\Debug\*.dll &quot;%userprofile%\Documents\Visual Studio 2019\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Legacy\Debugger\bin\Debug\net472\*.dll &quot;%userprofile%\Documents\Visual Studio 2019\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Standard\Debuggee\bin\Debug\netstandard2.0\*.dll &quot;%userprofile%\Documents\Visual Studio 2017\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Standard\Debugger\bin\Debug\net472\*.dll  &quot;%userprofile%\Documents\Visual Studio 2017\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Standard\Debuggee\bin\Debug\*.dll &quot;%userprofile%\Documents\Visual Studio 2019\Visualizers\&quot; /e /y" />
+    <Exec Command="xcopy %userprofile%\source\repos\ANTLR4ParseTreeVisualizer\Standard\Debugger\bin\Debug\net472\*.dll &quot;%userprofile%\Documents\Visual Studio 2019\Visualizers\&quot; /e /y" />
+  </Target>
+
+</Project>

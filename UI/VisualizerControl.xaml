@@ -1,0 +1,125 @@
+﻿<DockPanel x:Class="ParseTreeVisualizer.VisualizerControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:my="clr-namespace:ParseTreeVisualizer"
+           xmlns:util="clr-namespace:ZSpitz.Util.Wpf;assembly=ZSpitz.Util.Wpf"
+           xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
+  <FrameworkElement.Resources>
+
+    <my:RootConverter x:Key="RootConverter" />
+    <my:NullConverter x:Key="NullConverter" />
+    <my:ErrorColorConverter x:Key="ErrorColorConverter" />
+    <my:NodeForegroundConverter x:Key="NodeForegroundConverter" />
+    <my:NodeFontWeightConverter x:Key="NodeFontWeightConverter" />
+    <my:NonEmptyListConverter x:Key="NonEmptyListConverter" />
+    <util:VisibilityConverter x:Key="InvertVisibilityConverter" MatchValue="{x:Static Visibility.Visible}" Invert="True"  />
+    <util:VisibilityConverter x:Key="NonNullVisibilityConverter" MatchValue="{x:Null}" Invert="True" />
+
+    <Style TargetType="DataGrid">
+      <Setter Property="IsReadOnly" Value="True" />
+      <Setter Property="HeadersVisibility" Value="Column"/>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="LabelStyle">
+      <Setter Property="DockPanel.Dock" Value="Top"/>
+      <Setter Property="Margin" Value="0,0,0,3" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="TextTrimmedTextbox">
+      <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+      <Setter Property="ToolTip" Value="{Binding Text,RelativeSource={RelativeSource Self}}" />
+    </Style>
+  </FrameworkElement.Resources>
+
+  <DockPanel DockPanel.Dock="Left" Height="{Binding ActualHeight,RelativeSource={RelativeSource AncestorType=DockPanel,AncestorLevel=1}}" Margin="0,0,12,0">
+    <TextBlock Text="Tokens:" Style="{StaticResource LabelStyle}" />
+    <Grid>
+      <DataGrid Name="tokens" ItemsSource="{Binding Tokens}" VirtualizingStackPanel.VirtualizationMode="Standard" Visibility="{Binding Tokens, Converter={StaticResource NonNullVisibilityConverter}}">
+        <DataGrid.RowStyle>
+          <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="{Binding Model.IsError, Converter={StaticResource ErrorColorConverter},Mode=OneWay}" />
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+          </Style>
+        </DataGrid.RowStyle>
+        <b:Interaction.Triggers>
+          <b:EventTrigger EventName="SelectionChanged">
+            <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItems, ElementName=tokens }" />
+          </b:EventTrigger>
+        </b:Interaction.Triggers>
+      </DataGrid>
+      <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tokens. Choose the lexer class from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=tokens,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+    </Grid>
+  </DockPanel>
+
+  <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+    <TextBlock Text="Source:" Style="{StaticResource LabelStyle}" />
+    <util:BindableSelectionTextBox x:Name="source" Height="200" Text="{Binding Model.Source, Mode=OneTime}" IsReadOnly="True" BindableSelectionStart="{Binding SourceSelectionStart}" BindableSelectionLength="{Binding SourceSelectionLength}" TextWrapping="Wrap">
+      <b:Interaction.Triggers>
+        <b:EventTrigger EventName="SelectionChanged">
+          <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding}" />
+        </b:EventTrigger>
+      </b:Interaction.Triggers>
+    </util:BindableSelectionTextBox>
+  </DockPanel>
+
+  <Grid DockPanel.Dock="Right" Margin="12,0,0,0">
+    <DockPanel >
+      <TextBlock Text="Properties:" Style="{StaticResource LabelStyle}"/>
+      <DataGrid Name="properties" ItemsSource="{Binding SelectedItem.Model.Properties, ElementName=treeview, Mode=OneWay}" AutoGenerateColumns="False">
+        <DataGrid.Columns>
+          <DataGridCheckBoxColumn Header="Custom" Binding="{Binding Custom, Mode=OneWay}" />
+          <DataGridTextColumn Header="Name" Binding="{Binding Key, Mode=OneWay}" />
+          <DataGridTextColumn Header="Value" Binding="{Binding Value, TargetNullValue=null, Mode=OneWay}" Width="150" ElementStyle="{StaticResource TextTrimmedTextbox}">
+            <DataGridTextColumn.CellStyle>
+              <Style TargetType="DataGridCell">
+                <Setter Property="Foreground" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+                <Setter Property="FontStyle" Value="{Binding Value, Converter={StaticResource NullConverter}}" />
+              </Style>
+            </DataGridTextColumn.CellStyle>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+    </DockPanel>
+  </Grid>
+
+  <TextBlock Text="Parse tree view:" Style="{StaticResource LabelStyle}" />
+  <Grid>
+    <TreeView Name="treeview" ItemsSource="{Binding Root,Converter={StaticResource RootConverter}}" MinHeight="200" MinWidth="200" Visibility="{Binding Root, Converter={StaticResource NonNullVisibilityConverter}}">
+      <TreeView.ItemTemplate>
+        <HierarchicalDataTemplate ItemsSource="{Binding Children, Mode=OneTime}">
+          <TextBlock Text="{Binding Model.Caption}" FontWeight="{Binding Model.NodeType, Converter={StaticResource NodeFontWeightConverter}}">
+            <TextBlock.Foreground>
+              <MultiBinding Converter="{StaticResource NodeForegroundConverter}">
+                <Binding Path="Model.NodeType" />
+                <Binding Path="Model.FilterState" />
+              </MultiBinding>
+            </TextBlock.Foreground>
+            <TextBlock.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="Scope to this" Command="{Binding SetAsRootNode}" CommandParameter="{Binding}" />
+                <MenuItem Header="Scope to this in new window" Command="{Binding OpenInNewWindow}" CommandParameter="{Binding Model}" />
+                <MenuItem Header="Copy watch expression" Command="{Binding CopyWatchExpression}" CommandParameter="{Binding WatchFormatString}" />
+                <MenuItem Header="Expand recursively" Command="{Binding SubtreeExpand}" CommandParameter="{Binding}" />
+                <MenuItem Header="Collapse recursively" Command="{Binding SubtreeCollapse}" CommandParameter="{Binding}" />
+              </ContextMenu>
+            </TextBlock.ContextMenu>
+          </TextBlock>
+        </HierarchicalDataTemplate>
+      </TreeView.ItemTemplate>
+      <TreeView.ItemContainerStyle>
+        <Style TargetType="TreeViewItem">
+          <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+          <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+          <Style.Resources>
+            <Style TargetType="ItemsPresenter">
+              <Setter Property="Margin" Value="-6,0,0,0" />
+            </Style>
+          </Style.Resources>
+        </Style>
+      </TreeView.ItemContainerStyle>
+      <b:Interaction.Triggers>
+        <b:EventTrigger EventName="SelectedItemChanged">
+          <b:InvokeCommandAction Command="{Binding ChangeSelection}" CommandParameter="{Binding SelectedItem, ElementName=treeview }" />
+        </b:EventTrigger>
+      </b:Interaction.Triggers>
+    </TreeView>
+    <TextBlock Margin="50,0,50,0"  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="No tree nodes. Choose the lexer class, the parser class, and the parse method from the settings." Foreground="DarkGray" Visibility="{Binding Visibility, ElementName=treeview,Mode=OneWay, Converter={StaticResource InvertVisibilityConverter}}" />
+  </Grid>
+
+</DockPanel>

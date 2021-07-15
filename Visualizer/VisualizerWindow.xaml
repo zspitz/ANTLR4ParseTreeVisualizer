@@ -1,0 +1,10 @@
+﻿<my:VisualizerWindowBase x:Class="ParseTreeVisualizer.VisualizerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:my="clr-namespace:ParseTreeVisualizer"
+    Title="{Binding WindowTitle}">
+  <my:VisualizerControl />
+  <my:VisualizerWindowBase.OptionsPopup>
+    <my:SettingsControl />
+  </my:VisualizerWindowBase.OptionsPopup>
+</my:VisualizerWindowBase>

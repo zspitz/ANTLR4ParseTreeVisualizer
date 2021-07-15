@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>127b215f-f3f8-44df-a2d1-9aaf95b3f8f3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Debuggee</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\ConfigBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\ConfigDiffStates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\ExceptionData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\SubfolderAssemblyResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\VisualizerObjectSourceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualizerDataObjectSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\.gitignore" />
+    <None Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\LICENSE" />
+    <None Include="$(MSBuildThisFileDirectory)Periscope.Debuggee\README.md" />
+  </ItemGroup>
+</Project>

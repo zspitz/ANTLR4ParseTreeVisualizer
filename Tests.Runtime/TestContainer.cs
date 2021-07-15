@@ -1,10 +1,5 @@
-﻿using Rubberduck.Parsing.Grammar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using System.IO;
+using Rubberduck.Parsing.Grammar;
 
 namespace ParseTreeVisualizer.Tests {
     public partial class TestContainer {
@@ -19,7 +14,8 @@ namespace ParseTreeVisualizer.Tests {
 End Sub",
                     @"Public Sub DoSomething()
     Debug.Print ""hi from path 1""
-    If True Then"
+    If True Then",
+                    File.ReadAllText("BasicModule(edited).bas")
                 };
             lexerType = typeof(VBALexer);
             parserType = typeof(VBAParser);
