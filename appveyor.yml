@@ -54,6 +54,9 @@ after_build:
 artifacts:
   - path: '%APPVEYOR_BUILD_FOLDER%\*.zip'
     name: ParseTreeVisualizer
+
+  - path: '**\*.nupkg'
+    type: NuGetPackage
   
 deploy:
   - provider: GitHub
@@ -61,3 +64,8 @@ deploy:
     auth_token:
       secure: NgxEvJd/ApBpuz6rwCNDfOI5c6nAvBIabLMj1vAtzuV4ozyaVDfjRJKa7WeJK2Ri
     artifact: ParseTreeVisualizer
+
+  - provider: NuGet
+    api_key:
+      secure: Wca6odTGXdgBDMEPs0ypFUcyMkfpv5f6lLjRaoqBy0zE5TyuRPXAXNuCtJ5yk/Ne
+    artifact: /.*\.nupkg/
