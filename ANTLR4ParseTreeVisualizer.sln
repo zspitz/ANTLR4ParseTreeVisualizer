@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Debugger", "Standa
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Visualizer", "Visualizer\Visualizer.shproj", "{3C553FFD-FA4E-4EAB-AD03-9534C7CB8F3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBuild", "PostBuild\PostBuild.csproj", "{B403610B-1A25-4BB8-8C63-BB6BDC9A6893}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Package", "Legacy\Package\Legacy.Package.csproj", "{F09CFEBD-151C-487C-BC87-1EA68B5A4043}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Package", "Standard\Package\Standard.Package.csproj", "{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}"
@@ -65,10 +63,6 @@ Global
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74F8A769-77D2-4889-BB81-2FF397C220B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B403610B-1A25-4BB8-8C63-BB6BDC9A6893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B403610B-1A25-4BB8-8C63-BB6BDC9A6893}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B403610B-1A25-4BB8-8C63-BB6BDC9A6893}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B403610B-1A25-4BB8-8C63-BB6BDC9A6893}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F09CFEBD-151C-487C-BC87-1EA68B5A4043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F09CFEBD-151C-487C-BC87-1EA68B5A4043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F09CFEBD-151C-487C-BC87-1EA68B5A4043}.Release|Any CPU.ActiveCfg = Release|Any CPU
