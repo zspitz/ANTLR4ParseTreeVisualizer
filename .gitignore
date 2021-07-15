@@ -339,5 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-/ANTLR4ParseTreeVisualizer.sln
 _*
