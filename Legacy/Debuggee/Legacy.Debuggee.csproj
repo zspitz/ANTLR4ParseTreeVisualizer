@@ -8,6 +8,10 @@
     <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>VISUALIZER_DEBUGGEE;ANTLR_LEGACY</DefineConstants>
+    
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>bin/$(Configuration)/net2.0/</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -166,7 +166,7 @@ namespace ParseTreeVisualizer.Serialization {
             } else {
                 Root = ParseTreeNode.GetPlaceholder(actualRoot);
                 SourceOffset = actualRoot.CharSpan.startChar;
-                Source = Source.Substring(actualRoot.CharSpan.startChar, actualRoot.CharSpan.endChar - actualRoot.CharSpan.startChar);
+                Source = Source[actualRoot.CharSpan.startChar..actualRoot.CharSpan.endChar];
             }
 
             UsedRuleContexts = rulenameMapping.Keys

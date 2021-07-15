@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>ParseTreeVisualizer.Debuggee</RootNamespace>
-    <AssemblyName>ParseTreeVisualizer.Legacy.Debuggee</AssemblyName>
+    <AssemblyName>ParseTreeVisualizer.Standard.Debuggee</AssemblyName>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>VISUALIZER_DEBUGGEE</DefineConstants>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
