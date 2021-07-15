@@ -9,6 +9,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>VISUALIZER_DEBUGGEE;ANTLR_LEGACY</DefineConstants>
     <UseWPF>true</UseWPF>
+    <Version>0.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

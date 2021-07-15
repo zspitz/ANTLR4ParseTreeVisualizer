@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Package", "Legacy\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Package", "Standard\Package\Standard.Package.csproj", "{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_visualizerTestNoRef", "_visualizerTestNoRef\_visualizerTestNoRef.csproj", "{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Debuggee\Debuggee.projitems*{127b215f-f3f8-44df-a2d1-9aaf95b3f8f3}*SharedItemsImports = 13
@@ -83,6 +85,10 @@ Global
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADA5CBA-1FE0-48A2-BF4F-7158C1CFF44F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
