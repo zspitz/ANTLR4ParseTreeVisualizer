@@ -93,7 +93,7 @@
             <TextBlock.ContextMenu>
               <ContextMenu>
                 <MenuItem Header="Scope to this" Command="{Binding SetAsRootNode}" CommandParameter="{Binding}" />
-                <MenuItem Header="Scope to this in new window/" Command="{Binding OpenInNewWindow}" CommandParameter="{Binding Model}" />
+                <MenuItem Header="Scope to this in new window" Command="{Binding OpenInNewWindow}" CommandParameter="{Binding Model}" />
                 <MenuItem Header="Copy watch expression" Command="{Binding CopyWatchExpression}" CommandParameter="{Binding WatchFormatString}" />
                 <MenuItem Header="Expand recursively" Command="{Binding SubtreeExpand}" CommandParameter="{Binding}" />
                 <MenuItem Header="Collapse recursively" Command="{Binding SubtreeCollapse}" CommandParameter="{Binding}" />
