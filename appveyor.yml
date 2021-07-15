@@ -1,17 +1,23 @@
-version: 0.1.0.{build}
+version: 1.0.{build}
 image: Visual Studio 2019
 
 init:
   - git config --global core.autocrlf false
+
 branches:
   only:
     - master
+
 skip_tags:  true
+
 only_commits:
   files:
-    - Shared/
-    - Runtime/
-    - Runtime.Standard/
+    - Debuggee/
+    - Serialization/
+    - UI/
+    - Visualizer/
+    - Legacy/
+    - Standard/
     - appveyor.yml
 
 dotnet_csproj:
@@ -24,22 +30,34 @@ dotnet_csproj:
   informational_version: '{version}'
 
 before_build:
-  - cmd: dotnet restore Runtime\Runtime.csproj
-  - cmd: dotnet restore Runtime.Standard\Runtime.Standard.csproj
+  - cmd: dotnet restore ANTLR4ParseTreeVisualizer.sln
+
+install:
+- cmd: git submodule update --init --recursive
+
+matrix:
+  fast_finish: true
+
 build:
-  project: CI.sln
+  project: ANTLR4ParseTreeVisualizer.sln
+
 after_build:
-  - cmd: 7z a ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\Runtime\bin\Debug\*
-  - cmd: 7z a ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\Runtime.Standard\bin\Debug\*
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debuggee\bin\Debug\net2.0\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debugger\bin\Debug\net472\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debuggee\bin\Debug\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Legacy.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Legacy\Debugger\bin\Debug\net472\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debuggee\bin\Debug\net2.0\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2017.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debugger\bin\Debug\net472\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debuggee\bin\Debug\*.dll
+  - 7z a %APPVEYOR_BUILD_FOLDER%\ParseTreeVisualizer.Standard.2019.zip -r %APPVEYOR_BUILD_FOLDER%\Standard\Debugger\bin\Debug\net472\*.dll
 
 artifacts:
-  - path: ANTLRVisualizer.%APPVEYOR_BUILD_VERSION%.zip
-    name: ANTLRVisualizer
+  - path: '%APPVEYOR_BUILD_FOLDER%\*.zip'
+    name: ParseTreeVisualizer
   
 deploy:
   - provider: GitHub
     description: ''
     auth_token:
       secure: NgxEvJd/ApBpuz6rwCNDfOI5c6nAvBIabLMj1vAtzuV4ozyaVDfjRJKa7WeJK2Ri
-    artifact:
-      ANTLRVisualizer
+    artifact: ParseTreeVisualizer
