@@ -195,8 +195,8 @@ namespace ParseTreeVisualizer.Serialization {
             }
             if (selected.IsNullOrWhitespace()) {
                 selected = (
-                    lst.SingleOrDefaultExt(x => x.Antlr != "Runtime") ??
-                    lst.SingleOrDefaultExt()
+                    lst.SingleOrDefaultExt(x => x.Antlr != "Runtime" && x.HasRelevantConstructor) ??
+                    lst.SingleOrDefaultExt(x => x.HasRelevantConstructor)
                 )?.FullName;
             }
             return selected;

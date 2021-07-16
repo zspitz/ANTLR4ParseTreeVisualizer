@@ -19,6 +19,7 @@ namespace ParseTreeVisualizer.Serialization {
         public string? FullName { get; }
         public string? RuleName { get; }
         public int? RuleID { get; }
+        public bool HasRelevantConstructor { get; } = false;
 
         public ReadOnlyCollection<string>? MethodNames { get; }
 
@@ -37,6 +38,10 @@ namespace ParseTreeVisualizer.Serialization {
             FullName = t.FullName;
             RuleName = ruleName.IsNullOrWhitespace() ? null : ruleName;
             RuleID = ruleID;
+            HasRelevantConstructor =
+                t.InheritsFromOrImplements<Lexer>() ? t.GetConstructor(new[] { typeof(AntlrInputStream) }) is not null :
+                t.InheritsFromOrImplements<Parser>() ? t.GetConstructor(new[] { typeof(CommonTokenStream) }) is not null :
+                false;
 
             if (loadMethodNames) {
                 MethodNames = t.GetMethods()
