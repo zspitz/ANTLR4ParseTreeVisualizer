@@ -26,6 +26,8 @@
 
   ![Set node as root, in current or new window](set-root.gif)
 
+* You can also embed the same UI in your own applications.
+
 ## Requirements
 
 * Tested with Visual Studio 2019 or 2017 (may work with older versions as well)  
