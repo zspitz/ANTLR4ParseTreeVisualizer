@@ -26,7 +26,7 @@
 
   ![Set node as root, in current or new window](set-root.gif)
 
-* You can also embed the same UI in your own applications.
+* You can also [embed the same UI in your own applications](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/wiki/Embedding-UI-controls-in-third-party-apps).
 
 ## Requirements
 
