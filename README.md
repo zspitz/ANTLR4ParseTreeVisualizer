@@ -46,7 +46,7 @@ Then:
 
    For example, if you're in Visual Studio 2019 and debugging code written against `Antlr4.Runtime.Standard`, download the `ParseTreeVisualizer.Standard.2019.zip` file.
 
-   Note: if you need to, you can download and install all four ZIP files; they won't overwrite each other.
+   Note: if you need to, you can download and install all four visualizer variants; they won't overwrite each other.
 
 2. You may need to [unblock the file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
 3. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders:
@@ -59,6 +59,7 @@ Then:
 You can also compile the source yourself (`ANTLR4ParseTreeVisualizer.sln`) and place the output DLLs in one of the appropriate visualizer folders.
 
 Note: For VS 2017, the DLLs will end up in either the `Visualizers` parent folder, or a single subfolder. For VS 2019, there are additional subfolders for debugging various target frameworks.
+
 ## Usage
 
 1. Begin a debugging session, and break at some point.
