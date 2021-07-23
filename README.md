@@ -26,6 +26,8 @@
 
   ![Set node as root, in current or new window](set-root.gif)
 
+* You can also [embed the same UI in your own applications](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/wiki/Embedding-UI-controls-in-third-party-apps).
+
 ## Requirements
 
 * Tested with Visual Studio 2019 or 2017 (may work with older versions as well)  
@@ -44,7 +46,7 @@ Then:
 
    For example, if you're in Visual Studio 2019 and debugging code written against `Antlr4.Runtime.Standard`, download the `ParseTreeVisualizer.Standard.2019.zip` file.
 
-   Note: if you need to, you can download and install all four ZIP files; they won't overwrite each other.
+   Note: if you need to, you can download and install all four visualizer variants; they won't overwrite each other.
 
 2. You may need to [unblock the file](https://github.com/zspitz/ExpressionToString/wiki/Troubleshooting-visualizer-installation).
 3. Unzip the contents of the ZIP file into one of Visual Studio's recognized visualizer folders:
@@ -56,18 +58,24 @@ Then:
 
 You can also compile the source yourself (`ANTLR4ParseTreeVisualizer.sln`) and place the output DLLs in one of the appropriate visualizer folders.
 
-Note: For VS 2017, the DLLs will end up in either the `Visualizers` parent folder, or a single subfolder. For VS 2019, there are additional subfolders for debugging various target frameworks.
+For VS 2017, the DLLs will end up in either the `Visualizers` parent folder, or a single subfolder. For VS 2019, there are additional subfolders for debugging various target frameworks.
+
 ## Usage
 
 1. Begin a debugging session, and break at some point.
 2. Hover over an instance of one of the visualizer target types (`Antlr4.Runtime.RuleContext`, `Antlr4.Runtime.BufferedTokenStream`, or `string`), in the code editor, or the Watch or Locals window. This instance can be exposed by any variable, or any expression; the type of the expression doesn't matter.
 3. Click on the magnifying glass to the right of the expression.
-4. You may need to choose a lexer class if you are visualizing a `string` and there are multiple lexers in the debugged assemblies; and you haven't already done so.
-5. You may need to choose a parser class and a parser method from the settings, if you are visualizing a `BufferedTokenStream` or a `string`, and the debugged assemblies have multiple parser classes. (These choices persist between sessions, so if you've already chosen, there's no need to do so again.)
+4. You may need to choose a lexer class if you are visualizing a `string` and there are multiple lexers in the debugged assemblies.
+5. You may need to choose a parser class and a parser method from the settings, if you are visualizing a `BufferedTokenStream` or a `string`, and the debugged assemblies have multiple parser classes.
+
+Note that these choices -- selected lexer, parser and parser method -- persist between sessions, so if you've already chosen, there's no need to do so again.
 
   ![Visualizing a string](visualize-string.gif)
 
-> If you see an error message "Could not load this custom viewer", [try turning Managed Compatibility off](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/50) (**Tools** -> **Options...** -> **General** -> **Debugging**).
+## Troubleshooting
+
+* You may need to [unblock](https://github.com/zspitz/ExpressionTreeVisualizer/wiki/Troubleshooting-visualizer-installation) the ZIP file.
+* If you see an error message "Could not load this custom viewer", [try turning Managed Compatibility off](https://github.com/zspitz/ANTLR4ParseTreeVisualizer/issues/50) (**Tools** -> **Options...** -> **General** -> **Debugging**).
 
 ## Contributing
 
