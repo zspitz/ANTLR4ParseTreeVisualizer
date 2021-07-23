@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+</Project>

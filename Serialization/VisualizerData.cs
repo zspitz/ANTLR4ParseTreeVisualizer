@@ -23,10 +23,6 @@ namespace ParseTreeVisualizer.Serialization {
         public bool CanSelectLexer { get; }
         public bool CanSelectParser { get; }
 
-        private static readonly string[] ignnoreLoadErrors = new[] {
-            "Microsoft.Xaml.Behaviors"
-        };
-
         public VisualizerData(object o, Config config) {
             if (config is null) { throw new ArgumentNullException(nameof(config)); }
 
@@ -42,12 +38,10 @@ namespace ParseTreeVisualizer.Serialization {
                     .Where(x => x != GetType().Assembly)
                     .SelectMany(x => {
                         var ret = Empty<Type>();
-                        if (!x.FullName.StartsWithAny(ignnoreLoadErrors)) {
-                            try {
-                                ret = x.GetTypes();
-                            } catch {
-                                AssemblyLoadErrors.Add(x.FullName);
-                            }
+                        try {
+                            ret = x.GetTypes();
+                        } catch {
+                            AssemblyLoadErrors.Add(x.FullName);
                         }
                         return ret;
                     })

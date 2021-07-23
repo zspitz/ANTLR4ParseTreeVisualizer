@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>ParseTreeVisualizer.Test</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4" Version="4.6.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ZSpitz.Util" Version="0.1.114" />
+    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.114" />
+
+    <Antlr4 Include="..\Test.Shared\Grammar\SQLiteLexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
+      <Listener>False</Listener>
+      <Visitor>False</Visitor>
+    </Antlr4>
+
+      <Antlr4 Include="..\Test.Shared\Grammar\SQLiteParser.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
+      <Listener>False</Listener>
+      <Visitor>False</Visitor>
+    </Antlr4>
+  
+    <ProjectReference Include="..\..\Legacy\Package\Legacy.Package.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Test.Shared\Test.Shared.projitems" Label="Shared" />
+</Project>

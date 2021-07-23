@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <RootNamespace>ParseTreeVisualizer</RootNamespace>
     <AssemblyName>ParseTreeVisualizer.UI.Legacy</AssemblyName>
     <LangVersion>9.0</LangVersion>
@@ -25,8 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZSpitz.Util" Version="0.1.113" />
-    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.113" />
+    <PackageReference Include="ZSpitz.Util" Version="0.1.114" />
+    <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.114" />
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

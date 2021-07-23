@@ -33,14 +33,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Legacy.Package", "Legacy\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Package", "Standard\Package\Standard.Package.csproj", "{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{740AF50E-F735-4E54-8091-7DF29ABBD05A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Test.Shared", "Test\Test.Shared\Test.Shared.shproj", "{ED8BAF15-5B0B-4027-9B23-DD14B24739DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Legacy", "Test\Test.Legacy\Test.Legacy.csproj", "{22587B08-85CE-4383-B754-86808D0713E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Standard", "Test\Test.Standard\Test.Standard.csproj", "{40F8B1E1-E78C-4231-8ACE-3EE5A9486609}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Debuggee\Debuggee.projitems*{127b215f-f3f8-44df-a2d1-9aaf95b3f8f3}*SharedItemsImports = 13
+		Test\Test.Shared\Test.Shared.projitems*{22587b08-85ce-4383-b754-86808d0713e4}*SharedItemsImports = 5
 		Visualizer\Visualizer.projitems*{3c553ffd-fa4e-4eab-ad03-9534c7cb8f3e}*SharedItemsImports = 13
+		Test\Test.Shared\Test.Shared.projitems*{40f8b1e1-e78c-4231-8ace-3ee5a9486609}*SharedItemsImports = 5
 		Debuggee\Debuggee.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
 		Serialization\Serialization.projitems*{ae5a655c-c17c-4fbb-be45-13e49a5c7bc8}*SharedItemsImports = 5
 		UI\UI.projitems*{e2b06997-76f1-48de-abe6-cf90427423bb}*SharedItemsImports = 13
 		Serialization\Serialization.projitems*{e3b0367b-3649-4b77-878a-85a8a11c4c09}*SharedItemsImports = 13
+		Test\Test.Shared\Test.Shared.projitems*{ed8baf15-5b0b-4027-9b23-dd14b24739db}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +82,14 @@ Global
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22587B08-85CE-4383-B754-86808D0713E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22587B08-85CE-4383-B754-86808D0713E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22587B08-85CE-4383-B754-86808D0713E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22587B08-85CE-4383-B754-86808D0713E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F8B1E1-E78C-4231-8ACE-3EE5A9486609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F8B1E1-E78C-4231-8ACE-3EE5A9486609}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F8B1E1-E78C-4231-8ACE-3EE5A9486609}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F8B1E1-E78C-4231-8ACE-3EE5A9486609}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +101,9 @@ Global
 		{74F8A769-77D2-4889-BB81-2FF397C220B9} = {C0ADF39C-DD3F-4EBD-AC9C-7D1E5D5CD0A8}
 		{F09CFEBD-151C-487C-BC87-1EA68B5A4043} = {5F2046EA-A159-4673-B7B9-F1F3179C5D6C}
 		{D7950FB3-F80E-4249-99D1-F08E3A64CA0E} = {C0ADF39C-DD3F-4EBD-AC9C-7D1E5D5CD0A8}
+		{ED8BAF15-5B0B-4027-9B23-DD14B24739DB} = {740AF50E-F735-4E54-8091-7DF29ABBD05A}
+		{22587B08-85CE-4383-B754-86808D0713E4} = {740AF50E-F735-4E54-8091-7DF29ABBD05A}
+		{40F8B1E1-E78C-4231-8ACE-3EE5A9486609} = {740AF50E-F735-4E54-8091-7DF29ABBD05A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2A19EFC-E356-4E97-8752-D94ABBE584B0}
