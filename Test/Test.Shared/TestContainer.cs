@@ -10,17 +10,20 @@ using static System.IO.File;
 
 namespace ParseTreeVisualizer.Test {
     public class TestContainer {
+        public static readonly (string lexer, string parser, string rule) InvalidSelection = (
+            "Invalid lexer",
+            "Invalid parser",
+            "Invalid rule"
+        );
+
         public static readonly TheoryData<object, Config> TestData = IIFE(() => {
             var filesLexersParsers = new[] {
-                IIFE(() => {
-                    var parserType = typeof(SQLiteParser);
-                    return (
+                (
                         "WindowsFunctionsForSqLite.sql",
                         typeof(SQLiteLexer),
-                        parserType,
-                        parserType.GetMethod(nameof(SQLiteParser.parse))!
-                    );
-                })
+                        typeof(SQLiteParser),
+                        typeof(SQLiteParser).GetMethod(nameof(SQLiteParser.parse))!
+                )
             };
 
             var sources = filesLexersParsers.SelectManyT((filename, lexerType, parserType, parseMethod) => {
@@ -33,18 +36,24 @@ namespace ParseTreeVisualizer.Test {
                 return new object[] {
                     source, tokens, tree
                 }.Select(x => (
-                    source: x, 
-                    lexerName: lexerType.Name, 
-                    parserName: parserType.Name, 
+                    source: x,
+                    lexerName: lexerType.Name,
+                    parserName: parserType.Name,
                     parseMethodName: parseMethod.Name
                 ));
             }).ToList();
 
             return sources.SelectManyT((source, lexerName, parserName, parseMethodName) => {
-                var configs = Enumerable.Range(0, 4).Select(x => new Config()).ToArray();
+                var configs = Enumerable.Range(0, 5).Select(x => new Config()).ToArray();
                 configs.Skip(1).ForEach(x => x.SelectedLexerName = lexerName);
                 configs.Skip(2).ForEach(x => x.SelectedParserName = parserName);
                 configs.Skip(3).ForEach(x => x.ParseTokensWithRule = parseMethodName);
+
+                var invalid = configs[3];
+                invalid.SelectedLexerName = InvalidSelection.lexer;
+                invalid.SelectedParserName = InvalidSelection.parser;
+                invalid.ParseTokensWithRule = InvalidSelection.rule;
+
                 return configs.Select(config => (source, config));
             }).ToTheoryData();
         });
@@ -55,6 +64,12 @@ namespace ParseTreeVisualizer.Test {
             var vd = new VisualizerData(source, config);
             _ = new ConfigViewModel(vd);
             _ = new VisualizerDataViewModel(vd, null, null, null);
+
+            if (config.SelectedLexerName == InvalidSelection.lexer) {
+                Assert.NotEqual(InvalidSelection.lexer, vd.Config.SelectedLexerName);
+                Assert.NotEqual(InvalidSelection.parser, vd.Config.SelectedParserName);
+                Assert.NotEqual(InvalidSelection.rule, vd.Config.ParseTokensWithRule);
+            }
         }
     }
 }
