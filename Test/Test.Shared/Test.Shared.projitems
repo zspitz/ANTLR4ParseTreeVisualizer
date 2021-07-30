@@ -9,13 +9,21 @@
     <Import_RootNamespace>Test.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Grammar\SQLiteLexer.g4">
+    <None Include="$(MSBuildThisFileDirectory)Files\FormatterTest.java">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Grammar\SQLiteParser.g4">
+    <None Include="$(MSBuildThisFileDirectory)Files\Simple.java">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)WindowsFunctionsForSqLite.sql">
+    <None Include="$(MSBuildThisFileDirectory)Grammars\Java8Lexer.g4" />
+    <None Include="$(MSBuildThisFileDirectory)Grammars\Java8Parser.g4" />
+    <None Include="$(MSBuildThisFileDirectory)Grammars\SQLiteLexer.g4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Grammars\SQLiteParser.g4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Files\WindowsFunctionsForSqLite.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

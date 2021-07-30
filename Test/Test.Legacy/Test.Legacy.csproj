@@ -26,20 +26,34 @@
     <PackageReference Include="ZSpitz.Util" Version="0.1.114" />
     <PackageReference Include="ZSpitz.Util.Wpf" Version="0.1.114" />
 
-    <Antlr4 Include="..\Test.Shared\Grammar\SQLiteLexer.g4">
+    <Antlr4 Include="..\Test.Shared\Grammars\SQLiteLexer.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
       <Listener>False</Listener>
       <Visitor>False</Visitor>
     </Antlr4>
 
-      <Antlr4 Include="..\Test.Shared\Grammar\SQLiteParser.g4">
+      <Antlr4 Include="..\Test.Shared\Grammars\SQLiteParser.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
       <Listener>False</Listener>
       <Visitor>False</Visitor>
     </Antlr4>
-  
+
+    <Antlr4 Include="..\Test.Shared\Grammars\Java8Lexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
+      <Listener>False</Listener>
+      <Visitor>False</Visitor>
+    </Antlr4>
+
+    <Antlr4 Include="..\Test.Shared\Grammars\Java8Parser.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>ParseTreeVisualizer.Test</CustomToolNamespace>
+      <Listener>False</Listener>
+      <Visitor>False</Visitor>
+    </Antlr4>
+
     <ProjectReference Include="..\..\Legacy\Package\Legacy.Package.csproj" />
   </ItemGroup>
 

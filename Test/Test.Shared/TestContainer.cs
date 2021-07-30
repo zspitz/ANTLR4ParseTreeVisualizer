@@ -17,17 +17,29 @@ namespace ParseTreeVisualizer.Test {
         );
 
         public static readonly TheoryData<object, Config> TestData = IIFE(() => {
+            var java = (
+                lexer: typeof(Java8Lexer),
+                parser: typeof(Java8Parser),
+                parseMethod: typeof(Java8Parser).GetMethod(nameof(Java8Parser.compilationUnit))!
+            );
+
             var filesLexersParsers = new[] {
                 (
                         "WindowsFunctionsForSqLite.sql",
                         typeof(SQLiteLexer),
                         typeof(SQLiteParser),
                         typeof(SQLiteParser).GetMethod(nameof(SQLiteParser.parse))!
+                ),
+                (
+                    "Simple.java",
+                    java.lexer,
+                    java.parser,
+                    java.parseMethod
                 )
             };
 
             var sources = filesLexersParsers.SelectManyT((filename, lexerType, parserType, parseMethod) => {
-                var source = ReadAllText(filename);
+                var source = ReadAllText($"Files/{filename}");
                 var input = new AntlrInputStream(source);
                 var lexer = lexerType.CreateInstance<Lexer>(new[] { input });
                 var tokens = new CommonTokenStream(lexer);
